@@ -630,7 +630,6 @@ void ImageViewer2D::ShowImageAndDose(double SliceLoc)
 
     this->ViewRenderer->AddViewProp(this->ImgPositionAnnotation);
     //this->ViewRenderer->GetRenderWindow()->Render();
-    this->AxesWidget->GetInteractor()->GetRenderWindow()->Render();
 
 
     this->SliceLoc=SliceLoc;
@@ -668,6 +667,7 @@ void ImageViewer2D::on_toolButtonAxial_clicked()
     this->DisplayBeams(this->SliceLoc,this->SliceOrientation);
     this->ViewRenderer->ResetCamera();//This positions the view in the centre of the screen
     this->ViewRenderer->GetRenderWindow()->Render();
+    this->AxesWidget->GetInteractor()->GetRenderWindow()->Render();
 }
 
 
@@ -698,6 +698,7 @@ void ImageViewer2D::on_toolButtonSagittal_clicked()
     this->DisplayBeams(this->SliceLoc,this->SliceOrientation);
     this->ViewRenderer->ResetCamera();//This position the view in the centre of the screen
     this->ViewRenderer->GetRenderWindow()->Render();
+    this->AxesWidget->GetInteractor()->GetRenderWindow()->Render();
 
 }
 
@@ -729,6 +730,7 @@ void ImageViewer2D::on_toolButtonCoronal_clicked()
     this->DisplayBeams(this->SliceLoc,this->SliceOrientation);
     this->ViewRenderer->ResetCamera();//This position the view in the centre of the screen
     this->ViewRenderer->GetRenderWindow()->Render();
+    this->AxesWidget->GetInteractor()->GetRenderWindow()->Render();
 }
 
 
