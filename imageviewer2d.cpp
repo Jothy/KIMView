@@ -585,8 +585,13 @@ void ImageViewer2D::ShowImageAndDose(double SliceLoc)
         leftLowerText->append("Z:");
         //this->AnnotatedCube->GetAssembly()->SetOrientation(0,0,0);
         this->HumanActor->SetOrientation(0,0,180);
-
-
+        vtkSmartPointer<vtkTransform> transform =
+                vtkSmartPointer<vtkTransform>::New();
+        transform->PostMultiply(); //this is the key line
+        transform->RotateX(0);
+        transform->RotateY(0);
+        transform->RotateZ(0);
+        this->Axes->SetUserTransform(transform);
 
     }
     else if(this->SliceOrientation==1)
@@ -625,6 +630,7 @@ void ImageViewer2D::ShowImageAndDose(double SliceLoc)
 
     this->ViewRenderer->AddViewProp(this->ImgPositionAnnotation);
     //this->ViewRenderer->GetRenderWindow()->Render();
+    this->AxesWidget->GetInteractor()->GetRenderWindow()->Render();
 
 
     this->SliceLoc=SliceLoc;
