@@ -1,0 +1,32 @@
+<RCC>
+    <qresource prefix="/Icons"/>
+    <qresource prefix="/">
+        <file>Icons/Beam.png</file>
+        <file>Icons/Bones.png</file>
+        <file>Icons/Camera.png</file>
+        <file>Icons/CT.png</file>
+        <file>Icons/Eye.png</file>
+        <file>Icons/Mouse.png</file>
+        <file>Icons/Polygon.png</file>
+        <file>Icons/Profile.png</file>
+        <file>Icons/Protractor.png</file>
+        <file>Icons/Reset.png</file>
+        <file>Icons/Rotate3D.png</file>
+        <file>Icons/ScalarBar.png</file>
+        <file>Icons/Dose.png</file>
+        <file>Icons/zoom in.png</file>
+        <file>Icons/zoom out.png</file>
+        <file>Icons/zoom.png</file>
+        <file>Icons/BEV.PNG</file>
+        <file>Icons/DVH.png</file>
+        <file>Icons/Axes3D.png</file>
+        <file>Icons/Contrast.png</file>
+        <file>Icons/Axial.png</file>
+        <file>Icons/Coronal.png</file>
+        <file>Icons/Color.png</file>
+        <file>Icons/Extent.png</file>
+        <file>Icons/RubberBandZoom.png</file>
+        <file>Icons/Ruler.png</file>
+        <file>Icons/Sagittal.png</file>
+    </qresource>
+</RCC>

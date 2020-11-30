@@ -1,0 +1,594 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>988</width>
+    <height>586</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>KIM View</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="RC.qrc">
+    <normaloff>:/Icons/Eye.png</normaloff>:/Icons/Eye.png</iconset>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="0">
+     <widget class="QMdiArea" name="mdiAreaView">
+      <property name="contextMenuPolicy">
+       <enum>Qt::ActionsContextMenu</enum>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="sizeAdjustPolicy">
+       <enum>QAbstractScrollArea::AdjustToContents</enum>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>988</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <widget class="QMenu" name="menuImport">
+     <property name="title">
+      <string>Import</string>
+     </property>
+     <addaction name="actionCT"/>
+     <addaction name="actionStructures"/>
+     <addaction name="actionDose"/>
+     <addaction name="actionPlan"/>
+    </widget>
+    <addaction name="menuImport"/>
+    <addaction name="actionClose_Patient"/>
+   </widget>
+   <widget class="QMenu" name="menuInsert">
+    <property name="title">
+     <string>Insert</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="actionZoom_In_All"/>
+    <addaction name="actionZoom_Out_All"/>
+    <addaction name="actionReset_Zoom"/>
+    <addaction name="actionGo_To_Isocentre"/>
+    <addaction name="separator"/>
+    <addaction name="separator"/>
+    <addaction name="actionBEV"/>
+    <addaction name="action3DView"/>
+    <addaction name="separator"/>
+    <addaction name="actionShowBeams"/>
+    <addaction name="actionShowDose"/>
+    <addaction name="actionShowContours"/>
+    <addaction name="separator"/>
+    <addaction name="actionReset_WL_WW"/>
+   </widget>
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
+     <string>Tools</string>
+    </property>
+    <addaction name="actionCalc_DVH"/>
+   </widget>
+   <widget class="QMenu" name="menuDose">
+    <property name="title">
+     <string>Dose</string>
+    </property>
+    <addaction name="actionAdjust_Range"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Testing</string>
+    </property>
+    <addaction name="actionRender_Bones"/>
+    <addaction name="actionHello_UDP"/>
+   </widget>
+   <widget class="QMenu" name="menuStructures">
+    <property name="title">
+     <string>Structures</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuWindows">
+    <property name="title">
+     <string>Windows</string>
+    </property>
+    <addaction name="actionInformation"/>
+    <addaction name="actionPlan_Information"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuInsert"/>
+   <addaction name="menuView"/>
+   <addaction name="menuTools"/>
+   <addaction name="menuDose"/>
+   <addaction name="menuStructures"/>
+   <addaction name="menuWindows"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <property name="iconSize">
+    <size>
+     <width>24</width>
+     <height>24</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionCT"/>
+   <addaction name="actionStructures"/>
+   <addaction name="actionDose"/>
+   <addaction name="actionZoom_In_All"/>
+   <addaction name="actionZoom_Out_All"/>
+   <addaction name="actionReset_Zoom"/>
+   <addaction name="actionCalc_DVH"/>
+   <addaction name="actionBEV"/>
+   <addaction name="actionPlan"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QDockWidget" name="dockWidget">
+   <property name="minimumSize">
+    <size>
+     <width>200</width>
+     <height>166</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>500</width>
+     <height>524287</height>
+    </size>
+   </property>
+   <property name="features">
+    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable|QDockWidget::DockWidgetVerticalTitleBar</set>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::AllDockWidgetAreas</set>
+   </property>
+   <property name="windowTitle">
+    <string>Information</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents">
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QTreeWidget" name="treeWidget">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>500</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
+       </property>
+       <property name="alternatingRowColors">
+        <bool>false</bool>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+       <column>
+        <property name="text">
+         <string>Patient</string>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/RC/Icons1/user_suit.png</normaloff>:/RC/Icons1/user_suit.png</iconset>
+        </property>
+       </column>
+       <item>
+        <property name="text">
+         <string>Images</string>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/RC/Icons1/shape_move_forwards.png</normaloff>:/RC/Icons1/shape_move_forwards.png</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Structures</string>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/RC/Icons2/Polygon.png</normaloff>:/RC/Icons2/Polygon.png</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Beams</string>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/RC/Icons1/shape_flip_horizontal.png</normaloff>:/RC/Icons1/shape_flip_horizontal.png</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Dose</string>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/RC/Icons1/SphericalDose.PNG</normaloff>:/RC/Icons1/SphericalDose.PNG</iconset>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>POI</string>
+        </property>
+        <property name="icon">
+         <iconset>
+          <normaloff>:/RC/Icons1/bullet_blue.png</normaloff>:/RC/Icons1/bullet_blue.png</iconset>
+        </property>
+       </item>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="dockWidget_2">
+   <property name="features">
+    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable|QDockWidget::DockWidgetVerticalTitleBar</set>
+   </property>
+   <property name="windowTitle">
+    <string>Plan Information</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_2">
+    <layout class="QGridLayout" name="gridLayout_3">
+     <item row="0" column="0">
+      <widget class="QTableWidget" name="tableWidget">
+       <property name="font">
+        <font>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="toolTip">
+        <string>All distances are in mm</string>
+       </property>
+       <property name="alternatingRowColors">
+        <bool>true</bool>
+       </property>
+       <column>
+        <property name="text">
+         <string>Beam ID</string>
+        </property>
+        <property name="textAlignment">
+         <set>AlignCenter</set>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Beam Name</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Gantry</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Coll</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Couch</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Field X1</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Field X2</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Field Y1</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Field Y2</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Isocentre (X)</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Isocentre (Y)</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Isocentre (Z)</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>SSD</string>
+        </property>
+       </column>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <action name="actionZoom_In_All">
+   <property name="icon">
+    <iconset resource="RC.qrc">
+     <normaloff>:/Icons/zoom in.png</normaloff>:/Icons/zoom in.png</iconset>
+   </property>
+   <property name="text">
+    <string>Zoom In All</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl++</string>
+   </property>
+  </action>
+  <action name="actionZoom_Out_All">
+   <property name="icon">
+    <iconset resource="RC.qrc">
+     <normaloff>:/Icons/zoom out.png</normaloff>:/Icons/zoom out.png</iconset>
+   </property>
+   <property name="text">
+    <string>Zoom Out All</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+-</string>
+   </property>
+  </action>
+  <action name="actionReset_Zoom">
+   <property name="icon">
+    <iconset resource="RC.qrc">
+     <normaloff>:/Icons/zoom.png</normaloff>:/Icons/zoom.png</iconset>
+   </property>
+   <property name="text">
+    <string>Reset Zoom</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+0</string>
+   </property>
+  </action>
+  <action name="actionShow_Origin">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/RC/Icons2/Origin.png</normaloff>:/RC/Icons2/Origin.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show Origin</string>
+   </property>
+  </action>
+  <action name="actionCT">
+   <property name="icon">
+    <iconset resource="RC.qrc">
+     <normaloff>:/Icons/CT.png</normaloff>:/Icons/CT.png</iconset>
+   </property>
+   <property name="text">
+    <string>CT</string>
+   </property>
+  </action>
+  <action name="actionStructures">
+   <property name="icon">
+    <iconset resource="RC.qrc">
+     <normaloff>:/Icons/Polygon.png</normaloff>:/Icons/Polygon.png</iconset>
+   </property>
+   <property name="text">
+    <string>Structures</string>
+   </property>
+  </action>
+  <action name="actionPlan">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/RC/Icons1/applications.png</normaloff>:/RC/Icons1/applications.png</iconset>
+   </property>
+   <property name="text">
+    <string>Plan</string>
+   </property>
+  </action>
+  <action name="actionGo_To_Isocentre">
+   <property name="icon">
+    <iconset resource="RC.qrc">
+     <normaloff>:/Icons/Axes3D.png</normaloff>:/Icons/Axes3D.png</iconset>
+   </property>
+   <property name="text">
+    <string>Go To Isocentre</string>
+   </property>
+  </action>
+  <action name="actionDose">
+   <property name="icon">
+    <iconset resource="RC.qrc">
+     <normaloff>:/Icons/Dose.png</normaloff>:/Icons/Dose.png</iconset>
+   </property>
+   <property name="text">
+    <string>Dose</string>
+   </property>
+  </action>
+  <action name="actionBEV">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="RC.qrc">
+     <normaloff>:/Icons/BEV.PNG</normaloff>:/Icons/BEV.PNG</iconset>
+   </property>
+   <property name="text">
+    <string>BEV</string>
+   </property>
+   <property name="toolTip">
+    <string>Show BEV for selected beam</string>
+   </property>
+  </action>
+  <action name="action3DView">
+   <property name="icon">
+    <iconset resource="RC.qrc">
+     <normaloff>:/Icons/Rotate3D.png</normaloff>:/Icons/Rotate3D.png</iconset>
+   </property>
+   <property name="text">
+    <string>3DView</string>
+   </property>
+  </action>
+  <action name="actionClose_Patient">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/RC/Icons1/delete.png</normaloff>:/RC/Icons1/delete.png</iconset>
+   </property>
+   <property name="text">
+    <string>Close Patient</string>
+   </property>
+  </action>
+  <action name="actionShowBeams">
+   <property name="icon">
+    <iconset resource="RC.qrc">
+     <normaloff>:/Icons/Beam.png</normaloff>:/Icons/Beam.png</iconset>
+   </property>
+   <property name="text">
+    <string>Toggle Beams</string>
+   </property>
+   <property name="toolTip">
+    <string>Toggle Beams</string>
+   </property>
+  </action>
+  <action name="actionShowDose">
+   <property name="icon">
+    <iconset resource="RC.qrc">
+     <normaloff>:/Icons/Dose.png</normaloff>:/Icons/Dose.png</iconset>
+   </property>
+   <property name="text">
+    <string>Toggle Dose</string>
+   </property>
+   <property name="toolTip">
+    <string>Toggle Dose</string>
+   </property>
+  </action>
+  <action name="actionShowContours">
+   <property name="icon">
+    <iconset resource="RC.qrc">
+     <normaloff>:/Icons/Polygon.png</normaloff>:/Icons/Polygon.png</iconset>
+   </property>
+   <property name="text">
+    <string>Toggle Contours</string>
+   </property>
+   <property name="toolTip">
+    <string>Toggle Contours</string>
+   </property>
+  </action>
+  <action name="actionInformation">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Information</string>
+   </property>
+  </action>
+  <action name="actionPlan_Information">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Plan Information</string>
+   </property>
+  </action>
+  <action name="actionCalc_DVH">
+   <property name="icon">
+    <iconset resource="RC.qrc">
+     <normaloff>:/Icons/DVH.png</normaloff>:/Icons/DVH.png</iconset>
+   </property>
+   <property name="text">
+    <string>Calc DVH</string>
+   </property>
+  </action>
+  <action name="actionAdjust_Range">
+   <property name="icon">
+    <iconset resource="RC.qrc">
+     <normaloff>:/Icons/Color.png</normaloff>:/Icons/Color.png</iconset>
+   </property>
+   <property name="text">
+    <string>Adjust Range</string>
+   </property>
+  </action>
+  <action name="actionReset_WL_WW">
+   <property name="icon">
+    <iconset resource="RC.qrc">
+     <normaloff>:/Icons/Contrast.png</normaloff>:/Icons/Contrast.png</iconset>
+   </property>
+   <property name="text">
+    <string>Reset WL/WW</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+  </action>
+  <action name="actionRender_Bones">
+   <property name="icon">
+    <iconset resource="RC.qrc">
+     <normaloff>:/Icons/Bones.png</normaloff>:/Icons/Bones.png</iconset>
+   </property>
+   <property name="text">
+    <string>Render Bones</string>
+   </property>
+  </action>
+  <action name="actionHello_UDP">
+   <property name="text">
+    <string>Hello UDP</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="RC.qrc"/>
+ </resources>
+ <connections/>
+</ui>
