@@ -69,46 +69,44 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    this->listener=new UDPListener;
+
     //Avoid error window popping
-        vtkSmartPointer<vtkFileOutputWindow> fileOutputWindow =
-                vtkSmartPointer<vtkFileOutputWindow>::New();
-        fileOutputWindow->SetFileName("ErrorLog.txt" );
-        vtkOutputWindow* outputWindow = vtkOutputWindow::GetInstance();
-        if (outputWindow)
-        {
-            outputWindow->SetInstance(fileOutputWindow);
-        }
+    vtkSmartPointer<vtkFileOutputWindow> fileOutputWindow =
+            vtkSmartPointer<vtkFileOutputWindow>::New();
+    fileOutputWindow->SetFileName("ErrorLog.txt" );
+    vtkOutputWindow* outputWindow = vtkOutputWindow::GetInstance();
+    if (outputWindow)
+    {
+        outputWindow->SetInstance(fileOutputWindow);
+    }
 
-        this->BeamAngles.clear();
+    this->BeamAngles.clear();
 
-        this->ContextMenus=new QActionGroup(this);
-        this->ContextMenus->setEnabled(true);
-        this->ContextMenus->setExclusive(false);
+    this->ContextMenus=new QActionGroup(this);
+    this->ContextMenus->setEnabled(true);
+    this->ContextMenus->setExclusive(false);
 
-        this->ContextMenus->addAction(this->ui->actionBEV);
-        this->ContextMenus->addAction(this->ui->action3DView);
+    this->ContextMenus->addAction(this->ui->actionBEV);
+    this->ContextMenus->addAction(this->ui->action3DView);
 
-        this->RTDose=vtkSmartPointer<vtkImageData>::New();
+    this->RTDose=vtkSmartPointer<vtkImageData>::New();
 
-        this->ui->treeWidget->expandAll();
-        this->ui->statusBar->showMessage("No data available to display");
+    this->ui->treeWidget->expandAll();
+    this->ui->statusBar->showMessage("No data available to display");
 
-        this->CTImage=vtkSmartPointer<vtkImageData>::New();
-
-
-        this->MeshActors=vtkSmartPointer<vtkActorCollection>::New();
-        this->BeamActors=vtkSmartPointer<vtkActorCollection>::New();
-
-        //Setup BEV widget
-        this->BEVViewer=new BEVWidget(this->ui->mdiAreaView,this->ContextMenus);
-        //this->ui->mdiAreaView->addSubWindow(this->BEVViewer,Qt::WindowMinMaxButtonsHint|Qt::WindowTitleHint|Qt::FramelessWindowHint);//For frameless window
-        this->ui->mdiAreaView->addSubWindow(this->BEVViewer,Qt::WindowMaximizeButtonHint|Qt::WindowTitleHint);
-        this->BEVViewer->setWindowTitle("Model");
-        this->ui->mdiAreaView->tileSubWindows();
+    this->CTImage=vtkSmartPointer<vtkImageData>::New();
 
 
+    this->MeshActors=vtkSmartPointer<vtkActorCollection>::New();
+    this->BeamActors=vtkSmartPointer<vtkActorCollection>::New();
 
-
+    //Setup BEV widget
+    this->BEVViewer=new BEVWidget(this->ui->mdiAreaView,this->ContextMenus);
+    //this->ui->mdiAreaView->addSubWindow(this->BEVViewer,Qt::WindowMinMaxButtonsHint|Qt::WindowTitleHint|Qt::FramelessWindowHint);//For frameless window
+    this->ui->mdiAreaView->addSubWindow(this->BEVViewer,Qt::WindowMaximizeButtonHint|Qt::WindowTitleHint);
+    this->BEVViewer->setWindowTitle("Model");
+    this->ui->mdiAreaView->tileSubWindows();
 
 
 }
@@ -647,5 +645,15 @@ void MainWindow::on_actionRender_Bones_triggered()
 
 void MainWindow::on_actionHello_UDP_triggered()
 {
+    if(this->ui->actionHello_UDP->isChecked()==true)
+    {
+        this->listener->StartListening();
+    }
 
+    else
+    {
+        this->listener->StopListening();
+        QApplication::processEvents();
+
+    }
 }

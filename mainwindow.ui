@@ -581,6 +581,9 @@
    </property>
   </action>
   <action name="actionHello_UDP">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Hello UDP</string>
    </property>

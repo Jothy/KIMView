@@ -29,6 +29,7 @@ SOURCES += \
     rangesliderdialog.cpp \
     rtstructreaderdialog.cpp \
     rtstructreaderdialog.cpp \
+    udplistener.cpp \
     vtkinteractorstyleimagecustom.cpp \
     vtkinteractorstyleimagecustom.cpp \
     vtklinecallbackdose.cpp \
@@ -54,6 +55,7 @@ HEADERS += \
     rangesliderdialog.h \
     rtstructreaderdialog.h \
     rtstructreaderdialog.h \
+    udplistener.h \
     vtkinteractorstyleimagecustom.h \
     vtkinteractorstyleimagecustom.h \
     vtklinecallbackdose.h \

@@ -21,7 +21,7 @@
 #include<imageviewer2d.h>
 #include<bevwidget.h>
 
-
+#include<udplistener.h>
 
 
 namespace Ui {
@@ -68,6 +68,7 @@ public:
     ImageViewer2D *CoronalViewer;
     BEVWidget *BEVViewer;
     double CalcSSD(double Iso[3], double GantryAngle,vtkDataSet *BodyMesh);
+    UDPListener * listener;
 
 
 
