@@ -107,6 +107,7 @@
     </property>
     <addaction name="actionRender_Bones"/>
     <addaction name="actionHello_UDP"/>
+    <addaction name="actionMove_ROI"/>
    </widget>
    <widget class="QMenu" name="menuStructures">
     <property name="title">
@@ -586,6 +587,11 @@
    </property>
    <property name="text">
     <string>Hello UDP</string>
+   </property>
+  </action>
+  <action name="actionMove_ROI">
+   <property name="text">
+    <string>Move ROI</string>
    </property>
   </action>
  </widget>

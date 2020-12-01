@@ -17,6 +17,8 @@
 #include<vtkInteractorStyleTrackballCamera.h>
 #include<vtkCamera.h>
 #include<vtkCommand.h>
+#include<vtkTransformPolyDataFilter.h>
+#include<vtkTransform.h>
 
 #include "itkVersion.h"
 #include "itkImage.h"
@@ -642,7 +644,6 @@ void MainWindow::on_actionRender_Bones_triggered()
 
 }
 
-
 void MainWindow::on_actionHello_UDP_triggered()
 {
     if(this->ui->actionHello_UDP->isChecked()==true)
@@ -656,4 +657,52 @@ void MainWindow::on_actionHello_UDP_triggered()
         QApplication::processEvents();
 
     }
+}
+
+void MainWindow::on_actionMove_ROI_triggered()
+{
+    //double XYZ[3]={-5,10,20};
+    QString text = QInputDialog::getText(this, tr("Enter shifts (XYZ)"),
+                                             tr("X,Y,Z:"), QLineEdit::Normal,
+                                             "0,0,0");
+    double x=text.split(',')[0].toDouble();
+    double y=text.split(',')[1].toDouble();
+    double z=text.split(',')[2].toDouble();
+
+//    //Remove previous last actor
+//    this->BEVViewer->ModelRenderer->RemoveViewProp(this->MeshActors->GetLastActor());
+
+//    //Transform actor
+//    vtkSmartPointer<vtkTransform>transform=
+//            vtkSmartPointer<vtkTransform>::New();
+//    transform->Translate(x,y,z);
+//    //transActor->RotateX(0);
+//    //transActor->RotateZ(0);
+//    vtkSmartPointer<vtkTransformPolyDataFilter> transPoly=
+//            vtkSmartPointer<vtkTransformPolyDataFilter>::New();
+//    transPoly->SetTransform(transform);
+//    transPoly->SetInputData(this->MeshList[0]);
+
+//    vtkSmartPointer<vtkPolyDataMapper>transformMapper =
+//            vtkSmartPointer<vtkPolyDataMapper>::New();
+//    transformMapper->SetInputConnection(transPoly->GetOutputPort());
+//    transformMapper->ImmediateModeRenderingOn();
+//    transformMapper->ScalarVisibilityOff();
+
+//    vtkSmartPointer<vtkActor>actor=
+//            vtkSmartPointer<vtkActor>::New();
+//    actor->SetMapper(transformMapper);
+//    actor->GetProperty()->SetColor(1,0,0);
+
+//    this->MeshActors->AddItem(actor);
+
+//    this->BEVViewer->ModelRenderer->AddViewProp(actor);
+//    this->BEVViewer->show();
+//    this->BEVViewer->ModelRenderer->GetRenderWindow()->Render();
+
+    this->SagittalViewer->ContourActors->GetLastActor()->AddPosition(x,y,z);
+    this->SagittalViewer->ViewRenderer->GetRenderWindow()->Render();
+
+
+
 }

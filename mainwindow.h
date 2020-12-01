@@ -95,6 +95,8 @@ private slots:
 
     void on_actionHello_UDP_triggered();
 
+    void on_actionMove_ROI_triggered();
+
 private:
     Ui::MainWindow *ui;
     vtkSmartPointer<vtkRenderer>renderer;
