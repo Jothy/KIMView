@@ -108,6 +108,8 @@
     <addaction name="actionRender_Bones"/>
     <addaction name="actionHello_UDP"/>
     <addaction name="actionMove_ROI"/>
+    <addaction name="actionRotate_ROI"/>
+    <addaction name="actionAdd_Arc"/>
    </widget>
    <widget class="QMenu" name="menuStructures">
     <property name="title">
@@ -151,6 +153,9 @@
    <addaction name="actionReset_Zoom"/>
    <addaction name="actionCalc_DVH"/>
    <addaction name="actionBEV"/>
+   <addaction name="actionShowBeams"/>
+   <addaction name="actionAdjust_Range"/>
+   <addaction name="actionReset_WL_WW"/>
    <addaction name="actionPlan"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
@@ -592,6 +597,16 @@
   <action name="actionMove_ROI">
    <property name="text">
     <string>Move ROI</string>
+   </property>
+  </action>
+  <action name="actionRotate_ROI">
+   <property name="text">
+    <string>Rotate ROI</string>
+   </property>
+  </action>
+  <action name="actionAdd_Arc">
+   <property name="text">
+    <string>Add Arc</string>
    </property>
   </action>
  </widget>

@@ -63,6 +63,9 @@
 
 //Testing
 #include<QTimer>
+#include<vtkConeSource.h>
+#include<vtkPolarAxesActor.h>
+#include<vtkArcSource.h>
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -669,39 +672,168 @@ void MainWindow::on_actionMove_ROI_triggered()
     double y=text.split(',')[1].toDouble();
     double z=text.split(',')[2].toDouble();
 
-//    //Remove previous last actor
-//    this->BEVViewer->ModelRenderer->RemoveViewProp(this->MeshActors->GetLastActor());
+    //Remove previous last actor
+    //this->BEVViewer->ModelRenderer->RemoveViewProp(this->MeshActors->GetLastActor());
 
-//    //Transform actor
-//    vtkSmartPointer<vtkTransform>transform=
-//            vtkSmartPointer<vtkTransform>::New();
-//    transform->Translate(x,y,z);
-//    //transActor->RotateX(0);
-//    //transActor->RotateZ(0);
-//    vtkSmartPointer<vtkTransformPolyDataFilter> transPoly=
-//            vtkSmartPointer<vtkTransformPolyDataFilter>::New();
-//    transPoly->SetTransform(transform);
-//    transPoly->SetInputData(this->MeshList[0]);
+    //Transform actor
+    vtkSmartPointer<vtkTransform>transform=
+            vtkSmartPointer<vtkTransform>::New();
+    //transform->Translate(x,y,z);
+    transform->RotateZ(45);
+    //transform->RotateZ(0);
+    vtkSmartPointer<vtkTransformPolyDataFilter> transPoly=
+            vtkSmartPointer<vtkTransformPolyDataFilter>::New();
+    transPoly->SetTransform(transform);
+    transPoly->SetInputData(this->MeshList[0]);
 
-//    vtkSmartPointer<vtkPolyDataMapper>transformMapper =
-//            vtkSmartPointer<vtkPolyDataMapper>::New();
-//    transformMapper->SetInputConnection(transPoly->GetOutputPort());
-//    transformMapper->ImmediateModeRenderingOn();
-//    transformMapper->ScalarVisibilityOff();
+    vtkSmartPointer<vtkPolyDataMapper>transformMapper =
+            vtkSmartPointer<vtkPolyDataMapper>::New();
+    transformMapper->SetInputConnection(transPoly->GetOutputPort());
+    transformMapper->ImmediateModeRenderingOn();
+    transformMapper->ScalarVisibilityOff();
 
-//    vtkSmartPointer<vtkActor>actor=
-//            vtkSmartPointer<vtkActor>::New();
-//    actor->SetMapper(transformMapper);
-//    actor->GetProperty()->SetColor(1,0,0);
+    vtkSmartPointer<vtkActor>actor=
+            vtkSmartPointer<vtkActor>::New();
+    actor->SetMapper(transformMapper);
+    actor->GetProperty()->SetColor(1,0,0);
 
-//    this->MeshActors->AddItem(actor);
+    this->MeshActors->AddItem(actor);
 
-//    this->BEVViewer->ModelRenderer->AddViewProp(actor);
-//    this->BEVViewer->show();
-//    this->BEVViewer->ModelRenderer->GetRenderWindow()->Render();
+    this->BEVViewer->ModelRenderer->AddViewProp(actor);
+    this->BEVViewer->show();
+    this->BEVViewer->ModelRenderer->GetRenderWindow()->Render();
 
     this->SagittalViewer->ContourActors->GetLastActor()->AddPosition(x,y,z);
     this->SagittalViewer->ViewRenderer->GetRenderWindow()->Render();
+
+
+
+}
+
+void MainWindow::on_actionRotate_ROI_triggered()
+{
+//    //Create a cone
+//    vtkSmartPointer<vtkConeSource> coneSource1 =
+//            vtkSmartPointer<vtkConeSource>::New();
+//    coneSource1->SetHeight(10.0);
+//    coneSource1->Update();
+
+
+//    vtkSmartPointer<vtkTransform> transform =
+//            vtkSmartPointer<vtkTransform>::New();
+//    //transform->RotateWXYZ(double angle, double x, double y, double z);
+//    transform->RotateWXYZ(90,0.5,0.5,0.5);
+
+//    vtkSmartPointer<vtkTransformPolyDataFilter> transformFilter =
+//            vtkSmartPointer<vtkTransformPolyDataFilter>::New();
+//    transformFilter->SetTransform(transform);
+//    transformFilter->SetInputConnection(coneSource1->GetOutputPort());
+//    transformFilter->Update();
+
+//    //Create a mapper and actor
+//    vtkSmartPointer<vtkPolyDataMapper> mapper1 =
+//            vtkSmartPointer<vtkPolyDataMapper>::New();
+//    mapper1->SetInputConnection(coneSource1->GetOutputPort());
+
+//    vtkSmartPointer<vtkActor> actor1 =
+//            vtkSmartPointer<vtkActor>::New();
+//    actor1->SetMapper(mapper1);
+//    actor1->GetProperty()->SetColor(1,0,0);
+
+//    //TRansformed actor
+//    //Create a mapper and actor
+//    vtkSmartPointer<vtkPolyDataMapper> mapper2 =
+//            vtkSmartPointer<vtkPolyDataMapper>::New();
+//    mapper2->SetInputConnection(transformFilter->GetOutputPort());
+
+//    vtkSmartPointer<vtkActor> actor2 =
+//            vtkSmartPointer<vtkActor>::New();
+//    actor2->SetMapper(mapper2);
+//    actor2->GetProperty()->SetColor(0,1,0);
+
+//    //Create a renderer, render window, and interactor
+//    vtkSmartPointer<vtkRenderer> renderer =
+//            vtkSmartPointer<vtkRenderer>::New();
+//    vtkSmartPointer<vtkRenderWindow> renderWindow =
+//            vtkSmartPointer<vtkRenderWindow>::New();
+//    renderWindow->AddRenderer(renderer);
+//    vtkSmartPointer<vtkRenderWindowInteractor> renderWindowInteractor=
+//            vtkSmartPointer<vtkRenderWindowInteractor>::New();
+//    renderWindowInteractor->SetRenderWindow(renderWindow);
+
+//    //Add the actors to the scene
+//    renderer->AddActor(actor1);
+//    renderer->AddActor(actor2);
+//    renderer->SetBackground(0,0,0); // Background color dark red
+
+//    //Render and interact
+//    renderWindow->Render();
+//    renderWindowInteractor->Start();
+
+
+
+}
+
+void MainWindow::on_actionAdd_Arc_triggered()
+{
+    double startAngle=0;
+    double stopAngle=360;
+    double radius=400;
+
+    vtkSmartPointer<vtkPoints>points =
+            vtkSmartPointer<vtkPoints>::New();
+    vtkSmartPointer<vtkCellArray> cells =
+            vtkSmartPointer<vtkCellArray>::New();
+    points->SetNumberOfPoints(360);
+    cells->InsertNextCell(360);
+
+    for(double curAngle=startAngle;curAngle<stopAngle;curAngle++)
+    {
+        cells->InsertCellPoint(curAngle);
+    }
+
+    for(double curAngle=startAngle;curAngle<stopAngle;curAngle++)
+    {
+
+        double xCord=radius*cos(vtkMath::RadiansFromDegrees(curAngle));
+        double yCord=radius*sin(vtkMath::RadiansFromDegrees(curAngle));
+        points->SetPoint(curAngle,xCord,yCord,0);
+        qDebug()<<curAngle;
+    }
+
+    vtkSmartPointer<vtkPolyData>arc=
+            vtkSmartPointer<vtkPolyData>::New();
+    arc->Initialize();
+    arc->SetPolys(cells);
+    arc->SetPoints(points);
+
+    vtkSmartPointer<vtkPolyDataMapper>rectangleMapper=
+            vtkSmartPointer<vtkPolyDataMapper>::New();
+    rectangleMapper->SetInputData(arc);
+
+    vtkSmartPointer<vtkActor>arcActor=
+            vtkSmartPointer<vtkActor>::New();
+    arcActor->SetMapper(rectangleMapper);
+    arcActor->GetProperty()->SetColor(1,1,0);
+    arcActor->GetProperty()->SetLineWidth(3.0);
+    arcActor->GetProperty()->SetRepresentationToWireframe();
+    arcActor->SetOrigin(0,0,0);
+    arcActor->RotateZ(-90);
+    arcActor->GetProperty()->EdgeVisibilityOff();
+
+
+
+    this->BEVViewer->ModelRenderer->AddViewProp(arcActor);
+    this->BEVViewer->show();
+    this->BEVViewer->ModelRenderer->GetRenderWindow()->Render();
+
+    this->AxialViewer->ViewRenderer->AddActor(arcActor);
+    this->AxialViewer->ViewRenderer->GetRenderWindow()->Render();
+
+
+
+
+
 
 
 

@@ -97,6 +97,10 @@ private slots:
 
     void on_actionMove_ROI_triggered();
 
+    void on_actionRotate_ROI_triggered();
+
+    void on_actionAdd_Arc_triggered();
+
 private:
     Ui::MainWindow *ui;
     vtkSmartPointer<vtkRenderer>renderer;

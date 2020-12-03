@@ -67,8 +67,6 @@ void CreateObjects::createAnnotation(int location,double RGB[3],QString text1)
     this->annotation->GetTextProperty()->SetFontFamilyToTimes();
 }
 
-
-
 vtkSmartPointer<vtkPolyData> CreateObjects::createSphere(double radius,int thetaR,int phiR,double center[3])
 {
     vtkSmartPointer<vtkSphereSource> sph=
