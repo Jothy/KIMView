@@ -116,6 +116,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->BEVViewer->setWindowTitle("Model");
     this->ui->mdiAreaView->tileSubWindows();
 
+
     //Instantiate tracking members
     this->TrackingTranform=vtkSmartPointer<vtkTransform>::New();
     this->TrackingPolydataTransform=vtkSmartPointer<vtkTransformPolyDataFilter>::New();
@@ -131,7 +132,7 @@ MainWindow::MainWindow(QWidget *parent)
     this->TrackingActorCoronal->GetProperty()->SetColor(1,1,0);
 
     this->TrackingMapper=vtkSmartPointer<vtkPolyDataMapper>::New();
-    this->TrackingMapper->ImmediateModeRenderingOff();
+    this->TrackingMapper->ImmediateModeRenderingOn();
 
 
 
@@ -673,12 +674,19 @@ void MainWindow::on_actionHello_UDP_triggered()
 {
     if(this->ui->actionHello_UDP->isChecked()==true)
     {
+        this->listener->TrackingTarget->DeepCopy(this->MeshList[0]);
+        this->listener->AxialViewer=this->AxialViewer;
+        this->listener->SagittalViewer=this->SagittalViewer;
+        this->listener->CoronalViewer=this->CoronalViewer;
+        this->listener->BEVViewer=this->BEVViewer;
         this->listener->StartListening();
-    }
+        this->ui->statusBar->showMessage("Listening to UPD sender...");
+     }
 
     else
     {
         this->listener->StopListening();
+        this->ui->statusBar->clearMessage();
         QApplication::processEvents();
 
     }
@@ -733,7 +741,6 @@ void MainWindow::on_actionMove_ROI_triggered()
    qDebug() <<"Rendering took" << timer.elapsed() << "milliseconds";
    QMessageBox messageBox;
    messageBox.information(this,"Error",QString::number(timer.elapsed()));
-   messageBox.setFixedSize(500,200);
    messageBox.show();
 
 

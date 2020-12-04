@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>KIM View</string>
+   <string>KIMView</string>
   </property>
   <property name="windowIcon">
    <iconset resource="RC.qrc">
