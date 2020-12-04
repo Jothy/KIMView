@@ -119,6 +119,7 @@ MainWindow::MainWindow(QWidget *parent)
     //Instantiate tracking members
     this->TrackingTranform=vtkSmartPointer<vtkTransform>::New();
     this->TrackingPolydataTransform=vtkSmartPointer<vtkTransformPolyDataFilter>::New();
+    this->TrackingPolyData=vtkSmartPointer<vtkPolyData>::New();
 
     this->TrackingActor3D=vtkSmartPointer<vtkActor>::New();
     this->TrackingActor3D->GetProperty()->SetColor(1,1,0);
@@ -714,24 +715,27 @@ void MainWindow::on_actionMove_ROI_triggered()
     this->BEVViewer->ModelRenderer->AddViewProp(this->TrackingActor3D);
     this->BEVViewer->ModelRenderer->GetRenderWindow()->Render();
 
-    vtkSmartPointer<vtkPolyData>TrackingPolydata=
-            vtkSmartPointer<vtkPolyData>::New();
-    TrackingPolydata->ShallowCopy(this->TrackingPolydataTransform->GetOutput());
+    this->TrackingPolyData->ShallowCopy(this->TrackingPolydataTransform->GetOutput());
 
     //Update 2D views
-    this->TrackingActorAxial=this->AxialViewer->CutROI(TrackingPolydata,this->AxialViewer->SliceLoc,1,1,0,0);
+    this->TrackingActorAxial=this->AxialViewer->CutROI(this->TrackingPolyData,this->AxialViewer->SliceLoc,1,1,0,0);
     this->AxialViewer->ViewRenderer->AddActor(this->TrackingActorAxial);
     this->AxialViewer->ViewRenderer->GetRenderWindow()->Render();
 
-    this->TrackingActorSagittal=this->SagittalViewer->CutROI(TrackingPolydata,this->SagittalViewer->SliceLoc,1,1,0,1);
+    this->TrackingActorSagittal=this->SagittalViewer->CutROI(this->TrackingPolyData,this->SagittalViewer->SliceLoc,1,1,0,1);
     this->SagittalViewer->ViewRenderer->AddActor(this->TrackingActorSagittal);
     this->SagittalViewer->ViewRenderer->GetRenderWindow()->Render();
 
-    this->TrackingActorCoronal=this->CoronalViewer->CutROI(TrackingPolydata,this->CoronalViewer->SliceLoc,1,1,0,2);
+    this->TrackingActorCoronal=this->CoronalViewer->CutROI(this->TrackingPolyData,this->CoronalViewer->SliceLoc,1,1,0,2);
     this->CoronalViewer->ViewRenderer->AddActor(this->TrackingActorCoronal);
     this->CoronalViewer->ViewRenderer->GetRenderWindow()->Render();
 
    qDebug() <<"Rendering took" << timer.elapsed() << "milliseconds";
+   QMessageBox messageBox;
+   messageBox.information(this,"Error",QString::number(timer.elapsed()));
+   messageBox.setFixedSize(500,200);
+   messageBox.show();
+
 
 
 }

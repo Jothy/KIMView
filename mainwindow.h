@@ -85,6 +85,7 @@ public:
     vtkSmartPointer<vtkActor>TrackingActorAxial;
     vtkSmartPointer<vtkActor>TrackingActorSagittal;
     vtkSmartPointer<vtkActor>TrackingActorCoronal;
+    vtkSmartPointer<vtkPolyData>TrackingPolyData;
 
 
 
