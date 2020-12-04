@@ -66,6 +66,8 @@
 #include<vtkConeSource.h>
 #include<vtkPolarAxesActor.h>
 #include<vtkArcSource.h>
+#include<vtkArrowSource.h>
+#include<vtkGlyph3D.h>
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -776,64 +778,66 @@ void MainWindow::on_actionRotate_ROI_triggered()
 
 void MainWindow::on_actionAdd_Arc_triggered()
 {
-    double startAngle=0;
-    double stopAngle=360;
     double radius=400;
+    double xCord1=radius*cos(vtkMath::RadiansFromDegrees(0.0));
+    double yCord1=radius*sin(vtkMath::RadiansFromDegrees(0.0));
+    double xCord2=radius*cos(vtkMath::RadiansFromDegrees(359.9));
+    double yCord2=radius*sin(vtkMath::RadiansFromDegrees(359.9));
 
-    vtkSmartPointer<vtkPoints>points =
-            vtkSmartPointer<vtkPoints>::New();
-    vtkSmartPointer<vtkCellArray> cells =
-            vtkSmartPointer<vtkCellArray>::New();
-    points->SetNumberOfPoints(360);
-    cells->InsertNextCell(360);
+    vtkSmartPointer<vtkArcSource>arcSource=
+            vtkSmartPointer<vtkArcSource>::New();
+    //arcSource->SetAngle(90);
+    arcSource->SetResolution(360);
+    arcSource->SetPoint1(xCord1,yCord1,0);
+    arcSource->SetPoint2(xCord2,yCord2,0);
+    arcSource->NegativeOn();
+    arcSource->UseNormalAndAngleOff();
+    arcSource->Update();
 
-    for(double curAngle=startAngle;curAngle<stopAngle;curAngle++)
-    {
-        cells->InsertCellPoint(curAngle);
-    }
 
-    for(double curAngle=startAngle;curAngle<stopAngle;curAngle++)
-    {
-
-        double xCord=radius*cos(vtkMath::RadiansFromDegrees(curAngle));
-        double yCord=radius*sin(vtkMath::RadiansFromDegrees(curAngle));
-        points->SetPoint(curAngle,xCord,yCord,0);
-        qDebug()<<curAngle;
-    }
-
-    vtkSmartPointer<vtkPolyData>arc=
-            vtkSmartPointer<vtkPolyData>::New();
-    arc->Initialize();
-    arc->SetPolys(cells);
-    arc->SetPoints(points);
-
-    vtkSmartPointer<vtkPolyDataMapper>rectangleMapper=
+    // Visualize
+    vtkSmartPointer<vtkPolyDataMapper> mapper =
             vtkSmartPointer<vtkPolyDataMapper>::New();
-    rectangleMapper->SetInputData(arc);
+    mapper->SetInputConnection(arcSource->GetOutputPort());
 
-    vtkSmartPointer<vtkActor>arcActor=
+    vtkSmartPointer<vtkActor> arcActor =
             vtkSmartPointer<vtkActor>::New();
-    arcActor->SetMapper(rectangleMapper);
+    arcActor->SetMapper(mapper);
     arcActor->GetProperty()->SetColor(1,1,0);
-    arcActor->GetProperty()->SetLineWidth(3.0);
-    arcActor->GetProperty()->SetRepresentationToWireframe();
-    arcActor->SetOrigin(0,0,0);
+    arcActor->GetProperty()->SetLineWidth(2.0);
+    arcActor->SetPosition(-12,126,-32);
     arcActor->RotateZ(-90);
-    arcActor->GetProperty()->EdgeVisibilityOff();
 
 
+    //Add arrow
+    //Create an arrow.
+    vtkSmartPointer<vtkArrowSource>arrowSource =
+            vtkSmartPointer<vtkArrowSource>::New();
+    arrowSource->SetShaftRadius(50);
+    arrowSource->SetTipLength(125);
+
+    vtkSmartPointer<vtkPolyDataMapper>arrowMapper=
+            vtkSmartPointer<vtkPolyDataMapper>::New();
+    arrowMapper->SetInputData(arrowSource->GetOutput());
+
+    vtkSmartPointer<vtkActor>arrowActor=
+            vtkSmartPointer<vtkActor>::New();
+    arrowActor->SetMapper(arrowMapper);
+    arrowActor->GetProperty()->SetColor(1,0,0);
+    arrowActor->SetPosition(0,0,0);
+
+    vtkSmartPointer<vtkActor>actor=
+            vtkSmartPointer<vtkActor>::New();
+    actor=arcActor;
+    actor->SetPosition(-12,126,0);
 
     this->BEVViewer->ModelRenderer->AddViewProp(arcActor);
+    this->BEVViewer->ModelRenderer->AddViewProp(arrowActor);
     this->BEVViewer->show();
     this->BEVViewer->ModelRenderer->GetRenderWindow()->Render();
 
-    this->AxialViewer->ViewRenderer->AddActor(arcActor);
+    this->AxialViewer->ViewRenderer->AddActor(actor);
     this->AxialViewer->ViewRenderer->GetRenderWindow()->Render();
-
-
-
-
-
 
 
 
