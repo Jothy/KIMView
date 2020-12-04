@@ -18,6 +18,13 @@
 #include<vtkInteractorStyleTrackballCamera.h>
 #include<vtkObject.h>
 
+//Tracking function headers
+#include<vtkTransform.h>
+#include<vtkTransformPolyDataFilter.h>
+#include<vtkSMPTransform.h>
+
+
+
 #include<imageviewer2d.h>
 #include<bevwidget.h>
 
@@ -69,6 +76,15 @@ public:
     BEVWidget *BEVViewer;
     double CalcSSD(double Iso[3], double GantryAngle,vtkDataSet *BodyMesh);
     UDPListener * listener;
+
+    //Tracking members
+    vtkSmartPointer<vtkTransform>TrackingTranform;
+    vtkSmartPointer<vtkTransformPolyDataFilter>TrackingPolydataTransform;
+    vtkSmartPointer<vtkActor>TrackingActor3D;
+    vtkSmartPointer<vtkPolyDataMapper>TrackingMapper;
+    vtkSmartPointer<vtkActor>TrackingActorAxial;
+    vtkSmartPointer<vtkActor>TrackingActorSagittal;
+    vtkSmartPointer<vtkActor>TrackingActorCoronal;
 
 
 

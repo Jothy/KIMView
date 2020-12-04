@@ -68,6 +68,7 @@
 #include<vtkArcSource.h>
 #include<vtkArrowSource.h>
 #include<vtkGlyph3D.h>
+#include<vtkSMPTransform.h>
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -114,6 +115,23 @@ MainWindow::MainWindow(QWidget *parent)
     this->ui->mdiAreaView->addSubWindow(this->BEVViewer,Qt::WindowMaximizeButtonHint|Qt::WindowTitleHint);
     this->BEVViewer->setWindowTitle("Model");
     this->ui->mdiAreaView->tileSubWindows();
+
+    //Instantiate tracking members
+    this->TrackingTranform=vtkSmartPointer<vtkTransform>::New();
+    this->TrackingPolydataTransform=vtkSmartPointer<vtkTransformPolyDataFilter>::New();
+
+    this->TrackingActor3D=vtkSmartPointer<vtkActor>::New();
+    this->TrackingActor3D->GetProperty()->SetColor(1,1,0);
+    this->TrackingActorAxial=vtkSmartPointer<vtkActor>::New();
+    this->TrackingActorAxial->GetProperty()->SetColor(1,1,0);
+    this->TrackingActorSagittal=vtkSmartPointer<vtkActor>::New();
+    this->TrackingActorSagittal->GetProperty()->SetColor(1,1,0);
+    this->TrackingActorCoronal=vtkSmartPointer<vtkActor>::New();
+    this->TrackingActorCoronal->GetProperty()->SetColor(1,1,0);
+
+    this->TrackingMapper=vtkSmartPointer<vtkPolyDataMapper>::New();
+    this->TrackingMapper->ImmediateModeRenderingOff();
+
 
 
 }
@@ -297,6 +315,7 @@ void MainWindow::on_actionStructures_triggered()
     this->CoronalViewer->UpdateView();
 
     this->ui->action3DView->trigger();
+
 
 }
 
@@ -666,6 +685,7 @@ void MainWindow::on_actionHello_UDP_triggered()
 
 void MainWindow::on_actionMove_ROI_triggered()
 {
+
     //double XYZ[3]={-5,10,20};
     QString text = QInputDialog::getText(this, tr("Enter shifts (XYZ)"),
                                              tr("X,Y,Z:"), QLineEdit::Normal,
@@ -674,40 +694,44 @@ void MainWindow::on_actionMove_ROI_triggered()
     double y=text.split(',')[1].toDouble();
     double z=text.split(',')[2].toDouble();
 
-    //Remove previous last actor
-    //this->BEVViewer->ModelRenderer->RemoveViewProp(this->MeshActors->GetLastActor());
+    QElapsedTimer timer;
+    timer.start();
+
+    //Remove previous last actors
+    this->BEVViewer->ModelRenderer->RemoveViewProp(this->TrackingActor3D);
+    this->AxialViewer->ViewRenderer->RemoveViewProp(this->TrackingActorAxial);
+    this->SagittalViewer->ViewRenderer->RemoveViewProp(this->TrackingActorSagittal);
+    this->CoronalViewer->ViewRenderer->RemoveViewProp(this->TrackingActorCoronal);
 
     //Transform actor
-    vtkSmartPointer<vtkTransform>transform=
-            vtkSmartPointer<vtkTransform>::New();
-    //transform->Translate(x,y,z);
-    transform->RotateZ(45);
-    //transform->RotateZ(0);
-    vtkSmartPointer<vtkTransformPolyDataFilter> transPoly=
-            vtkSmartPointer<vtkTransformPolyDataFilter>::New();
-    transPoly->SetTransform(transform);
-    transPoly->SetInputData(this->MeshList[0]);
+    this->TrackingTranform->Identity();
+    this->TrackingTranform->Translate(x,y,z);
+    this->TrackingPolydataTransform->SetTransform(this->TrackingTranform);
+    this->TrackingPolydataTransform->SetInputData(this->MeshList[0]);
+    this->TrackingMapper->SetInputConnection(this->TrackingPolydataTransform->GetOutputPort());
+    this->TrackingActor3D->SetMapper(this->TrackingMapper);
 
-    vtkSmartPointer<vtkPolyDataMapper>transformMapper =
-            vtkSmartPointer<vtkPolyDataMapper>::New();
-    transformMapper->SetInputConnection(transPoly->GetOutputPort());
-    transformMapper->ImmediateModeRenderingOn();
-    transformMapper->ScalarVisibilityOff();
-
-    vtkSmartPointer<vtkActor>actor=
-            vtkSmartPointer<vtkActor>::New();
-    actor->SetMapper(transformMapper);
-    actor->GetProperty()->SetColor(1,0,0);
-
-    this->MeshActors->AddItem(actor);
-
-    this->BEVViewer->ModelRenderer->AddViewProp(actor);
-    this->BEVViewer->show();
+    this->BEVViewer->ModelRenderer->AddViewProp(this->TrackingActor3D);
     this->BEVViewer->ModelRenderer->GetRenderWindow()->Render();
 
-    this->SagittalViewer->ContourActors->GetLastActor()->AddPosition(x,y,z);
+    vtkSmartPointer<vtkPolyData>TrackingPolydata=
+            vtkSmartPointer<vtkPolyData>::New();
+    TrackingPolydata->ShallowCopy(this->TrackingPolydataTransform->GetOutput());
+
+    //Update 2D views
+    this->TrackingActorAxial=this->AxialViewer->CutROI(TrackingPolydata,this->AxialViewer->SliceLoc,1,1,0,0);
+    this->AxialViewer->ViewRenderer->AddActor(this->TrackingActorAxial);
+    this->AxialViewer->ViewRenderer->GetRenderWindow()->Render();
+
+    this->TrackingActorSagittal=this->SagittalViewer->CutROI(TrackingPolydata,this->SagittalViewer->SliceLoc,1,1,0,1);
+    this->SagittalViewer->ViewRenderer->AddActor(this->TrackingActorSagittal);
     this->SagittalViewer->ViewRenderer->GetRenderWindow()->Render();
 
+    this->TrackingActorCoronal=this->CoronalViewer->CutROI(TrackingPolydata,this->CoronalViewer->SliceLoc,1,1,0,2);
+    this->CoronalViewer->ViewRenderer->AddActor(this->TrackingActorCoronal);
+    this->CoronalViewer->ViewRenderer->GetRenderWindow()->Render();
+
+   qDebug() <<"Rendering took" << timer.elapsed() << "milliseconds";
 
 
 }

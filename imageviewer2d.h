@@ -153,7 +153,6 @@ private slots:
 
     void on_actionMeasureAngle_triggered();
 
-
     void on_actionReset_WL_WW_triggered();    
 
     void on_toolButtonProbe_clicked();

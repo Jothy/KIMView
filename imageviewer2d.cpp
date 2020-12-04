@@ -1039,7 +1039,7 @@ vtkSmartPointer<vtkActor>ImageViewer2D::CutROI(vtkPolyData *mesh,double sliceNo,
     //cutterMapper->SetResolveCoincidentTopologyPolygonOffsetParameters(10,10);
     cutterMapper->SetInputConnection(cutter->GetOutputPort());
     cutterMapper->ScalarVisibilityOff();
-    cutterMapper->ImmediateModeRenderingOn();
+    cutterMapper->ImmediateModeRenderingOff();
     cutterMapper->Update();
 
 
