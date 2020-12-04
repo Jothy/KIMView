@@ -118,6 +118,8 @@ private slots:
 
     void on_actionAdd_Arc_triggered();
 
+    void on_actionSend_UDP_triggered();
+
 private:
     Ui::MainWindow *ui;
     vtkSmartPointer<vtkRenderer>renderer;

@@ -37,6 +37,7 @@ public:
     ImageViewer2D *CoronalViewer;
     ImageViewer2D *SagittalViewer;
     BEVWidget *BEVViewer;
+    void UpdateViews();
 
 
 

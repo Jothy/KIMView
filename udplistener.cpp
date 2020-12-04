@@ -3,6 +3,7 @@
 #include<udplistener.h>
 #include<QUdpSocket>
 #include<QElapsedTimer>
+#include<QApplication>
 
 //Tracking includes
 #include<vtkProperty.h>
@@ -39,14 +40,11 @@ UDPListener::~UDPListener()
 
 void UDPListener::HelloUDP()
 {
-    QByteArray Data;
-    Data.append("Hello from UDP");
-
-    // Sends the datagram datagram
-    // to the host address and at port.
-    // qint64 QUdpSocket::writeDatagram(const QByteArray & datagram,
-    //                      const QHostAddress & host, quint16 port)
-    socket->writeDatagram(Data, QHostAddress::LocalHost,45617);
+//    QByteArray Data;
+//    Data.append("Hello from UDP");
+//    //Sends the datagram datagram
+//    socket->writeDatagram(Data, QHostAddress::LocalHost,45617);
+    qDebug()<<"Writing...";
 }
 
 void UDPListener::readMessage()
@@ -78,6 +76,29 @@ void UDPListener::readMessage()
     this->shifts[2]=buffer.split(',')[2].toDouble();
     qDebug()<<"Shifts: "<<this->shifts[0]<<""<<this->shifts[1]<<""<<this->shifts[2];
 
+    this->UpdateViews();
+    QApplication::processEvents();
+
+    qDebug() <<"Rendering took" << timer.elapsed() << "milliseconds";
+
+
+}
+
+void UDPListener::StartListening()
+{
+    qDebug()<<"Start";
+    socket->bind(QHostAddress::LocalHost,45617);
+    connect(socket, SIGNAL(readyRead()), this, SLOT(readMessage()));
+
+}
+
+void UDPListener::StopListening()
+{
+    socket->close();
+}
+
+void UDPListener::UpdateViews()
+{
     /*******************************Tracking.......................................*/
     //Remove previous last actors
     this->BEVViewer->ModelRenderer->RemoveViewProp(this->TrackingActor3D);
@@ -101,6 +122,8 @@ void UDPListener::readMessage()
     //Update 2D views
     this->TrackingActorAxial=this->AxialViewer->CutROI(this->TrackingPolyData,this->AxialViewer->SliceLoc,1,1,0,0);
     this->TrackingActorAxial->GetProperty()->SetLineWidth(3.0);
+    this->TrackingActorAxial->GetProperty()->SetLineStipplePattern(0xA1A1);
+    this->TrackingActorAxial->GetProperty()->SetLineStippleRepeatFactor(3);
     this->AxialViewer->ViewRenderer->AddActor(this->TrackingActorAxial);
     this->AxialViewer->ViewRenderer->GetRenderWindow()->Render();
 
@@ -113,23 +136,6 @@ void UDPListener::readMessage()
     this->TrackingActorCoronal->GetProperty()->SetLineWidth(3.0);
     this->CoronalViewer->ViewRenderer->AddActor(this->TrackingActorCoronal);
     this->CoronalViewer->ViewRenderer->GetRenderWindow()->Render();
-
-    qDebug() <<"Rendering took" << timer.elapsed() << "milliseconds";
-
-
-}
-
-void UDPListener::StartListening()
-{
-    qDebug()<<"Start";
-    socket->bind(QHostAddress::LocalHost,45617);
-    connect(socket, SIGNAL(readyRead()), this, SLOT(readMessage()));
-
-}
-
-void UDPListener::StopListening()
-{
-    socket->close();
 }
 
 
