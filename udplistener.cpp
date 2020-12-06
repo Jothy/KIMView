@@ -120,19 +120,19 @@ void UDPListener::UpdateViews()
     this->TrackingPolyData->DeepCopy(this->TrackingPolydataTransform->GetOutput());
 
     //Update 2D views
-    this->TrackingActorAxial=this->AxialViewer->CutROI(this->TrackingPolyData,this->AxialViewer->SliceLoc,1,1,0,0);
+    this->TrackingActorAxial=this->AxialViewer->CutROI(this->TrackingPolyData,this->AxialViewer->SliceLoc,1,1,0,this->AxialViewer->SliceOrientation);
     this->TrackingActorAxial->GetProperty()->SetLineWidth(3.0);
     this->TrackingActorAxial->GetProperty()->SetLineStipplePattern(0xA1A1);
     this->TrackingActorAxial->GetProperty()->SetLineStippleRepeatFactor(3);
     this->AxialViewer->ViewRenderer->AddActor(this->TrackingActorAxial);
     this->AxialViewer->ViewRenderer->GetRenderWindow()->Render();
 
-    this->TrackingActorSagittal=this->SagittalViewer->CutROI(this->TrackingPolyData,this->SagittalViewer->SliceLoc,1,1,0,1);
+    this->TrackingActorSagittal=this->SagittalViewer->CutROI(this->TrackingPolyData,this->SagittalViewer->SliceLoc,1,1,0,this->SagittalViewer->SliceOrientation);
     this->TrackingActorSagittal->GetProperty()->SetLineWidth(3.0);
     this->SagittalViewer->ViewRenderer->AddActor(this->TrackingActorSagittal);
     this->SagittalViewer->ViewRenderer->GetRenderWindow()->Render();
 
-    this->TrackingActorCoronal=this->CoronalViewer->CutROI(this->TrackingPolyData,this->CoronalViewer->SliceLoc,1,1,0,2);
+    this->TrackingActorCoronal=this->CoronalViewer->CutROI(this->TrackingPolyData,this->CoronalViewer->SliceLoc,1,1,0,this->CoronalViewer->SliceOrientation);
     this->TrackingActorCoronal->GetProperty()->SetLineWidth(3.0);
     this->CoronalViewer->ViewRenderer->AddActor(this->TrackingActorCoronal);
     this->CoronalViewer->ViewRenderer->GetRenderWindow()->Render();

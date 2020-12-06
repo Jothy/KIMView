@@ -77,16 +77,6 @@ public:
     double CalcSSD(double Iso[3], double GantryAngle,vtkDataSet *BodyMesh);
     UDPListener * listener;
 
-    //Tracking members
-    vtkSmartPointer<vtkTransform>TrackingTranform;
-    vtkSmartPointer<vtkTransformPolyDataFilter>TrackingPolydataTransform;
-    vtkSmartPointer<vtkActor>TrackingActor3D;
-    vtkSmartPointer<vtkPolyDataMapper>TrackingMapper;
-    vtkSmartPointer<vtkActor>TrackingActorAxial;
-    vtkSmartPointer<vtkActor>TrackingActorSagittal;
-    vtkSmartPointer<vtkActor>TrackingActorCoronal;
-    vtkSmartPointer<vtkPolyData>TrackingPolyData;
-
 
 
 private slots:
