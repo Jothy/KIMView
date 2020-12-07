@@ -124,7 +124,8 @@ LIBS+= -LD:\Libs\GDCM\Install\lib -lgdcmcharls -lgdcmCommon -lgdcmDICT -lgdcmDSE
 
 DISTFILES += \
     Human.vtp \
-    Icons/DVH.png
+    Icons/DVH.png \
+    Shifts.txt
 
 RESOURCES += \
     RC.qrc
