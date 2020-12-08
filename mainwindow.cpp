@@ -837,22 +837,7 @@ void MainWindow::on_actionSend_UDP_triggered()
     this->listener->CoronalViewer=this->CoronalViewer;
     this->listener->BEVViewer=this->BEVViewer;
     this->listener->StartListening();
+    QApplication::processEvents();
 
-    QFile inputFile("D:\\Projects\\KIMView\\Shifts.txt");
-    if (inputFile.open(QIODevice::ReadOnly))
-    {
-       QTextStream in(&inputFile);
-       while (!in.atEnd())
-       {
-          //Coordinate conversion from KIM to LPS/DICOM
-          QString line = in.readLine();
-          this->listener->shifts[0]=(line.split('\t')[1].toDouble())*50.0;
-          this->listener->shifts[2]=(line.split('\t')[2].toDouble())*50.0;
-          this->listener->shifts[1]=-(line.split('\t')[3].toDouble())*50.0;
-          //qDebug()<<this->listener->shifts[0]<<""<<this->listener->shifts[1]<<""<<this->listener->shifts[1];
-          this->listener->UpdateViews();
-          QApplication::processEvents();
-       }
-       inputFile.close();
-    }
 }
+

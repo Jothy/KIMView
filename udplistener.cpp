@@ -71,15 +71,16 @@ void UDPListener::readMessage()
     //qDebug() << "Message from: " << sender.toString();
     //qDebug() << "Message port: " << senderPort;
     //qDebug() << "Message: " << buffer;
-    this->shifts[0]=buffer.split(',')[0].toDouble();
-    this->shifts[1]=buffer.split(',')[1].toDouble();
-    this->shifts[2]=buffer.split(',')[2].toDouble();
-    qDebug()<<"Shifts: "<<this->shifts[0]<<""<<this->shifts[1]<<""<<this->shifts[2];
+
+    this->shifts[0]=buffer.split(' ')[2].toDouble()*10;
+    this->shifts[1]=buffer.split(' ')[3].toDouble()*10;
+    this->shifts[2]=buffer.split(' ')[4].toDouble()*1;
+    //qDebug()<<"Shifts: "<<this->shifts[0]<<""<<this->shifts[1]<<""<<this->shifts[2];
 
     this->UpdateViews();
     QApplication::processEvents();
 
-    qDebug() <<"Rendering took" << timer.elapsed() << "milliseconds";
+//    qDebug() <<"Rendering took" << timer.elapsed() << "milliseconds";
 
 
 }
