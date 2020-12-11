@@ -4,6 +4,7 @@
 #include <QDialog>
 
 #include<imageviewer2d.h>
+#include<bevwidget.h>
 
 namespace Ui {
 class RangeSliderDialog;
@@ -22,6 +23,7 @@ public:
     ImageViewer2D *AxialViewer;
     ImageViewer2D *CoronalViewer;
     ImageViewer2D *SagittalViewer;
+    BEVWidget *ModelViewer;
 
 
 private slots:

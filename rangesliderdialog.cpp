@@ -3,6 +3,8 @@
 
 #include<QDebug>
 #include<imageviewer2d.h>
+#include<bevwidget.h>
+#include<vtkRenderWindow.h>
 
 #include<vtkLookupTable.h>
 
@@ -40,7 +42,8 @@ void RangeSliderDialog::on_SpinBoxMinDose_editingFinished()
 {
     this->minDose=this->ui->SpinBoxMinDose->value();
     this->ui->horizontalSlider->setValue(this->minDose);
-    //this->AxialViewer->AdjustDoseRange(this->ui->horizontalSlider->value(),this->maxDose);
+    //this->AxialViewer->AdjustDoseRange(this->ui->horizontalSlider->value(),this->maxDose);    
+    this->ModelViewer->ShowIsodoseSurface(this->minDose,this->minDose);
 
 
 }
@@ -53,6 +56,7 @@ void RangeSliderDialog::on_SpinBoxMaxDose_editingFinished()
         this->AxialViewer->AdjustDoseRange(this->ui->horizontalSlider->value(),this->maxDose);
         this->SagittalViewer->AdjustDoseRange(this->ui->horizontalSlider->value(),this->maxDose);
         this->CoronalViewer->AdjustDoseRange(this->ui->horizontalSlider->value(),this->maxDose);
+        this->ModelViewer->ShowIsodoseSurface(this->minDose,this->minDose);
     }
     else
     {
@@ -69,6 +73,10 @@ void RangeSliderDialog::on_horizontalSlider_valueChanged(double)
     this->AxialViewer->AdjustDoseRange(this->ui->horizontalSlider->value(),this->maxDose);
     this->SagittalViewer->AdjustDoseRange(this->ui->horizontalSlider->value(),this->maxDose);
     this->CoronalViewer->AdjustDoseRange(this->ui->horizontalSlider->value(),this->maxDose);
+    this->ModelViewer->ShowIsodoseSurface(this->minDose,this->minDose);
+    this->ModelViewer->ModelRenderer->GetRenderWindow()->Render();
+    this->ModelViewer->show();
+
 
 }
 
@@ -82,6 +90,7 @@ void RangeSliderDialog::on_pushButton_clicked()
     this->AxialViewer->AdjustDoseRange(this->minDose,this->maxDose);
     this->SagittalViewer->AdjustDoseRange(this->minDose,this->maxDose);
     this->CoronalViewer->AdjustDoseRange(this->minDose,this->maxDose);
+    this->ModelViewer->ShowIsodoseSurface(this->minDose,this->minDose);
     this->AxialViewer->UpdateView();
     this->SagittalViewer->UpdateView();
     this->CoronalViewer->UpdateView();

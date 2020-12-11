@@ -446,12 +446,12 @@ void meshReader::getROIMeshes(vtkImageData *imgData,float zSpacing,float targetR
                             vtkSmartPointer<vtkActor>::New();
                     actor->SetMapper(mapper);
                     actor->GetProperty()->SetColor(R/255,G/255,B/255);
-                    actor->GetProperty()->SetDiffuse(0.9);
+                    actor->GetProperty()->SetDiffuse(0.5);
                     actor->GetProperty()->SetSpecular(0.5);
-                    actor->GetProperty()->SetSpecularPower(20);
-                    //actor->GetProperty()->SetInterpolationToPhong();
+                    actor->GetProperty()->SetSpecularPower(10);
+                    actor->GetProperty()->SetInterpolationToPhong();
                     actor->GetProperty()->SetLineWidth(1.0);
-                    actor->GetProperty()->SetAmbient(0.1);
+                    actor->GetProperty()->SetAmbient(0.3);
                     actor->PickableOff();
 
 

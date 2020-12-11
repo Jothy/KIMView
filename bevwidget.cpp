@@ -20,7 +20,8 @@
 #include<vtkTransformFilter.h>
 #include<vtkAxesActor.h>
 #include<vtkOrientationMarkerWidget.h>
-
+#include<vtkContourFilter.h>
+#include<vtkImageData.h>
 
 BEVWidget::BEVWidget(QWidget *parent,QActionGroup *contextMenus) :
     QWidget(parent),
@@ -46,6 +47,7 @@ BEVWidget::BEVWidget(QWidget *parent,QActionGroup *contextMenus) :
     this->ImageStyleImg=vtkSmartPointer<vtkInteractorStyleImage>::New();
     this->Interactor3D=vtkSmartPointer<vtkRenderWindowInteractor>::New();
     this->InteractorTrackball=vtkSmartPointer<vtkInteractorStyleTrackballCamera>::New();
+    this->RTDose=vtkSmartPointer<vtkImageData>::New();
 
 //    //Initialize
 //    this->AnnotatedCube=vtkSmartPointer<vtkAnnotatedCubeActor>::New();
@@ -112,6 +114,16 @@ BEVWidget::BEVWidget(QWidget *parent,QActionGroup *contextMenus) :
     this->MarkerWidget2->SetViewport( 0.0,0.7,0.1,1.0);//[Xmin,Ymin.Xmax,Ymax]
     this->MarkerWidget2->SetEnabled(1);
     this->MarkerWidget2->InteractiveOff();
+
+    this->IsodoseSurface=vtkSmartPointer<vtkActor>::New();
+    this->IsodoseSurface->GetProperty()->SetAmbient(1);
+    this->IsodoseSurface->GetProperty()->SetOpacity(0.6);
+    this->IsodoseSurface->GetProperty()->SetDiffuse(0.9);
+    this->IsodoseSurface->GetProperty()->SetSpecular(0.5);
+    this->IsodoseSurface->GetProperty()->SetSpecularPower(20);
+    this->IsodoseSurface->GetProperty()->SetInterpolationToPhong();
+    this->IsodoseSurface->GetProperty()->SetColor(1.0,0.216,0.823);
+    this->IsodoseSurface->ForceTranslucentOn();
 
 
 }
@@ -224,4 +236,73 @@ void BEVWidget::DisplayBeams()
 
 
 }
+
+void BEVWidget::ShowIsodoseSurface(double minDose, double maxDose)
+{
+    vtkSmartPointer<vtkContourFilter>contours=
+            vtkSmartPointer<vtkContourFilter>::New();
+    contours->SetInputData(this->RTDose);
+    contours->GenerateValues(1,minDose,maxDose);
+    contours->UseScalarTreeOn();
+
+    vtkSmartPointer<vtkPolyDataMapper>contourMapper=
+            vtkSmartPointer<vtkPolyDataMapper>::New();
+    contourMapper->SetInputConnection(contours->GetOutputPort());
+    contourMapper->ScalarVisibilityOn();
+
+    this->ModelRenderer->RemoveActor(this->IsodoseSurface);
+    this->IsodoseSurface->SetMapper(contourMapper);
+    this->ModelRenderer->AddActor(this->IsodoseSurface);
+    this->ModelRenderer->GetRenderWindow()->Render();
+    //this->ModelRenderer->GetRenderWindow()->GetInteractor()->Start();
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

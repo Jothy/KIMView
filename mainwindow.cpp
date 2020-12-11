@@ -113,6 +113,10 @@ MainWindow::MainWindow(QWidget *parent)
     //this->ui->mdiAreaView->addSubWindow(this->BEVViewer,Qt::WindowMinMaxButtonsHint|Qt::WindowTitleHint|Qt::FramelessWindowHint);//For frameless window
     this->ui->mdiAreaView->addSubWindow(this->BEVViewer,Qt::WindowMaximizeButtonHint|Qt::WindowTitleHint);
     this->BEVViewer->setWindowTitle("Model");
+
+
+    //By default plan information dock widget is hidden
+    this->ui->dockWidget_2->setVisible(false);
     this->ui->mdiAreaView->tileSubWindows();
 
 
@@ -406,6 +410,7 @@ void MainWindow::on_actionDose_triggered()
     this->AxialViewer->SetRTDose(this->RTDose);
     this->SagittalViewer->SetRTDose(this->RTDose);
     this->CoronalViewer->SetRTDose(this->RTDose);
+    this->BEVViewer->RTDose=this->RTDose;
 
     this->AxialViewer->DoseVisibility=true;
     this->AxialViewer->UpdateView();
@@ -421,6 +426,7 @@ void MainWindow::on_actionDose_triggered()
 
     double *ImgOrg=this->CTImage->GetOrigin();
     //qDebug()<<ImgOrg[0]<<ImgOrg[1]<<ImgOrg[2]<<"Image Origin";
+
 
 }
 
@@ -509,6 +515,19 @@ void MainWindow::on_actionShowDose_triggered()
     this->AxialViewer->TriggerActionShowDose();
     this->SagittalViewer->TriggerActionShowDose();
     this->CoronalViewer->TriggerActionShowDose();
+
+    if(this->AxialViewer->DoseVisibility==1)
+    {
+        this->BEVViewer->IsodoseSurface->VisibilityOn();
+        //qDebug()<<"Dose on";
+
+    }
+    else
+    {
+        this->BEVViewer->IsodoseSurface->VisibilityOff();
+         //qDebug()<<"Dose off";
+    }
+    this->BEVViewer->ModelRenderer->GetRenderWindow()->Render();
 
 }
 
@@ -631,10 +650,11 @@ void MainWindow::on_actionAdjust_Range_triggered()
         RangeSliderDialog *ranger=new RangeSliderDialog(this);
         ranger->minDose=this->RTDose->GetScalarRange()[0];
         ranger->maxDose=this->RTDose->GetScalarRange()[1];
-        //Need to set viewer first before SetDoseRange, or else crashes
+        //Need to set viewers first before SetDoseRange, or else crashes
         ranger->AxialViewer=this->AxialViewer;
         ranger->SagittalViewer=this->SagittalViewer;
         ranger->CoronalViewer=this->CoronalViewer;
+        ranger->ModelViewer=this->BEVViewer;
         ranger->SetDoseRange();
         ranger->show();
     }

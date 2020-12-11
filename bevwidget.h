@@ -13,6 +13,7 @@
 #include<vtkAnnotatedCubeActor.h>
 #include<vtkOrientationMarkerWidget.h>
 #include<vtkAxesActor.h>
+#include<vtkImageData.h>
 
 
 namespace Ui {
@@ -29,7 +30,7 @@ public:
     double (*ROIColors)[3];
     std::vector<vtkSmartPointer<vtkPolyData> >MeshList;
     std::vector<vtkSmartPointer<vtkPolyData> >BeamList;
-    vtkSmartPointer<vtkRenderer>ViewRenderer;    
+    //vtkSmartPointer<vtkRenderer>ViewRenderer;
     vtkSmartPointer<vtkActorCollection>MeshActors;
     vtkSmartPointer<vtkActorCollection>BeamActors;
     vtkSmartPointer<vtkRenderer>ModelRenderer;
@@ -42,6 +43,9 @@ public:
     vtkSmartPointer<vtkOrientationMarkerWidget>MarkerWidget2;
     vtkSmartPointer<vtkActor>BEVField;
     vtkSmartPointer<vtkAxesActor>Axes;
+    vtkSmartPointer<vtkActor>IsodoseSurface;
+    vtkSmartPointer<vtkImageData>RTDose;
+
 
 
     double *Isocentre;
@@ -50,6 +54,7 @@ public:
     void DisplayBEV();
     void DisplayMeshes();
     void DisplayBeams();
+    void ShowIsodoseSurface(double minDose, double maxDose);
 
 
 private:
