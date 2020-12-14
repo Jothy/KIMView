@@ -200,7 +200,7 @@ void MainWindow::on_actionCT_triggered()
 
         //QString supportedIOP="HFS ";//DICOM seems to be hvaving a space after as "HFS "
         QString supportedIOP="1\\0.0\\0.0\\0.0\\1\\0.0 ";//DICOM seems to be hvaving a space at the end "
-        qDebug()<<curIOP<<"**********"<<supportedIOP;
+        //qDebug()<<curIOP<<"**********"<<supportedIOP;
 
 
         //1==match,-1=no match
