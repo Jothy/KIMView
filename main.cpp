@@ -13,6 +13,5 @@ int main(int argc, char *argv[])
     a.setStyle(QStyleFactory::create("Fusion"));
 
 
-
     return a.exec();
 }
