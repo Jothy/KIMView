@@ -33,7 +33,13 @@
 #include "itkCommand.h"
 #include "itkMetaDataObject.h"
 #include "itkCastImageFilter.h"
+#include<itkMetaDataDictionary.h>
 
+#include<gdcmTag.h>
+#include<gdcmItem.h>
+#include<gdcmNestedModuleEntries.h>
+#include<gdcmDataElement.h>
+#include<gdcmAttribute.h>
 
 #include<QDebug>
 #include<QTreeWidgetItem>
@@ -131,11 +137,6 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionCT_triggered()
 {
-
-    QString imageDirName=QFileDialog::getExistingDirectory(this,"Open CT Folder","D:\\DICOM Test Patients");
-
-    //Start reading DICOM CT data with Phase info
-    /********************************************************************************/
     const unsigned int InputDimension = 3;
     typedef signed short PixelType;
 
@@ -149,21 +150,124 @@ void MainWindow::on_actionCT_triggered()
             InputNamesGeneratorType;
 
     ImageIOType::Pointer gdcmIO= ImageIOType::New();
-    InputNamesGeneratorType::Pointer inputNames=
-            InputNamesGeneratorType::New();
-    inputNames->SetInputDirectory(imageDirName.toLatin1().data());
-    gdcmIO->SetLoadPrivateTags(true);
-    gdcmIO->SetLoadSequences(true);
-
-    const ReaderType::FileNamesContainer & filenames =
-            inputNames->GetInputFileNames();
     ReaderType::Pointer reader= ReaderType::New();
-    reader->SetImageIO(gdcmIO);
-    reader->SetFileNames(filenames);
+    std::string val1;
 
     try
     {
+        QString imageDirName=QFileDialog::getExistingDirectory(this,"Open CT Folder","D:\\DICOM Test Patients");
+
+        //Start reading DICOM CT data with Phase info
+        /********************************************************************************/
+
+        InputNamesGeneratorType::Pointer inputNames=
+                InputNamesGeneratorType::New();
+        inputNames->SetInputDirectory(imageDirName.toLatin1().data());
+        gdcmIO->SetLoadPrivateTags(true);
+        gdcmIO->SetLoadSequences(true);
+
+        const ReaderType::FileNamesContainer & filenames =
+                inputNames->GetInputFileNames();
+
+        reader->SetImageIO(gdcmIO);
+        reader->SetFileNames(filenames);
         reader->Update();
+
+        //qDebug()<<"Reading done!";
+        using DictionaryType = itk::MetaDataDictionary;
+        typedef itk::MetaDataObject< std::string > MetaDataStringType;
+        const DictionaryType & dictionary = gdcmIO->GetMetaDataDictionary();
+
+        //Read Patient Position tag
+        std::string PatientPosition = "0018|5100";
+        auto tagItr1 = dictionary.Find(PatientPosition);
+        MetaDataStringType::ConstPointer PatientPositionValue = dynamic_cast<const MetaDataStringType *>(tagItr1->second.GetPointer() );
+        val1 = PatientPositionValue->GetMetaDataObjectValue().c_str();
+        //qDebug()<<"Patient Position: "<<val1.c_str();
+
+
+        //    //Read Patient Orientation tag
+        //    std::string PatientOrientation = "0020|0037";
+        //    auto tagItr = dictionary.Find(PatientOrientation);
+        //    MetaDataStringType::ConstPointer PatientOrientationValue = dynamic_cast<const MetaDataStringType *>(tagItr->second.GetPointer() );
+        //    std::string val2 = PatientOrientationValue->GetMetaDataObjectValue();
+        //    qDebug()<<"Patient Position: "<<val2.c_str();
+
+
+
+
+
+        //1==match,-1=no match
+        if(val1.compare("HFS")==1)
+        {
+
+            typedef itk::ImageToVTKImageFilter<InputImageType> ConnectorType;
+            ConnectorType::Pointer Converter = ConnectorType::New();
+            Converter->SetInput(reader->GetOutput());
+            Converter->Update();
+            //qDebug()<<"Conversion done!";
+
+            this->CTImage->DeepCopy(Converter->GetOutput());
+
+            //Display the data
+            this->SagittalViewer=new ImageViewer2D(this->ui->mdiAreaView,this->ContextMenus);
+            this->SagittalViewer->SetImageData(this->CTImage);
+            this->SagittalViewer->SetSliceOrientation(1);
+            this->SagittalViewer->SetUpView();
+            this->ui->mdiAreaView->addSubWindow(this->SagittalViewer,Qt::WindowMaximizeButtonHint|Qt::WindowTitleHint);//add to make borderless window Qt::FramelessWindowHint
+            this->SagittalViewer->setWindowTitle("Sagittal");
+            this->SagittalViewer->show();
+
+            this->CoronalViewer=new ImageViewer2D(this->ui->mdiAreaView,this->ContextMenus);
+            this->CoronalViewer->SetImageData(this->CTImage);
+            this->CoronalViewer->SetSliceOrientation(2);
+            this->CoronalViewer->SetUpView();
+            this->ui->mdiAreaView->addSubWindow(this->CoronalViewer,Qt::WindowMaximizeButtonHint|Qt::WindowTitleHint);
+            this->CoronalViewer->setWindowTitle("Coronal");
+            this->CoronalViewer->show();
+
+            this->AxialViewer=new ImageViewer2D(this->ui->mdiAreaView,this->ContextMenus);
+            this->AxialViewer->SetImageData(this->CTImage);
+            this->AxialViewer->SetSliceOrientation(0);
+            this->AxialViewer->SetUpView();
+            this->ui->mdiAreaView->addSubWindow(this->AxialViewer,Qt::WindowMaximizeButtonHint|Qt::WindowTitleHint);
+            this->AxialViewer->setWindowTitle("Axial");
+            this->AxialViewer->show();
+
+            this->ui->mdiAreaView->tileSubWindows();
+            this->ui->statusBar->showMessage("CT imported sucessfully");
+
+            QTreeWidgetItem *wItem = new QTreeWidgetItem((QTreeWidget*)nullptr, QStringList(QString("CT")));
+            wItem->setCheckState(0,Qt::Checked);
+            QIcon icon;
+            icon.addFile(QString::fromUtf8(":/Icons/CT.png"),QSize(24,24), QIcon::Normal, QIcon::Off);
+            wItem->setIcon(0,icon);
+            this->ui->treeWidget->topLevelItem(0)->addChild(wItem);
+
+            //Set default DoseVOI for RPL calculation
+            double bds[6];
+            this->CTImage->GetBounds(bds);
+
+            //Enable actions
+            this->ui->actionReset_WL_WW->setEnabled(true);
+            this->ui->actionGo_To_Isocentre->setEnabled(true);
+            this->ui->actionReset_Zoom->setEnabled(true);
+            this->ui->actionShowBeams->setEnabled(true);
+            this->ui->actionShowContours->setEnabled(true);
+            this->ui->actionShowDose->setEnabled(true);
+            this->ui->actionZoom_In_All->setEnabled(true);
+            this->ui->actionZoom_Out_All->setEnabled(true);
+            this->ui->actionBEV->setEnabled(true);
+            this->ui->action3DView->setEnabled(true);
+
+
+        }
+        else
+        {
+            QMessageBox messageBox;
+            messageBox.critical(this,"Error","Unsupported image orientation.\nOnly HFS is supported in this version.");
+            messageBox.setFixedSize(500,200);
+        }
 
     }
     catch (itk::ExceptionObject &excp)
@@ -172,137 +276,154 @@ void MainWindow::on_actionCT_triggered()
         std::cerr << excp << std::endl;
     }
 
-    qDebug()<<"Reading done!";
-
-    typedef itk::ImageToVTKImageFilter<InputImageType> ConnectorType;
-    ConnectorType::Pointer Converter = ConnectorType::New();
-    Converter->SetInput(reader->GetOutput());
-    Converter->Update();
-    //qDebug()<<"Conversion done!";
-
-    this->CTImage->DeepCopy(Converter->GetOutput());
-
-
-    //Display the data
-    this->SagittalViewer=new ImageViewer2D(this->ui->mdiAreaView,this->ContextMenus);
-    this->SagittalViewer->SetImageData(this->CTImage);
-    this->SagittalViewer->SetSliceOrientation(1);
-    this->SagittalViewer->SetUpView();
-    this->ui->mdiAreaView->addSubWindow(this->SagittalViewer,Qt::WindowMaximizeButtonHint|Qt::WindowTitleHint);//add to make borderless window Qt::FramelessWindowHint
-    this->SagittalViewer->setWindowTitle("Sagittal");
-    this->SagittalViewer->show();
-
-    this->CoronalViewer=new ImageViewer2D(this->ui->mdiAreaView,this->ContextMenus);
-    this->CoronalViewer->SetImageData(this->CTImage);
-    this->CoronalViewer->SetSliceOrientation(2);
-    this->CoronalViewer->SetUpView();
-    this->ui->mdiAreaView->addSubWindow(this->CoronalViewer,Qt::WindowMaximizeButtonHint|Qt::WindowTitleHint);
-    this->CoronalViewer->setWindowTitle("Coronal");
-    this->CoronalViewer->show();
-
-    this->AxialViewer=new ImageViewer2D(this->ui->mdiAreaView,this->ContextMenus);
-    this->AxialViewer->SetImageData(this->CTImage);
-    this->AxialViewer->SetSliceOrientation(0);
-    this->AxialViewer->SetUpView();
-    this->ui->mdiAreaView->addSubWindow(this->AxialViewer,Qt::WindowMaximizeButtonHint|Qt::WindowTitleHint);
-    this->AxialViewer->setWindowTitle("Axial");
-    this->AxialViewer->show();
-
-    this->ui->mdiAreaView->tileSubWindows();
-    this->ui->statusBar->showMessage("CT imported sucessfully");
-
-    QTreeWidgetItem *wItem = new QTreeWidgetItem((QTreeWidget*)nullptr, QStringList(QString("CT")));
-    wItem->setCheckState(0,Qt::Checked);
-    QIcon icon;
-    icon.addFile(QString::fromUtf8(":/Icons/CT.png"),QSize(24,24), QIcon::Normal, QIcon::Off);
-    wItem->setIcon(0,icon);
-    this->ui->treeWidget->topLevelItem(0)->addChild(wItem);
-
-    //Set default DoseVOI for RPL calculation
-    double bds[6];
-    this->CTImage->GetBounds(bds);
-
 }
 
 void MainWindow::on_actionStructures_triggered()
 {
-    //Read ROIs
-    RTStructReaderDialog *meshReaderDlg=new RTStructReaderDialog(this);
-    meshReaderDlg->exec();
-
-
-    if(meshReaderDlg->ROINames.size()>0)//Check any ROI exist or not
+    if(this->CTImage->GetDimensions()[0]>0)
     {
-        QList<int>selectedStructsList=meshReaderDlg->selectedItems;
-        //qDebug()<<selectedStructsList[0]<<"ROI";
-
-        meshReader* RTStructReader=new meshReader(this);
-        //RTStructReader->getStructFileName();
-        RTStructReader->structFileName=meshReaderDlg->structFileName;
-        QCoreApplication::processEvents();
-        RTStructReader->getROIMeshes(this->CTImage,this->CTImage->GetSpacing()[2],this->TargetReduction,meshReaderDlg->selectedItems,this);//Reads ROI name as well as structs
-        QCoreApplication::processEvents();
-        this->MeshList=RTStructReader->meshes;
-        this->MeshActors=RTStructReader->ROIActors;
-        this->ROIVisibleFlag=1;//structs imported
+        //Read ROIs
+        RTStructReaderDialog *meshReaderDlg=new RTStructReaderDialog(this);
+        meshReaderDlg->exec();
 
 
-        for(int i=0;i<meshReaderDlg->selectedItems.size();i++)
+        if(meshReaderDlg->ROINames.size()>0)//Check any ROI exist or not
         {
-            this->ROIColors[i][0]=RTStructReader->ROIColors[i][0];
-            this->ROIColors[i][1]=RTStructReader->ROIColors[i][1];
-            this->ROIColors[i][2]=RTStructReader->ROIColors[i][2];
+            QList<int>selectedStructsList=meshReaderDlg->selectedItems;
+            //qDebug()<<selectedStructsList[0]<<"ROI";
+
+            meshReader* RTStructReader=new meshReader(this);
+            //RTStructReader->getStructFileName();
+            RTStructReader->structFileName=meshReaderDlg->structFileName;
+            QCoreApplication::processEvents();
+            RTStructReader->getROIMeshes(this->CTImage,this->CTImage->GetSpacing()[2],this->TargetReduction,meshReaderDlg->selectedItems,this);//Reads ROI name as well as structs
+            QCoreApplication::processEvents();
+            this->MeshList=RTStructReader->meshes;
+            this->MeshActors=RTStructReader->ROIActors;
+            this->ROIVisibleFlag=1;//structs imported
+
+
+            for(int i=0;i<meshReaderDlg->selectedItems.size();i++)
+            {
+                this->ROIColors[i][0]=RTStructReader->ROIColors[i][0];
+                this->ROIColors[i][1]=RTStructReader->ROIColors[i][1];
+                this->ROIColors[i][2]=RTStructReader->ROIColors[i][2];
+            }
+
+            this->ROINum=meshReaderDlg->selectedItems.size();
+            this->ROINames=RTStructReader->ROINames;
+            this->ROITypes=RTStructReader->ROITypes;
+            this->ROINo=RTStructReader->ROINo;
+
+            QList<QTreeWidgetItem *> items;
+            for (int i=0;i<meshReaderDlg->selectedItems.size();++i)
+            {
+                QTreeWidgetItem *wItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList(QString(RTStructReader->ROINames[i])));
+                wItem->setCheckState(0,Qt::Checked);
+                QIcon icon;
+                icon.addFile(QString::fromUtf8(":/Icons/Polygon.png"),QSize(16,16),QIcon::Normal,QIcon::Off);
+                wItem->setIcon(0,icon);
+                wItem->setBackgroundColor(0,QColor(RTStructReader->ROIColors[i][0],
+                                          RTStructReader->ROIColors[i][1],RTStructReader->ROIColors[i][2]));
+                items.append(wItem);
+            }
+            //Add ROIs to RTSS item
+            this->ui->treeWidget->topLevelItem(1)->addChildren(items);
+            this->ui->treeWidget->expandAll();
+            delete RTStructReader;
+
         }
+        delete meshReaderDlg;
 
-        this->ROINum=meshReaderDlg->selectedItems.size();
-        this->ROINames=RTStructReader->ROINames;
-        this->ROITypes=RTStructReader->ROITypes;
-        this->ROINo=RTStructReader->ROINo;
+        //Dispaly ROIs
+        this->AxialViewer->MeshList=this->MeshList;
+        this->AxialViewer->ROIColors=this->ROIColors;
+        this->AxialViewer->show();
+        this->AxialViewer->ContourVisibility=1;
+        this->AxialViewer->DisplayROIs(this->AxialViewer->SliceLoc,this->AxialViewer->SliceOrientation);
+        this->AxialViewer->UpdateView();
 
-        QList<QTreeWidgetItem *> items;
-        for (int i=0;i<meshReaderDlg->selectedItems.size();++i)
-        {
-            QTreeWidgetItem *wItem = new QTreeWidgetItem((QTreeWidget*)0, QStringList(QString(RTStructReader->ROINames[i])));
-            wItem->setCheckState(0,Qt::Checked);
-            QIcon icon;
-            icon.addFile(QString::fromUtf8(":/Icons/Polygon.png"),QSize(16,16),QIcon::Normal,QIcon::Off);
-            wItem->setIcon(0,icon);
-            wItem->setBackgroundColor(0,QColor(RTStructReader->ROIColors[i][0],
-                                      RTStructReader->ROIColors[i][1],RTStructReader->ROIColors[i][2]));
-            items.append(wItem);
-        }
-        //Add ROIs to RTSS item
-        this->ui->treeWidget->topLevelItem(1)->addChildren(items);
-        this->ui->treeWidget->expandAll();
-        delete RTStructReader;
 
+        this->SagittalViewer->MeshList=this->MeshList;
+        this->SagittalViewer->ROIColors=this->ROIColors;
+        this->SagittalViewer->show();
+        this->SagittalViewer->ContourVisibility=1;
+        this->SagittalViewer->DisplayROIs(this->SagittalViewer->SliceLoc,this->SagittalViewer->SliceOrientation);
+        this->SagittalViewer->UpdateView();
+
+        this->CoronalViewer->MeshList=this->MeshList;
+        this->CoronalViewer->ROIColors=this->ROIColors;
+        this->CoronalViewer->show();
+        this->CoronalViewer->ContourVisibility=1;
+        this->CoronalViewer->DisplayROIs(this->CoronalViewer->SliceLoc,this->CoronalViewer->SliceOrientation);
+        this->CoronalViewer->UpdateView();
+
+        this->ui->action3DView->trigger();
     }
-    delete meshReaderDlg;
-
-    //Dispaly ROIs
-    this->AxialViewer->MeshList=this->MeshList;
-    this->AxialViewer->ROIColors=this->ROIColors;
-    this->AxialViewer->show();
-    this->AxialViewer->ContourVisibility=1;
-    this->AxialViewer->DisplayROIs(this->AxialViewer->SliceLoc,this->AxialViewer->SliceOrientation);
-    this->AxialViewer->UpdateView();
+    else
+    {
+        QMessageBox messageBox;
+        messageBox.critical(this,"Error","Please load a CT image before loading structures");
+        messageBox.setFixedSize(500,200);
+    }
 
 
-    this->SagittalViewer->MeshList=this->MeshList;
-    this->SagittalViewer->ROIColors=this->ROIColors;
-    this->SagittalViewer->show();
-    this->SagittalViewer->ContourVisibility=1;
-    this->SagittalViewer->DisplayROIs(this->SagittalViewer->SliceLoc,this->SagittalViewer->SliceOrientation);
-    this->SagittalViewer->UpdateView();
+}
 
-    this->CoronalViewer->MeshList=this->MeshList;
-    this->CoronalViewer->ROIColors=this->ROIColors;
-    this->CoronalViewer->show();
-    this->CoronalViewer->ContourVisibility=1;
-    this->CoronalViewer->DisplayROIs(this->CoronalViewer->SliceLoc,this->CoronalViewer->SliceOrientation);
-    this->CoronalViewer->UpdateView();
+void MainWindow::on_actionDose_triggered()
+{
+    if(this->CTImage->GetDimensions()[0]>0)
+    {
 
-    this->ui->action3DView->trigger();
+        QString DoseFile=QFileDialog::getOpenFileName(this,"Open RT Dose");
+        if(DoseFile!=nullptr)
+        {
+            //qDebug()<<doseFile;
+            vtkSmartPointer <vtkGDCMImageReader>DoseReader=
+                    vtkSmartPointer<vtkGDCMImageReader>::New();
+            DoseReader->SetFileName(DoseFile.toLatin1());
+            DoseReader->FileLowerLeftOn();//otherwise flips the image
+            DoseReader->SetDataScalarTypeToDouble();
+            DoseReader->Update();
+            this->RTDose->DeepCopy(DoseReader->GetOutput());
+            //qDebug()<<this->RTDose->GetScalarRange()[0]<<":Min"<<this->RTDose->GetScalarRange()[1]<<":Max";
+        }
+        else
+        {
+            QMessageBox messageBox;
+            messageBox.critical(this,"Error","An error has occured !");
+            messageBox.setFixedSize(500,200);
+            messageBox.show();
+        }
+
+        this->AxialViewer->SetRTDose(this->RTDose);
+        this->SagittalViewer->SetRTDose(this->RTDose);
+        this->CoronalViewer->SetRTDose(this->RTDose);
+        this->BEVViewer->RTDose=this->RTDose;
+
+        this->AxialViewer->DoseVisibility=true;
+        this->AxialViewer->UpdateView();
+        this->SagittalViewer->DoseVisibility=true;
+        this->SagittalViewer->UpdateView();
+        this->CoronalViewer->DoseVisibility=true;
+        this->CoronalViewer->UpdateView();
+
+        this->ui->statusBar->showMessage("Dose imported sucessfully");
+
+        double *DoseOrg=this->RTDose->GetOrigin();
+        //qDebug()<<DoseOrg[0]<<DoseOrg[1]<<DoseOrg[2]<<"Dose Origin";
+
+        double *ImgOrg=this->CTImage->GetOrigin();
+        //qDebug()<<ImgOrg[0]<<ImgOrg[1]<<ImgOrg[2]<<"Image Origin";
+    }
+    else
+    {
+        QMessageBox messageBox;
+        messageBox.critical(this,"Error","Please load a CT image before loading dose");
+        messageBox.setFixedSize(500,200);
+    }
+
+
 
 
 }
@@ -381,53 +502,6 @@ void MainWindow::on_actionGo_To_Isocentre_triggered()
         }
 
     }
-}
-
-void MainWindow::on_actionDose_triggered()
-{
-
-    QString DoseFile=QFileDialog::getOpenFileName(this,"Open RT Dose");
-    if(DoseFile!=nullptr)
-    {
-        //qDebug()<<doseFile;
-        vtkSmartPointer <vtkGDCMImageReader>DoseReader=
-                vtkSmartPointer<vtkGDCMImageReader>::New();
-        DoseReader->SetFileName(DoseFile.toLatin1());
-        DoseReader->FileLowerLeftOn();//otherwise flips the image
-        DoseReader->SetDataScalarTypeToDouble();
-        DoseReader->Update();
-        this->RTDose->DeepCopy(DoseReader->GetOutput());
-        //qDebug()<<this->RTDose->GetScalarRange()[0]<<":Min"<<this->RTDose->GetScalarRange()[1]<<":Max";
-    }
-    else
-    {
-        QMessageBox messageBox;
-        messageBox.critical(this,"Error","An error has occured !");
-        messageBox.setFixedSize(500,200);
-        messageBox.show();
-    }
-
-    this->AxialViewer->SetRTDose(this->RTDose);
-    this->SagittalViewer->SetRTDose(this->RTDose);
-    this->CoronalViewer->SetRTDose(this->RTDose);
-    this->BEVViewer->RTDose=this->RTDose;
-
-    this->AxialViewer->DoseVisibility=true;
-    this->AxialViewer->UpdateView();
-    this->SagittalViewer->DoseVisibility=true;
-    this->SagittalViewer->UpdateView();
-    this->CoronalViewer->DoseVisibility=true;
-    this->CoronalViewer->UpdateView();
-
-     this->ui->statusBar->showMessage("Dose imported sucessfully");
-
-    double *DoseOrg=this->RTDose->GetOrigin();
-    //qDebug()<<DoseOrg[0]<<DoseOrg[1]<<DoseOrg[2]<<"Dose Origin";
-
-    double *ImgOrg=this->CTImage->GetOrigin();
-    //qDebug()<<ImgOrg[0]<<ImgOrg[1]<<ImgOrg[2]<<"Image Origin";
-
-
 }
 
 void MainWindow::on_actionBEV_triggered()

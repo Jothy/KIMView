@@ -368,6 +368,9 @@
    </widget>
   </widget>
   <action name="actionZoom_In_All">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="RC.qrc">
      <normaloff>:/Icons/zoom in.png</normaloff>:/Icons/zoom in.png</iconset>
@@ -380,6 +383,9 @@
    </property>
   </action>
   <action name="actionZoom_Out_All">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="RC.qrc">
      <normaloff>:/Icons/zoom out.png</normaloff>:/Icons/zoom out.png</iconset>
@@ -392,6 +398,9 @@
    </property>
   </action>
   <action name="actionReset_Zoom">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="RC.qrc">
      <normaloff>:/Icons/zoom.png</normaloff>:/Icons/zoom.png</iconset>
@@ -404,6 +413,9 @@
    </property>
   </action>
   <action name="actionShow_Origin">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset>
      <normaloff>:/RC/Icons2/Origin.png</normaloff>:/RC/Icons2/Origin.png</iconset>
@@ -440,6 +452,9 @@
    </property>
   </action>
   <action name="actionGo_To_Isocentre">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="RC.qrc">
      <normaloff>:/Icons/Axes3D.png</normaloff>:/Icons/Axes3D.png</iconset>
@@ -461,6 +476,9 @@
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="RC.qrc">
      <normaloff>:/Icons/BEV.PNG</normaloff>:/Icons/BEV.PNG</iconset>
@@ -473,6 +491,9 @@
    </property>
   </action>
   <action name="action3DView">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="RC.qrc">
      <normaloff>:/Icons/Rotate3D.png</normaloff>:/Icons/Rotate3D.png</iconset>
@@ -491,6 +512,9 @@
    </property>
   </action>
   <action name="actionShowBeams">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="RC.qrc">
      <normaloff>:/Icons/Beam.png</normaloff>:/Icons/Beam.png</iconset>
@@ -503,6 +527,9 @@
    </property>
   </action>
   <action name="actionShowDose">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="RC.qrc">
      <normaloff>:/Icons/Dose.png</normaloff>:/Icons/Dose.png</iconset>
@@ -515,6 +542,9 @@
    </property>
   </action>
   <action name="actionShowContours">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="RC.qrc">
      <normaloff>:/Icons/Polygon.png</normaloff>:/Icons/Polygon.png</iconset>
@@ -567,6 +597,9 @@
    </property>
   </action>
   <action name="actionReset_WL_WW">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="RC.qrc">
      <normaloff>:/Icons/Contrast.png</normaloff>:/Icons/Contrast.png</iconset>
