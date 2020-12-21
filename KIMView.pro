@@ -11,55 +11,38 @@ CONFIG += c++11
 SOURCES += \
     alignimageinteractorstyle.cpp \
     bevwidget.cpp \
-    createobjects.cpp \
-    createobjects.cpp \
-    doseprofiledialog.cpp \
-    doseprofiledialog.cpp \
-    dvhcalc.cpp \
-    dvhcalc.cpp \
+    createobjects.cpp \       
+    doseprofiledialog.cpp \    
+    dvhcalc.cpp \    
     dvhdialog.cpp \
-    dvhdialog.cpp \
-    imageviewer2d.cpp \
-    imageviewer2d.cpp \
+    imageviewer2d.cpp \    
     main.cpp \
     mainwindow.cpp \
     meshreader.cpp \
     qDoubleSlider.cpp \
-    rangesliderdialog.cpp \
-    rangesliderdialog.cpp \
-    rtstructreaderdialog.cpp \
-    rtstructreaderdialog.cpp \
+    rangesliderdialog.cpp \   
+    rtstructreaderdialog.cpp \    
     udplistener.cpp \
-    vtkinteractorstyleimagecustom.cpp \
-    vtkinteractorstyleimagecustom.cpp \
-    vtklinecallbackdose.cpp \
+    vtkinteractorstyleimagecustom.cpp \    
     vtklinecallbackdose.cpp
 
 HEADERS += \
     alignimageinteractorstyle.h \
-    bevwidget.h \
-    bevwidget.h \
-    createobjects.h \
-    createobjects.h \
-    doseprofiledialog.h \
-    doseprofiledialog.h \
-    dvhcalc.h \
-    dvhcalc.h \
-    dvhdialog.h \
-    dvhdialog.h \
-    imageviewer2d.h \
-    imageviewer2d.h \
+    bevwidget.h \    
+    createobjects.h \   
+    doseprofiledialog.h \    
+    dvhcalc.h \   
+    dvhdialog.h \    
+    imageviewer2d.h \   
     mainwindow.h \
     meshreader.h \
     qDoubleSlider.h \
     rangesliderdialog.h \
-    rtstructreaderdialog.h \
-    rtstructreaderdialog.h \
+    rtstructreaderdialog.h \   
     udplistener.h \
-    vtkinteractorstyleimagecustom.h \
-    vtkinteractorstyleimagecustom.h \
-    vtklinecallbackdose.h \
+    vtkinteractorstyleimagecustom.h \   
     vtklinecallbackdose.h
+
 
 FORMS += \
     bevwidget.ui \
