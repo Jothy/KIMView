@@ -69,6 +69,11 @@
 
 //Testing
 #include<QTimer>
+#include<vtkConeSource.h>
+#include<vtkPolarAxesActor.h>
+#include<vtkArcSource.h>
+#include<vtkArrowSource.h>
+#include<vtkGlyph3D.h>
 
 
 
