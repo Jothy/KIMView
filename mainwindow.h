@@ -110,6 +110,8 @@ private slots:
 
     void on_actionSend_UDP_triggered();
 
+    void on_actionAbout_QT_triggered();
+
 private:
     Ui::MainWindow *ui;
     vtkSmartPointer<vtkRenderer>renderer;

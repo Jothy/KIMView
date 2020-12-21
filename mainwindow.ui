@@ -124,6 +124,12 @@
     <addaction name="actionInformation"/>
     <addaction name="actionPlan_Information"/>
    </widget>
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
+     <string>About</string>
+    </property>
+    <addaction name="actionAbout_QT"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuInsert"/>
    <addaction name="menuView"/>
@@ -131,6 +137,7 @@
    <addaction name="menuDose"/>
    <addaction name="menuStructures"/>
    <addaction name="menuWindows"/>
+   <addaction name="menuAbout"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -646,6 +653,15 @@
   <action name="actionSend_UDP">
    <property name="text">
     <string>Send UDP</string>
+   </property>
+  </action>
+  <action name="actionAbout_QT">
+   <property name="icon">
+    <iconset resource="RC.qrc">
+     <normaloff>:/Icons/Qt.png</normaloff>:/Icons/Qt.png</iconset>
+   </property>
+   <property name="text">
+    <string>About QT</string>
    </property>
   </action>
  </widget>

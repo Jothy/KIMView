@@ -28,5 +28,6 @@
         <file>Icons/RubberBandZoom.png</file>
         <file>Icons/Ruler.png</file>
         <file>Icons/Sagittal.png</file>
+        <file>Icons/Qt.png</file>
     </qresource>
 </RCC>

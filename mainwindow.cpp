@@ -69,11 +69,7 @@
 
 //Testing
 #include<QTimer>
-#include<vtkConeSource.h>
-#include<vtkPolarAxesActor.h>
-#include<vtkArcSource.h>
-#include<vtkArrowSource.h>
-#include<vtkGlyph3D.h>
+
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -940,4 +936,32 @@ void MainWindow::on_actionSend_UDP_triggered()
     QApplication::processEvents();
 
 }
+
+
+void MainWindow::on_actionAbout_QT_triggered()
+{
+    QMessageBox::aboutQt(this);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
