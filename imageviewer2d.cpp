@@ -267,7 +267,7 @@ ImageViewer2D::ImageViewer2D(QWidget *parent,QActionGroup *contextMenus) :
     this->DoseLUT=vtkSmartPointer<vtkLookupTable>::New();
     this->DoseScalarBar=vtkSmartPointer<vtkScalarBarActor>::New();
 
-    this->DoseSlice->PickableOn();
+    this->DoseSlice->PickableOff();
 
     this->ContourActors=vtkSmartPointer<vtkActorCollection>::New();
     this->BeamActors=vtkSmartPointer<vtkActorCollection>::New();
@@ -833,12 +833,12 @@ void ImageViewer2D::on_toolButtonContrast_clicked()
         this->ui->widget->GetRenderWindow()->GetInteractor()->SetInteractorStyle(InteractorImage);
     }
 
-    else if(!this->DoseSlice->GetPickable() && !this->ui->toolButtonContrast->isChecked())
-    {
-        //Switch to image alignment interaction
-        this->SetInteractorStyleToRegistration();
-        //qDebug()<<"Reverting interactor style to registration";
-    }
+//    else if(!this->DoseSlice->GetPickable() && !this->ui->toolButtonContrast->isChecked())
+//    {
+//        //Switch to image alignment interaction
+//        this->SetInteractorStyleToRegistration();
+//        //qDebug()<<"Reverting interactor style to registration";
+//    }
 
     else
     {
@@ -998,8 +998,11 @@ void ImageViewer2D::on_actionReset_WL_WW_triggered()
 void ImageViewer2D::SetInteractorStyleToRegistration()
 {
     //Custom interaction to shift and rotate images and align
-    vtkSmartPointer<AlignImageInteractorStyle>actorStyle =
-            vtkSmartPointer<AlignImageInteractorStyle>::New();
+    //vtkSmartPointer<AlignImageInteractorStyle>actorStyle =
+            //vtkSmartPointer<AlignImageInteractorStyle>::New();
+
+    vtkSmartPointer<vtkInteractorStyleImage>actorStyle=
+            vtkSmartPointer<vtkInteractorStyleImage>::New();
     this->ViewRenderer->GetRenderWindow()->GetInteractor()->SetInteractorStyle(actorStyle);
 
 }
@@ -1064,6 +1067,7 @@ vtkSmartPointer<vtkActor>ImageViewer2D::CutROI(vtkPolyData *mesh,double sliceNo,
     cutROI->GetProperty()->SetLineWidth(1.5);
     cutROI->GetProperty()->SetOpacity(0.95);
     cutROI->GetProperty()->SetAmbient(1.0);
+    cutROI->DragableOff();
 
 
 
@@ -1669,3 +1673,8 @@ void ImageViewer2D::on_actionShow_Image_Extent_triggered()
 }
 
 
+
+void ImageViewer2D::on_toolButtonContrast_triggered(QAction *arg1)
+{
+
+}

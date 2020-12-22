@@ -72,6 +72,7 @@ DoseProfileDialog::DoseProfileDialog(QWidget *parent) :
 DoseProfileDialog::~DoseProfileDialog()
 {
     delete ui;
+    delete this->DoseData;
 
 }
 

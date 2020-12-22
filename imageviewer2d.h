@@ -170,6 +170,8 @@ private slots:
     void on_actionShow_Image_Extent_triggered();
 
 
+    void on_toolButtonContrast_triggered(QAction *arg1);
+
 private:
     Ui::ImageViewer2D *ui;
 
