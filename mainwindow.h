@@ -78,6 +78,7 @@ public:
     UDPListener * listener;
 
     void loadSettings();
+    void saveSettings();
 
 
 

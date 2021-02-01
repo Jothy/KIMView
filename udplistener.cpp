@@ -4,6 +4,7 @@
 #include<QUdpSocket>
 #include<QElapsedTimer>
 #include<QApplication>
+#include<QSettings>
 
 //Tracking includes
 #include<vtkProperty.h>
@@ -73,13 +74,13 @@ void UDPListener::readMessage()
     qDebug() << "Message: " << buffer;
 
     //The UDP format is [X,Y,Z,Gantry] in IEC(cm) and Varian degrees
-
-    this->shifts[0]=buffer.split(' ')[0].toDouble()*1;
-    this->shifts[1]=buffer.split(' ')[1].toDouble()*1;
-    this->shifts[2]=buffer.split(' ')[2].toDouble()*1;
+    //IEC to LPS conversion, simple approach as it only supports HFS orientation now
+    this->shifts[0]=buffer.split(' ')[0].toDouble()/10;//cm to mm
+    this->shifts[1]=-buffer.split(' ')[2].toDouble()/10;//cm to mm
+    this->shifts[2]=buffer.split(' ')[1].toDouble()/10;//cm to mm
     qDebug()<<"Shifts: "<<this->shifts[0]<<""<<this->shifts[1]<<""<<this->shifts[2];
 
-    //this->UpdateViews();
+    this->UpdateViews();
     QApplication::processEvents();
 
 //    qDebug() <<"Rendering took" << timer.elapsed() << "milliseconds";
@@ -91,9 +92,13 @@ void UDPListener::StartListening()
 {
     qDebug()<<"Start";
     //Receiver port
-    socket->bind(45617);
-    //KIM' IP adn port
-    socket->connectToHost(QHostAddress("147.212.42.10"),61299);
+    QSettings settings("ImageX","KIMView");
+    int KIMViewPort=settings.value("KIMViewPort").toInt();
+    socket->bind(KIMViewPort);
+    //KIM IP and port
+    QString KIMIP=settings.value("KIMIP").toString();
+    int KIMPort=settings.value("KIMPort").toInt();
+    socket->connectToHost(QHostAddress(KIMIP),KIMPort);
     //socket->waitForConnected(1000);
     connect(socket, SIGNAL(readyRead()), this, SLOT(readMessage()));
 

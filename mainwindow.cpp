@@ -85,9 +85,10 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    this->loadSettings();
 
     this->listener=new UDPListener;
+
+    //this->loadSettings();
 
     //Avoid error window popping
     vtkSmartPointer<vtkFileOutputWindow> fileOutputWindow =
@@ -946,16 +947,11 @@ void MainWindow::on_actionSend_UDP_triggered()
 
 }
 
-
 void MainWindow::on_actionAbout_QT_triggered()
 {
     QMessageBox::aboutQt(this);
-    QSettings settings;
-    qDebug()<<settings.value("KIMPort").toString()<<" :KIMIP";
 
 }
-
-
 
 void MainWindow::on_actionIP_COnfiguration_triggered()
 {
@@ -968,14 +964,19 @@ void MainWindow::on_actionIP_COnfiguration_triggered()
 
 void MainWindow::loadSettings()
 {
-   QSettings settings;
-   settings.setValue("KIMIP","127.0.0.1");
-   settings.setValue("KIMPort",52364);
-   settings.setValue("KIMViewPort",45617);
+   QSettings settings("ImageX","KIMView");
+   qDebug()<<settings.value("KIMIP").toString();
+
+}
+
+void MainWindow::saveSettings()
+{
 
 
 
 }
+
+
 
 
 
