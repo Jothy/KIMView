@@ -68,16 +68,18 @@ void UDPListener::readMessage()
     socket->readDatagram(buffer.data(), buffer.size(),
                          &sender, &senderPort);
 
-    //qDebug() << "Message from: " << sender.toString();
-    //qDebug() << "Message port: " << senderPort;
-    //qDebug() << "Message: " << buffer;
+    qDebug() << "Message from: " << sender.toString();
+    qDebug() << "Message port: " << senderPort;
+    qDebug() << "Message: " << buffer;
 
-    this->shifts[0]=buffer.split(' ')[2].toDouble()*10;
-    this->shifts[1]=buffer.split(' ')[3].toDouble()*10;
-    this->shifts[2]=buffer.split(' ')[4].toDouble()*1;
-    //qDebug()<<"Shifts: "<<this->shifts[0]<<""<<this->shifts[1]<<""<<this->shifts[2];
+    //The UDP format is [X,Y,Z,Gantry] in IEC(cm) and Varian degrees
 
-    this->UpdateViews();
+    this->shifts[0]=buffer.split(' ')[0].toDouble()*1;
+    this->shifts[1]=buffer.split(' ')[1].toDouble()*1;
+    this->shifts[2]=buffer.split(' ')[2].toDouble()*1;
+    qDebug()<<"Shifts: "<<this->shifts[0]<<""<<this->shifts[1]<<""<<this->shifts[2];
+
+    //this->UpdateViews();
     QApplication::processEvents();
 
 //    qDebug() <<"Rendering took" << timer.elapsed() << "milliseconds";
@@ -88,7 +90,11 @@ void UDPListener::readMessage()
 void UDPListener::StartListening()
 {
     qDebug()<<"Start";
-    socket->bind(QHostAddress::LocalHost,45617);
+    //Receiver port
+    socket->bind(45617);
+    //KIM' IP adn port
+    socket->connectToHost(QHostAddress("147.212.42.10"),61299);
+    //socket->waitForConnected(1000);
     connect(socket, SIGNAL(readyRead()), this, SLOT(readMessage()));
 
 }

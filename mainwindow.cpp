@@ -932,11 +932,11 @@ void MainWindow::on_actionAdd_Arc_triggered()
 
 void MainWindow::on_actionSend_UDP_triggered()
 {
-    this->listener->TrackingTarget->DeepCopy(this->MeshList[0]);
-    this->listener->AxialViewer=this->AxialViewer;
-    this->listener->SagittalViewer=this->SagittalViewer;
-    this->listener->CoronalViewer=this->CoronalViewer;
-    this->listener->BEVViewer=this->BEVViewer;
+//    this->listener->TrackingTarget->DeepCopy(this->MeshList[0]);
+//    this->listener->AxialViewer=this->AxialViewer;
+//    this->listener->SagittalViewer=this->SagittalViewer;
+//    this->listener->CoronalViewer=this->CoronalViewer;
+//    this->listener->BEVViewer=this->BEVViewer;
     this->listener->StartListening();
     QApplication::processEvents();
 

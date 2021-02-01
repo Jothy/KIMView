@@ -269,6 +269,7 @@ void DVHDialog::on_pushButton_clicked()
                         for (int i = 1; i<numPoints; ++i)
                         {
                             CurROIDVH->append(myDVHCalc->doseBins[i],myDVHCalc->cumVolume[i]);
+                            qDebug()<<myDVHCalc->doseBins[i]<<""<<myDVHCalc->cumVolume[i];
                         }
 
                     }
