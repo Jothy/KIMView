@@ -55,6 +55,7 @@
 #include<QMessageBox>
 #include<QTime>
 #include<QDockWidget>
+#include<QSettings>
 
 #include"imageviewer2d.h"
 #include"rtstructreaderdialog.h"
@@ -83,6 +84,8 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    this->loadSettings();
 
     this->listener=new UDPListener;
 
@@ -947,6 +950,8 @@ void MainWindow::on_actionSend_UDP_triggered()
 void MainWindow::on_actionAbout_QT_triggered()
 {
     QMessageBox::aboutQt(this);
+    QSettings settings;
+    qDebug()<<settings.value("KIMPort").toString()<<" :KIMIP";
 
 }
 
@@ -958,9 +963,21 @@ void MainWindow::on_actionIP_COnfiguration_triggered()
     IPConfigDialog *IPDialog=new IPConfigDialog(this);
     IPDialog->exec();
     delete  IPDialog;
+}
+
+
+void MainWindow::loadSettings()
+{
+   QSettings settings;
+   settings.setValue("KIMIP","127.0.0.1");
+   settings.setValue("KIMPort",52364);
+   settings.setValue("KIMViewPort",45617);
+
 
 
 }
+
+
 
 
 

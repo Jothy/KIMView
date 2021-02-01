@@ -15,6 +15,9 @@ public:
     explicit IPConfigDialog(QWidget *parent = nullptr);
     ~IPConfigDialog();
 
+private slots:
+    void on_buttonBox_accepted();
+
 private:
     Ui::IPConfigDialog *ui;
 };
