@@ -61,6 +61,7 @@
 #include"meshreader.h"
 #include"createobjects.h"
 #include"rangesliderdialog.h"
+#include"ipconfigdialog.h"
 
 #include<iostream>
 #include<dvhdialog.h>
@@ -946,6 +947,18 @@ void MainWindow::on_actionSend_UDP_triggered()
 void MainWindow::on_actionAbout_QT_triggered()
 {
     QMessageBox::aboutQt(this);
+
+}
+
+
+
+void MainWindow::on_actionIP_COnfiguration_triggered()
+{
+
+    IPConfigDialog *IPDialog=new IPConfigDialog(this);
+    IPDialog->exec();
+    delete  IPDialog;
+
 
 }
 

@@ -130,12 +130,19 @@
     </property>
     <addaction name="actionAbout_QT"/>
    </widget>
+   <widget class="QMenu" name="menuSettings">
+    <property name="title">
+     <string>Settings</string>
+    </property>
+    <addaction name="actionIP_COnfiguration"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuInsert"/>
    <addaction name="menuView"/>
    <addaction name="menuTools"/>
    <addaction name="menuDose"/>
    <addaction name="menuStructures"/>
+   <addaction name="menuSettings"/>
    <addaction name="menuWindows"/>
    <addaction name="menuAbout"/>
    <addaction name="menuHelp"/>
@@ -662,6 +669,11 @@
    </property>
    <property name="text">
     <string>About QT</string>
+   </property>
+  </action>
+  <action name="actionIP_COnfiguration">
+   <property name="text">
+    <string>IP Configuration</string>
    </property>
   </action>
  </widget>

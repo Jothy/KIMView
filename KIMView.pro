@@ -11,7 +11,8 @@ CONFIG += c++11
 SOURCES += \
     alignimageinteractorstyle.cpp \
     bevwidget.cpp \
-    createobjects.cpp \       
+    createobjects.cpp \
+    ipconfigdialog.cpp \
     doseprofiledialog.cpp \    
     dvhcalc.cpp \    
     dvhdialog.cpp \
@@ -24,11 +25,13 @@ SOURCES += \
     rtstructreaderdialog.cpp \    
     udplistener.cpp \
     vtkinteractorstyleimagecustom.cpp \    
-    vtklinecallbackdose.cpp
+    vtklinecallbackdose.cpp \
+
 
 HEADERS += \
     alignimageinteractorstyle.h \
-    bevwidget.h \    
+    bevwidget.h \
+    ipconfigdialog.h \
     createobjects.h \   
     doseprofiledialog.h \    
     dvhcalc.h \   
@@ -41,7 +44,8 @@ HEADERS += \
     rtstructreaderdialog.h \   
     udplistener.h \
     vtkinteractorstyleimagecustom.h \   
-    vtklinecallbackdose.h
+    vtklinecallbackdose.h \
+
 
 
 FORMS += \
@@ -49,6 +53,7 @@ FORMS += \
     doseprofiledialog.ui \
     dvhdialog.ui \
     imageviewer2d.ui \
+    ipconfigdialog.ui \
     mainwindow.ui \
     rangesliderdialog.ui \
     rtstructreaderdialog.ui

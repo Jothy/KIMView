@@ -112,6 +112,8 @@ private slots:
 
     void on_actionAbout_QT_triggered();
 
+    void on_actionIP_COnfiguration_triggered();
+
 private:
     Ui::MainWindow *ui;
     vtkSmartPointer<vtkRenderer>renderer;
