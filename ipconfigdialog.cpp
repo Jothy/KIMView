@@ -10,6 +10,19 @@ IPConfigDialog::IPConfigDialog(QWidget *parent) :
     ui(new Ui::IPConfigDialog)
 {
     ui->setupUi(this);
+
+    //Receiver port
+    QSettings settings("ImageX","KIMView");
+    QString KIMIP=settings.value("KIMIP").toString();
+    int KIMViewPort=settings.value("KIMViewPort").toInt();
+    int KIMPort=settings.value("KIMPort").toInt();
+
+    this->ui->lineEdit_KIMIP->setText(KIMIP);
+    this->ui->lineEdit_KIMPort->setText(QString::number(KIMPort));
+    this->ui->lineEdit_KIMViewPort->setText(QString::number(KIMViewPort));
+
+
+
 }
 
 IPConfigDialog::~IPConfigDialog()

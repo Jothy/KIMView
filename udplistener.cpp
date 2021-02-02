@@ -69,9 +69,9 @@ void UDPListener::readMessage()
     socket->readDatagram(buffer.data(), buffer.size(),
                          &sender, &senderPort);
 
-    qDebug() << "Message from: " << sender.toString();
-    qDebug() << "Message port: " << senderPort;
-    qDebug() << "Message: " << buffer;
+//    qDebug() << "Message from: " << sender.toString();
+//    qDebug() << "Message port: " << senderPort;
+//    qDebug() << "Message: " << buffer;
 
     //The UDP format is [X,Y,Z,Gantry] in IEC(cm) and Varian degrees
     //IEC to LPS conversion, simple approach as it only supports HFS orientation now
@@ -90,7 +90,7 @@ void UDPListener::readMessage()
 
 void UDPListener::StartListening()
 {
-    qDebug()<<"Start";
+    //qDebug()<<"Start";
     //Receiver port
     QSettings settings("ImageX","KIMView");
     int KIMViewPort=settings.value("KIMViewPort").toInt();

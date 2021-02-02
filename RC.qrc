@@ -29,5 +29,8 @@
         <file>Icons/Ruler.png</file>
         <file>Icons/Sagittal.png</file>
         <file>Icons/Qt.png</file>
+        <file>Icons/Phone.png</file>
+        <file>Icons/Start.png</file>
+        <file>Icons/Stop.png</file>
     </qresource>
 </RCC>

@@ -136,6 +136,13 @@
     </property>
     <addaction name="actionIP_COnfiguration"/>
    </widget>
+   <widget class="QMenu" name="menuTracking">
+    <property name="title">
+     <string>Tracking</string>
+    </property>
+    <addaction name="actionStart"/>
+    <addaction name="actionStop"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuInsert"/>
    <addaction name="menuView"/>
@@ -146,6 +153,7 @@
    <addaction name="menuWindows"/>
    <addaction name="menuAbout"/>
    <addaction name="menuHelp"/>
+   <addaction name="menuTracking"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <property name="iconSize">
@@ -171,6 +179,9 @@
    <addaction name="actionShowBeams"/>
    <addaction name="actionAdjust_Range"/>
    <addaction name="actionReset_WL_WW"/>
+   <addaction name="actionIP_COnfiguration"/>
+   <addaction name="actionStart"/>
+   <addaction name="actionStop"/>
    <addaction name="actionPlan"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
@@ -672,8 +683,30 @@
    </property>
   </action>
   <action name="actionIP_COnfiguration">
+   <property name="icon">
+    <iconset resource="RC.qrc">
+     <normaloff>:/Icons/Phone.png</normaloff>:/Icons/Phone.png</iconset>
+   </property>
    <property name="text">
     <string>IP Configuration</string>
+   </property>
+  </action>
+  <action name="actionStart">
+   <property name="icon">
+    <iconset resource="RC.qrc">
+     <normaloff>:/Icons/Start.png</normaloff>:/Icons/Start.png</iconset>
+   </property>
+   <property name="text">
+    <string>Start</string>
+   </property>
+  </action>
+  <action name="actionStop">
+   <property name="icon">
+    <iconset resource="RC.qrc">
+     <normaloff>:/Icons/Stop.png</normaloff>:/Icons/Stop.png</iconset>
+   </property>
+   <property name="text">
+    <string>Stop</string>
    </property>
   </action>
  </widget>

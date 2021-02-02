@@ -961,7 +961,6 @@ void MainWindow::on_actionIP_COnfiguration_triggered()
     delete  IPDialog;
 }
 
-
 void MainWindow::loadSettings()
 {
    QSettings settings("ImageX","KIMView");
