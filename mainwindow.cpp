@@ -182,30 +182,30 @@ void MainWindow::on_actionCT_triggered()
         typedef itk::MetaDataObject< std::string > MetaDataStringType;
         const DictionaryType & dictionary = gdcmIO->GetMetaDataDictionary();
 
-//        //Read Patient Position tag
-//        std::string PatientPosition = "0018|5100";
-//        auto tagItr1 = dictionary.Find(PatientPosition);
-//        MetaDataStringType::ConstPointer PatientPositionValue = dynamic_cast<const MetaDataStringType *>(tagItr1->second.GetPointer() );
-//        val1 = PatientPositionValue->GetMetaDataObjectValue();
-//        //qDebug()<<val1.c_str()<<" "<<val1.compare("HFS")<<" Comaprarison";
-//        QString curIOP;
-//        curIOP=QString::fromStdString(val1);
-
-
-
-        //Read Patient Orientation tag, this seems more relibale
-        std::string PatientOrientation = "0020|0037";
-        auto tagItr = dictionary.Find(PatientOrientation);
-        MetaDataStringType::ConstPointer PatientOrientationValue = dynamic_cast<const MetaDataStringType *>(tagItr->second.GetPointer() );
-        std::string val2 = PatientOrientationValue->GetMetaDataObjectValue();
-        qDebug()<<"DICOM Cosines: "<<val2.c_str();
-
+        //Read Patient Position tag
+        std::string PatientPosition = "0018|5100";
+        auto tagItr1 = dictionary.Find(PatientPosition);
+        MetaDataStringType::ConstPointer PatientPositionValue = dynamic_cast<const MetaDataStringType *>(tagItr1->second.GetPointer() );
+        val1 = PatientPositionValue->GetMetaDataObjectValue();
+        //qDebug()<<val1.c_str()<<" "<<val1.compare("HFS")<<" Comaprarison";
         QString curIOP;
-        curIOP=QString::fromStdString(val2);
+        curIOP=QString::fromStdString(val1);
 
 
-        //QString supportedIOP="HFS ";//DICOM seems to be hvaving a space after as "HFS "
-        QString supportedIOP="1\\0.0\\0.0\\0.0\\1\\0.0 ";//DICOM seems to be hvaving a space at the end "
+
+//        //Read Patient Orientation tag, this seems more relibale
+//        std::string PatientOrientation = "0020|0037";
+//        auto tagItr = dictionary.Find(PatientOrientation);
+//        MetaDataStringType::ConstPointer PatientOrientationValue = dynamic_cast<const MetaDataStringType *>(tagItr->second.GetPointer() );
+//        std::string val2 = PatientOrientationValue->GetMetaDataObjectValue();
+//        qDebug()<<"DICOM Cosines: "<<val2.c_str();
+
+//        QString curIOP;
+//        curIOP=QString::fromStdString(val2);
+
+
+        QString supportedIOP="HFS ";//DICOM seems to be hvaving a space after as "HFS "
+        //QString supportedIOP="1\\0.0\\0.0\\0.0\\1\\0.0 ";//DICOM seems to be hvaving a space at the end "
         //qDebug()<<curIOP<<"**********"<<supportedIOP;
 
 
