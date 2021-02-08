@@ -451,7 +451,7 @@ void meshReader::getROIMeshes(vtkImageData *imgData,float zSpacing,float targetR
                     actor->GetProperty()->SetSpecularPower(10);
                     actor->GetProperty()->SetInterpolationToPhong();
                     actor->GetProperty()->SetLineWidth(1.0);
-                    actor->GetProperty()->SetAmbient(0.3);
+                    actor->GetProperty()->SetAmbient(0.5);
                     actor->PickableOff();
 
 

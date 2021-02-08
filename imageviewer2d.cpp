@@ -204,7 +204,7 @@ ImageViewer2D::ImageViewer2D(QWidget *parent,QActionGroup *contextMenus) :
     this->ui->widget->GetRenderWindow()->AddRenderer(this->ViewRenderer);
 
     //Enable anti-aliasing
-     this->ui->widget->GetRenderWindow()->LineSmoothingOn();
+     this->ui->widget->GetRenderWindow()->LineSmoothingOff();//Off to avoid color issues with MPR ROIs
      this->ui->widget->GetRenderWindow()->PolygonSmoothingOn();
      this->ui->widget->GetRenderWindow()->PointSmoothingOff();
 
@@ -497,7 +497,7 @@ void ImageViewer2D::SliceImageAndDose(double SliceLoc)
     color->SetInputConnection(this->ImageReslice->GetOutputPort());
     color->Update();
     this->ImageSlice->GetMapper()->SetInputConnection(color->GetOutputPort());    
-    this->ImageSlice->SetOpacity(1.0);
+    this->ImageSlice->SetOpacity(0.95);
     this->ImageSlice->InterpolateOn();
     //*****************End of slicing image****************
 
@@ -1063,10 +1063,14 @@ vtkSmartPointer<vtkActor>ImageViewer2D::CutROI(vtkPolyData *mesh,double sliceNo,
     vtkSmartPointer<vtkActor>cutROI=
             vtkSmartPointer<vtkActor>::New();
     cutROI->GetProperty()->SetColor(R,G,B);
+    //qDebug()<<R << G<< B;
     cutROI->SetMapper(cutterMapper);
+    cutROI->GetProperty()->SetDiffuse(0.3);
+    cutROI->GetProperty()->SetSpecular(0.3);
+    cutROI->GetProperty()->SetSpecularPower(5);
+    cutROI->GetProperty()->SetInterpolationToPhong();
     cutROI->GetProperty()->SetLineWidth(1.5);
-    cutROI->GetProperty()->SetOpacity(0.95);
-    cutROI->GetProperty()->SetAmbient(1.0);
+    cutROI->GetProperty()->SetAmbient(0.6);
     cutROI->DragableOff();
 
 
