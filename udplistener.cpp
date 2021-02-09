@@ -17,7 +17,7 @@ UDPListener::UDPListener(QObject *parent) : QObject(parent)
     socket = new QUdpSocket(this);
 
     //Instantiate tracking members
-    this->TrackingTranform=vtkSmartPointer<vtkTransform>::New();
+    this->TrackingTransform=vtkSmartPointer<vtkTransform>::New();
     this->TrackingPolydataTransform=vtkSmartPointer<vtkTransformPolyDataFilter>::New();
     this->TrackingPolyData=vtkSmartPointer<vtkPolyData>::New();
     this->TrackingTarget=vtkSmartPointer<vtkPolyData>::New();
@@ -119,9 +119,9 @@ void UDPListener::UpdateViews()
     this->CoronalViewer->ViewRenderer->RemoveViewProp(this->TrackingActorCoronal);
 
     //Transform actor
-    this->TrackingTranform->Identity();
-    this->TrackingTranform->Translate(this->shifts);
-    this->TrackingPolydataTransform->SetTransform(this->TrackingTranform);
+    this->TrackingTransform->Identity();
+    this->TrackingTransform->Translate(this->shifts);
+    this->TrackingPolydataTransform->SetTransform(this->TrackingTransform);
     this->TrackingPolydataTransform->SetInputData(this->TrackingTarget);
     this->TrackingMapper->SetInputConnection(this->TrackingPolydataTransform->GetOutputPort());
     this->TrackingActor3D->SetMapper(this->TrackingMapper);

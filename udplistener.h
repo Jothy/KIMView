@@ -24,7 +24,7 @@ public:
     double shifts[3]={0,0,0};
 
     //Tracking members
-    vtkSmartPointer<vtkTransform>TrackingTranform;
+    vtkSmartPointer<vtkTransform>TrackingTransform;
     vtkSmartPointer<vtkTransformPolyDataFilter>TrackingPolydataTransform;
     vtkSmartPointer<vtkActor>TrackingActor3D;
     vtkSmartPointer<vtkPolyDataMapper>TrackingMapper;
