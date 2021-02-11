@@ -45,7 +45,7 @@ void UDPListener::HelloUDP()
 //    Data.append("Hello from UDP");
 //    //Sends the datagram datagram
 //    socket->writeDatagram(Data, QHostAddress::LocalHost,45617);
-    qDebug()<<"Writing...";
+//    qDebug()<<"Writing...";
 }
 
 void UDPListener::readMessage()
@@ -78,7 +78,7 @@ void UDPListener::readMessage()
     this->shifts[0]=buffer.split(' ')[0].toDouble()/10;//cm to mm
     this->shifts[1]=-buffer.split(' ')[2].toDouble()/10;//cm to mm
     this->shifts[2]=buffer.split(' ')[1].toDouble()/10;//cm to mm
-    qDebug()<<"Shifts: "<<this->shifts[0]<<""<<this->shifts[1]<<""<<this->shifts[2];
+    //qDebug()<<"Shifts: "<<this->shifts[0]<<""<<this->shifts[1]<<""<<this->shifts[2];
 
     this->UpdateViews();
     QApplication::processEvents();

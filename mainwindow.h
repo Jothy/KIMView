@@ -77,10 +77,6 @@ public:
     double CalcSSD(double Iso[3], double GantryAngle,vtkDataSet *BodyMesh);
     UDPListener * listener;
 
-    void loadSettings();
-    void saveSettings();
-
-
 
 private slots:
     void on_actionDose_triggered();    
@@ -117,7 +113,9 @@ private slots:
 
     void on_actionIP_COnfiguration_triggered();
 
+    void on_actionStart_triggered();
 
+    void on_actionStop_triggered();
 
 private:
     Ui::MainWindow *ui;

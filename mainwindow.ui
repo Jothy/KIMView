@@ -151,9 +151,9 @@
    <addaction name="menuStructures"/>
    <addaction name="menuSettings"/>
    <addaction name="menuWindows"/>
+   <addaction name="menuTracking"/>
    <addaction name="menuAbout"/>
    <addaction name="menuHelp"/>
-   <addaction name="menuTracking"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <property name="iconSize">
@@ -699,6 +699,9 @@
    <property name="text">
     <string>Start</string>
    </property>
+   <property name="toolTip">
+    <string>Start tracking</string>
+   </property>
   </action>
   <action name="actionStop">
    <property name="icon">
@@ -707,6 +710,9 @@
    </property>
    <property name="text">
     <string>Stop</string>
+   </property>
+   <property name="toolTip">
+    <string>Stop tracking</string>
    </property>
   </action>
  </widget>
