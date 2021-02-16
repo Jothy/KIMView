@@ -75,9 +75,9 @@ void UDPListener::readMessage()
 
     //The UDP format is [X,Y,Z,Gantry] in IEC(cm) and Varian degrees
     //IEC to LPS conversion, simple approach as it only supports HFS orientation now
-    this->shifts[0]=buffer.split(' ')[0].toDouble()/10;//cm to mm
-    this->shifts[1]=-buffer.split(' ')[2].toDouble()/10;//cm to mm
-    this->shifts[2]=buffer.split(' ')[1].toDouble()/10;//cm to mm
+    this->shifts[0]=buffer.split(' ')[0].toDouble()*10;//cm to mm
+    this->shifts[1]=-buffer.split(' ')[2].toDouble()*10;//cm to mm
+    this->shifts[2]=buffer.split(' ')[1].toDouble()*10;//cm to mm
     //qDebug()<<"Shifts: "<<this->shifts[0]<<""<<this->shifts[1]<<""<<this->shifts[2];
 
     this->UpdateViews();
