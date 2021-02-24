@@ -54,7 +54,7 @@ UDPListener::UDPListener(QObject *parent) : QObject(parent)
 
 
     this->TrackingMapper=vtkSmartPointer<vtkPolyDataMapper>::New();
-    //◘this->TrackingMapper->ImmediateModeRenderingOn();
+    //this->TrackingMapper->ImmediateModeRenderingOn();
 }
 
 UDPListener::~UDPListener()
