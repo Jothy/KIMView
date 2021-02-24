@@ -114,6 +114,7 @@ LIBS+= -LD:\Libs\GDCM\Install\lib -lgdcmcharls -lgdcmCommon -lgdcmDICT -lgdcmDSE
 DISTFILES += \
     Human.vtp \
     Icons/DVH.png \
+    Notes \
     Perpendicular_-25_Arc2.txt \
     Shifts.txt
 

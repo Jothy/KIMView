@@ -1,0 +1,3 @@
+*Remove openGL32.dll from the folder containing KIMView.exe when running on a computer with graphics card
+
+*Where there is no graphics card on the pc KIMView need to be deployed with mesa software (run the bacth files of mesa to configure)
