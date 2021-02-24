@@ -13,8 +13,8 @@ SOURCES += \
     bevwidget.cpp \
     createobjects.cpp \
     ipconfigdialog.cpp \
-    doseprofiledialog.cpp \    
-    dvhcalc.cpp \    
+    doseprofiledialog.cpp \
+    dvhcalc.cpp \
     dvhdialog.cpp \
     imageviewer2d.cpp \    
     main.cpp \
@@ -32,8 +32,8 @@ HEADERS += \
     alignimageinteractorstyle.h \
     bevwidget.h \
     ipconfigdialog.h \
-    createobjects.h \   
-    doseprofiledialog.h \    
+    createobjects.h \    \
+    doseprofiledialog.h \
     dvhcalc.h \   
     dvhdialog.h \    
     imageviewer2d.h \   
@@ -113,9 +113,7 @@ LIBS+= -LD:\Libs\GDCM\Install\lib -lgdcmcharls -lgdcmCommon -lgdcmDICT -lgdcmDSE
 
 DISTFILES += \
     Human.vtp \
-    Icons/DVH.png \
     Notes \
-    Perpendicular_-25_Arc2.txt \
     Shifts.txt
 
 RESOURCES += \
