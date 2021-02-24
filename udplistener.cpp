@@ -30,7 +30,7 @@ UDPListener::UDPListener(QObject *parent) : QObject(parent)
 
 
     this->TrackingMapper=vtkSmartPointer<vtkPolyDataMapper>::New();
-    this->TrackingMapper->ImmediateModeRenderingOn();
+    //◘this->TrackingMapper->ImmediateModeRenderingOn();
 }
 
 UDPListener::~UDPListener()
@@ -133,9 +133,7 @@ void UDPListener::UpdateViews()
 
     //Update 2D views
     this->TrackingActorAxial=this->AxialViewer->CutROI(this->TrackingPolyData,this->AxialViewer->SliceLoc,1,1,0,this->AxialViewer->SliceOrientation);
-    this->TrackingActorAxial->GetProperty()->SetLineWidth(3.0);
-    this->TrackingActorAxial->GetProperty()->SetLineStipplePattern(0xA1A1);
-    this->TrackingActorAxial->GetProperty()->SetLineStippleRepeatFactor(3);
+    this->TrackingActorAxial->GetProperty()->SetLineWidth(3.0);    
     this->AxialViewer->ViewRenderer->AddActor(this->TrackingActorAxial);
     this->AxialViewer->ViewRenderer->GetRenderWindow()->Render();
 
