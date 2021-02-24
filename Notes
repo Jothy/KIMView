@@ -1,3 +1,10 @@
 *Remove openGL32.dll from the folder containing KIMView.exe when running on a computer with graphics card
 
 *Where there is no graphics card on the pc KIMView need to be deployed with mesa software (run the bacth files of mesa to configure)
+
+IEC2LPS conversion usage:
+Utilities *Util=new Utilities();
+double IEC[3]={10.0,20.0,30.0};
+double *LPS=Util->IEC2LPS(IEC);
+qDebug()<<LPS[0] <<LPS[1]<< LPS[2];
+

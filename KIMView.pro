@@ -16,7 +16,8 @@ SOURCES += \
     doseprofiledialog.cpp \
     dvhcalc.cpp \
     dvhdialog.cpp \
-    imageviewer2d.cpp \    
+    imageviewer2d.cpp \
+    utilities.cpp   \
     main.cpp \
     mainwindow.cpp \
     meshreader.cpp \
@@ -34,7 +35,8 @@ HEADERS += \
     ipconfigdialog.h \
     createobjects.h \    \
     doseprofiledialog.h \
-    dvhcalc.h \   
+    dvhcalc.h \
+    utilities.h \
     dvhdialog.h \    
     imageviewer2d.h \   
     mainwindow.h \

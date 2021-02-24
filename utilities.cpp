@@ -22,26 +22,30 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ********************************************************************************/
 
-#include "mainwindow.h"
-
-#include<QApplication>
-#include<QStyleFactory>
-
-//Testing
 #include<vtkTransform.h>
 #include<vtkMatrix4x4.h>
-#include<utilities.h>
 
 
-int main(int argc, char *argv[])
+#include "utilities.h"
+
+#include<vtkTransform.h>
+#include<vtkSmartPointer.h>
+
+#include<QDebug>
+
+Utilities::Utilities()
 {
-    QApplication a(argc, argv);
-    MainWindow w;
-    w.showMaximized();
-    a.setStyle(QStyleFactory::create("Fusion"));
-    a.setOrganizationName("ImageX");
-    a.setOrganizationDomain("https://image-x.sydney.edu.au/");
-    a.setApplicationName("KIMView");
 
-    return a.exec();
+}
+
+double *Utilities::IEC2LPS(double IEC[3])
+{
+    vtkSmartPointer<vtkTransform>IEC2LPSTransform=
+            vtkSmartPointer<vtkTransform>::New();
+    IEC2LPSTransform->Identity();
+    IEC2LPSTransform->RotateX(90);
+    double *LPS=IEC2LPSTransform->TransformPoint(IEC);
+    //qDebug()<<out[0] <<out[1] <<out[2];
+    return LPS;
+
 }

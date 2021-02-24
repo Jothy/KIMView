@@ -22,26 +22,23 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ********************************************************************************/
 
-#include "mainwindow.h"
 
-#include<QApplication>
-#include<QStyleFactory>
 
-//Testing
-#include<vtkTransform.h>
+
+#ifndef UTILITIES_H
+#define UTILITIES_H
+
 #include<vtkMatrix4x4.h>
-#include<utilities.h>
+#include<vtkTransform.h>
 
 
-int main(int argc, char *argv[])
+class Utilities
 {
-    QApplication a(argc, argv);
-    MainWindow w;
-    w.showMaximized();
-    a.setStyle(QStyleFactory::create("Fusion"));
-    a.setOrganizationName("ImageX");
-    a.setOrganizationDomain("https://image-x.sydney.edu.au/");
-    a.setApplicationName("KIMView");
+public:
+    Utilities();
+    //Converts points from IEC to LPS (DICOM) coordinates
+    double *IEC2LPS(double IEC[3]);
 
-    return a.exec();
-}
+};
+
+#endif // UTILITIES_H
