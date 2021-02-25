@@ -27,11 +27,12 @@ SOFTWARE.
 
 #define vtkRenderingCore_AUTOINIT 3(vtkInteractionStyle,vtkRenderingFreeType,vtkRenderingOpenGL2)
 
-#include <QMainWindow>
-#include <QActionGroup>
+#include<QMainWindow>
+#include<QActionGroup>
 #include<QString>
 #include<QList>
 #include<QDockWidget>
+#include<QMap>
 
 #include<vtkRenderer.h>
 #include<vtkSmartPointer.h>
@@ -45,9 +46,6 @@ SOFTWARE.
 //Tracking function headers
 #include<vtkTransform.h>
 #include<vtkTransformPolyDataFilter.h>
-#include<vtkSMPTransform.h>
-
-
 
 #include<imageviewer2d.h>
 #include<bevwidget.h>
@@ -100,6 +98,8 @@ public:
     BEVWidget *BEVViewer;
     double CalcSSD(double Iso[3], double GantryAngle,vtkDataSet *BodyMesh);
     UDPListener * listener;
+
+    QMap<QString,QString>PatientInfo;
 
 
 private slots:

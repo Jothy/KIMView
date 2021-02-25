@@ -28,9 +28,8 @@ SOFTWARE.
 #include<QStyleFactory>
 
 //Testing
-#include<vtkTransform.h>
-#include<vtkMatrix4x4.h>
-#include<utilities.h>
+#include<QMap>
+#include<QString>
 
 
 int main(int argc, char *argv[])
@@ -42,6 +41,11 @@ int main(int argc, char *argv[])
     a.setOrganizationName("ImageX");
     a.setOrganizationDomain("https://image-x.sydney.edu.au/");
     a.setApplicationName("KIMView");
+
+
+
+
+
 
     return a.exec();
 }

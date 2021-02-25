@@ -179,7 +179,7 @@ void MainWindow::on_actionCT_triggered()
             InputNamesGeneratorType;
     ImageIOType::Pointer gdcmIO= ImageIOType::New();
     ReaderType::Pointer reader= ReaderType::New();
-    std::string val1;
+
 
     try
     {
@@ -210,12 +210,11 @@ void MainWindow::on_actionCT_triggered()
         std::string PatientPosition = "0018|5100";
         auto tagItr1 = dictionary.Find(PatientPosition);
         MetaDataStringType::ConstPointer PatientPositionValue = dynamic_cast<const MetaDataStringType *>(tagItr1->second.GetPointer() );
+        std::string val1;
         val1 = PatientPositionValue->GetMetaDataObjectValue();
         //qDebug()<<val1.c_str()<<" "<<val1.compare("HFS")<<" Comaprarison";
         QString curIOP;
         curIOP=QString::fromStdString(val1);
-
-
 
 //        //Read Patient Orientation tag, this seems more relibale
 //        std::string PatientOrientation = "0020|0037";
@@ -232,6 +231,25 @@ void MainWindow::on_actionCT_triggered()
         //QString supportedIOP="1\\0.0\\0.0\\0.0\\1\\0.0 ";//DICOM seems to be hvaving a space at the end "
         //qDebug()<<curIOP<<"**********"<<supportedIOP;
 
+        //Read patient's name tag
+        std::string PatientName = "0010|0010";
+        auto tagItr2 = dictionary.Find(PatientName);
+        MetaDataStringType::ConstPointer PatientNameValue = dynamic_cast<const MetaDataStringType *>(tagItr2->second.GetPointer() );
+        std::string val2;
+        val2 = PatientNameValue->GetMetaDataObjectValue();
+        QString PatientNameStr;
+        PatientInfo["PatientName"]=QString::fromStdString(val2);
+
+        //Read patient's ID
+        std::string PatientID = "0010|0020";
+        auto tagItr3 = dictionary.Find(PatientID);
+        MetaDataStringType::ConstPointer PatientIDValue = dynamic_cast<const MetaDataStringType *>(tagItr3->second.GetPointer() );
+        std::string val3;
+        val3 = PatientIDValue->GetMetaDataObjectValue();
+        QString PatientIDStr;
+        PatientInfo["PatientID"]=QString::fromStdString(val3);
+
+
 
         //1==match,-1=no match
         if(curIOP==supportedIOP)
@@ -244,6 +262,13 @@ void MainWindow::on_actionCT_triggered()
             //qDebug()<<"Conversion done!";
 
             this->CTImage->DeepCopy(Converter->GetOutput());
+
+            //Set patients name and ID to treeWidget
+            QString NameIDStr;
+            NameIDStr.append(PatientInfo["PatientName"]);
+            NameIDStr.append(" | ");
+            NameIDStr.append(PatientInfo["PatientID"]);
+            this->ui->treeWidget->setHeaderLabel(NameIDStr);
 
             //Display the data
             this->SagittalViewer=new ImageViewer2D(this->ui->mdiAreaView,this->ContextMenus);
@@ -983,8 +1008,6 @@ void MainWindow::on_actionIP_COnfiguration_triggered()
     IPDialog->exec();
     delete  IPDialog;
 }
-
-
 
 void MainWindow::on_actionStart_triggered()
 {
