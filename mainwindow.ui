@@ -240,8 +240,8 @@
          <string>Patient</string>
         </property>
         <property name="icon">
-         <iconset>
-          <normaloff>:/RC/Icons1/user_suit.png</normaloff>:/RC/Icons1/user_suit.png</iconset>
+         <iconset resource="RC.qrc">
+          <normaloff>:/Icons/Patient.png</normaloff>:/Icons/Patient.png</iconset>
         </property>
        </column>
        <item>

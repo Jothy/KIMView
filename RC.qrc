@@ -32,5 +32,6 @@
         <file>Icons/Phone.png</file>
         <file>Icons/Start.png</file>
         <file>Icons/Stop.png</file>
+        <file>Icons/Patient.png</file>
     </qresource>
 </RCC>
