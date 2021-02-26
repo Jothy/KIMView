@@ -109,6 +109,12 @@ DVHDialog::DVHDialog(QWidget *parent) :
     this->clonogenDensity=1.0E7;
     this->selectedStructureNum=0;//Default is 1st structure
 
+    //Add context menu
+    this->ui->ChartView->addAction(this->ui->actionCalculate_DVH);
+    this->ui->ChartView->addAction(this->ui->actionReset_View);
+    this->ui->ChartView->addAction(this->ui->actionSave_Figure);
+
+
 
 
 
