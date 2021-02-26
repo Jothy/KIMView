@@ -322,6 +322,17 @@ void MainWindow::on_actionCT_triggered()
             this->ui->actionZoom_Out_All->setEnabled(true);
             this->ui->actionBEV->setEnabled(true);
             this->ui->action3DView->setEnabled(true);
+            this->ui->actionZoom_In_All->setEnabled(true);
+            this->ui->actionZoom_Out_All->setEnabled(true);
+            this->ui->actionReset_Zoom->setEnabled(true);
+            this->ui->actionReset_WL_WW->setEnabled(true);
+            this->ui->actionCalc_DVH->setEnabled(true);
+            this->ui->actionStart->setEnabled(true);
+            this->ui->actionStop->setEnabled(true);
+            this->ui->actionStructures->setEnabled(true);
+            this->ui->actionDose->setEnabled(true);
+            this->ui->actionAdjust_Range->setEnabled(true);
+
 
 
         }

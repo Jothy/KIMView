@@ -33,5 +33,9 @@
         <file>Icons/Start.png</file>
         <file>Icons/Stop.png</file>
         <file>Icons/Patient.png</file>
+        <file>Icons/Charts.png</file>
+        <file>Icons/Zoom-In.png</file>
+        <file>Icons/Zoom-Out.png</file>
+        <file>Icons/Zoom-Reset.png</file>
     </qresource>
 </RCC>

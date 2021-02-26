@@ -398,7 +398,7 @@
    </property>
    <property name="icon">
     <iconset resource="RC.qrc">
-     <normaloff>:/Icons/zoom in.png</normaloff>:/Icons/zoom in.png</iconset>
+     <normaloff>:/Icons/Zoom-In.png</normaloff>:/Icons/Zoom-In.png</iconset>
    </property>
    <property name="text">
     <string>Zoom In All</string>
@@ -413,7 +413,7 @@
    </property>
    <property name="icon">
     <iconset resource="RC.qrc">
-     <normaloff>:/Icons/zoom out.png</normaloff>:/Icons/zoom out.png</iconset>
+     <normaloff>:/Icons/Zoom-Out.png</normaloff>:/Icons/Zoom-Out.png</iconset>
    </property>
    <property name="text">
     <string>Zoom Out All</string>
@@ -428,7 +428,7 @@
    </property>
    <property name="icon">
     <iconset resource="RC.qrc">
-     <normaloff>:/Icons/zoom.png</normaloff>:/Icons/zoom.png</iconset>
+     <normaloff>:/Icons/Zoom-Reset.png</normaloff>:/Icons/Zoom-Reset.png</iconset>
    </property>
    <property name="text">
     <string>Reset Zoom</string>
@@ -459,6 +459,9 @@
    </property>
   </action>
   <action name="actionStructures">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="RC.qrc">
      <normaloff>:/Icons/Polygon.png</normaloff>:/Icons/Polygon.png</iconset>
@@ -468,6 +471,9 @@
    </property>
   </action>
   <action name="actionPlan">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset>
      <normaloff>:/RC/Icons1/applications.png</normaloff>:/RC/Icons1/applications.png</iconset>
@@ -489,6 +495,9 @@
    </property>
   </action>
   <action name="actionDose">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="RC.qrc">
      <normaloff>:/Icons/Dose.png</normaloff>:/Icons/Dose.png</iconset>
@@ -604,21 +613,30 @@
    </property>
   </action>
   <action name="actionCalc_DVH">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="RC.qrc">
-     <normaloff>:/Icons/DVH.png</normaloff>:/Icons/DVH.png</iconset>
+     <normaloff>:/Icons/Charts.png</normaloff>:/Icons/Charts.png</iconset>
    </property>
    <property name="text">
     <string>Calc DVH</string>
    </property>
   </action>
   <action name="actionAdjust_Range">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="RC.qrc">
      <normaloff>:/Icons/Color.png</normaloff>:/Icons/Color.png</iconset>
    </property>
    <property name="text">
     <string>Adjust Range</string>
+   </property>
+   <property name="toolTip">
+    <string>Adjust dose range</string>
    </property>
   </action>
   <action name="actionReset_WL_WW">
@@ -692,6 +710,9 @@
    </property>
   </action>
   <action name="actionStart">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="RC.qrc">
      <normaloff>:/Icons/Start.png</normaloff>:/Icons/Start.png</iconset>
@@ -704,6 +725,9 @@
    </property>
   </action>
   <action name="actionStop">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="RC.qrc">
      <normaloff>:/Icons/Stop.png</normaloff>:/Icons/Stop.png</iconset>
