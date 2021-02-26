@@ -22,14 +22,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ********************************************************************************/
 
-#include<vtkTransform.h>
-#include<vtkMatrix4x4.h>
-
-
 #include "utilities.h"
 
 #include<vtkTransform.h>
 #include<vtkSmartPointer.h>
+#include<vtkMatrix4x4.h>
 
 #include<QDebug>
 

@@ -74,8 +74,8 @@ void UDPListener::HelloUDP()
 
 void UDPListener::readMessage()
 {
-    QElapsedTimer timer;
-    timer.start();
+//    QElapsedTimer timer;
+//    timer.start();
 
     //When data comes in
     QByteArray buffer;

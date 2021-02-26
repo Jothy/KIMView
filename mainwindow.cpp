@@ -269,6 +269,8 @@ void MainWindow::on_actionCT_triggered()
             NameIDStr.append(" | ");
             NameIDStr.append(PatientInfo["PatientID"]);
             this->ui->treeWidget->setHeaderLabel(NameIDStr);
+            this->setWindowTitle(NameIDStr);
+            this->ui->actionInformation->trigger();
 
             //Display the data
             this->SagittalViewer=new ImageViewer2D(this->ui->mdiAreaView,this->ContextMenus);
