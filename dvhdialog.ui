@@ -1870,6 +1870,7 @@
               <widget class="QGroupBox" name="groupBox_3">
                <property name="font">
                 <font>
+                 <family>Agency FB</family>
                  <pointsize>10</pointsize>
                  <stylestrategy>PreferAntialias</stylestrategy>
                 </font>
@@ -1886,6 +1887,7 @@
                      <widget class="QLabel" name="label_2">
                       <property name="font">
                        <font>
+                        <family>Agency FB</family>
                         <pointsize>10</pointsize>
                         <weight>75</weight>
                         <bold>true</bold>
@@ -1915,6 +1917,7 @@
                      <widget class="QLabel" name="label_3">
                       <property name="font">
                        <font>
+                        <family>Agency FB</family>
                         <pointsize>10</pointsize>
                         <weight>75</weight>
                         <bold>true</bold>
@@ -1947,6 +1950,7 @@
                      <widget class="QLabel" name="label_4">
                       <property name="font">
                        <font>
+                        <family>Agency FB</family>
                         <pointsize>10</pointsize>
                         <weight>75</weight>
                         <bold>true</bold>
@@ -1979,6 +1983,7 @@
               <widget class="QGroupBox" name="groupBox_4">
                <property name="font">
                 <font>
+                 <family>Agency FB</family>
                  <pointsize>10</pointsize>
                  <stylestrategy>PreferAntialias</stylestrategy>
                 </font>
@@ -2041,11 +2046,17 @@
            <string>Legend</string>
           </property>
           <property name="icon">
-           <iconset>
-            <normaloff>:/Icons/Icons/edit2.png</normaloff>:/Icons/Icons/edit2.png</iconset>
+           <iconset resource="RC.qrc">
+            <normaloff>:/Icons/Legend.png</normaloff>:/Icons/Legend.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>16</width>
+            <height>16</height>
+           </size>
           </property>
           <property name="checked">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -2183,6 +2194,8 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="RC.qrc"/>
+ </resources>
  <connections/>
 </ui>

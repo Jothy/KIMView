@@ -192,9 +192,9 @@ void DVHDialog::on_pushButton_clicked()
     }
 
 
-        //Instantiate QChart
+        //Instantiate QChart and hide legend by default so the chart is bigger
         QChart *DVHChart = new QChart();
-        DVHChart->legend()->show();
+        DVHChart->legend()->hide();
 
         QValueAxis *axisX = new QValueAxis;
         axisX->setTickCount(10);
