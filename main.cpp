@@ -41,7 +41,5 @@ int main(int argc, char *argv[])
     a.setApplicationName("KIMView");
 
 
-
-
     return a.exec();
 }

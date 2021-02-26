@@ -554,7 +554,7 @@
      <normaloff>:/Icons/Beam.png</normaloff>:/Icons/Beam.png</iconset>
    </property>
    <property name="text">
-    <string>Toggle Beams</string>
+    <string>Beams</string>
    </property>
    <property name="toolTip">
     <string>Toggle Beams</string>
@@ -569,7 +569,7 @@
      <normaloff>:/Icons/Dose.png</normaloff>:/Icons/Dose.png</iconset>
    </property>
    <property name="text">
-    <string>Toggle Dose</string>
+    <string>Dose</string>
    </property>
    <property name="toolTip">
     <string>Toggle Dose</string>
@@ -584,7 +584,7 @@
      <normaloff>:/Icons/Polygon.png</normaloff>:/Icons/Polygon.png</iconset>
    </property>
    <property name="text">
-    <string>Toggle Contours</string>
+    <string>Contours</string>
    </property>
    <property name="toolTip">
     <string>Toggle Contours</string>
