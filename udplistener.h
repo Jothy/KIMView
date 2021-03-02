@@ -25,8 +25,10 @@ SOFTWARE.
 #ifndef UDPLISTENER_H
 #define UDPLISTENER_H
 
-#include <QObject>
-#include <QUdpSocket>
+#include<QObject>
+#include<QUdpSocket>
+#include<QFile>
+#include<QString>
 
 //Tracking function headers
 #include<vtkTransform.h>
@@ -62,6 +64,8 @@ public:
     ImageViewer2D *SagittalViewer;
     BEVWidget *BEVViewer;
     void UpdateViews();
+    QFile *UDPLog;
+    QString PatientID;
 
 
 

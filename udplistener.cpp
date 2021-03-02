@@ -25,10 +25,14 @@ SOFTWARE.
 #include "udplistener.h"
 
 #include<udplistener.h>
+
 #include<QUdpSocket>
 #include<QElapsedTimer>
 #include<QApplication>
 #include<QSettings>
+#include<QFile>
+#include<QTextStream>
+#include<QDateTime>
 
 //Tracking includes
 #include<vtkProperty.h>
@@ -55,6 +59,10 @@ UDPListener::UDPListener(QObject *parent) : QObject(parent)
 
     this->TrackingMapper=vtkSmartPointer<vtkPolyDataMapper>::New();
     //this->TrackingMapper->ImmediateModeRenderingOn();
+
+    this->UDPLog=new QFile("UDPLog.txt");
+
+
 }
 
 UDPListener::~UDPListener()
@@ -97,15 +105,28 @@ void UDPListener::readMessage()
 //    qDebug() << "Message port: " << senderPort;
 //    qDebug() << "Message: " << buffer;
 
-    //The UDP format is [X,Y,Z,Gantry] in IEC(cm) and Varian degrees
-    //IEC to LPS conversion, simple approach as it only supports HFS orientation now
-    this->shifts[0]=buffer.split(' ')[0].toDouble()*10;//cm to mm
-    this->shifts[1]=-buffer.split(' ')[2].toDouble()*10;//cm to mm
-    this->shifts[2]=buffer.split(' ')[1].toDouble()*10;//cm to mm
-    //qDebug()<<"Shifts: "<<this->shifts[0]<<""<<this->shifts[1]<<""<<this->shifts[2];
+    if(this->UDPLog->open(QIODevice::WriteOnly |QIODevice::Append| QIODevice::Text))
+    {
+        // We're going to streaming text to the file
+        QTextStream stream(this->UDPLog);
 
-    this->UpdateViews();
-    QApplication::processEvents();
+        stream <<buffer <<'\n';
+
+        this->UDPLog->close();
+        //qDebug() << "Writing finished";
+    }
+
+
+
+//    //The UDP format is [X,Y,Z,Gantry] in IEC(cm) and Varian degrees
+//    //IEC to LPS conversion, simple approach as it only supports HFS orientation now
+//    this->shifts[0]=buffer.split(' ')[0].toDouble()*10;//cm to mm
+//    this->shifts[1]=-buffer.split(' ')[2].toDouble()*10;//cm to mm
+//    this->shifts[2]=buffer.split(' ')[1].toDouble()*10;//cm to mm
+//    //qDebug()<<"Shifts: "<<this->shifts[0]<<""<<this->shifts[1]<<""<<this->shifts[2];
+
+//    this->UpdateViews();
+//    QApplication::processEvents();
 
 //    qDebug() <<"Rendering took" << timer.elapsed() << "milliseconds";
 
@@ -114,6 +135,15 @@ void UDPListener::readMessage()
 
 void UDPListener::StartListening()
 {
+    if(this->UDPLog->open(QIODevice::WriteOnly |QIODevice::Append| QIODevice::Text))
+    {
+        // We're going to streaming text to the file
+        QTextStream stream(this->UDPLog);
+        stream <<"************ "<<this->PatientID<<" "<<QDateTime::currentDateTime().toString()<<" ******************"<<'\n';
+        this->UDPLog->close();
+    }
+
+
     //qDebug()<<"Start";
     //Receiver port
     QSettings settings("ImageX","KIMView");
@@ -125,6 +155,8 @@ void UDPListener::StartListening()
     socket->connectToHost(QHostAddress(KIMIP),KIMPort);
     //socket->waitForConnected(1000);
     connect(socket, SIGNAL(readyRead()), this, SLOT(readMessage()));
+
+
 
 }
 

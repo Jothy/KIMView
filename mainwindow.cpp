@@ -1030,6 +1030,7 @@ void MainWindow::on_actionStart_triggered()
     this->listener->SagittalViewer=this->SagittalViewer;
     this->listener->CoronalViewer=this->CoronalViewer;
     this->listener->BEVViewer=this->BEVViewer;
+    this->listener->PatientID=this->PatientInfo["PatientID"];
     this->listener->StartListening();
     QApplication::processEvents();
 }
