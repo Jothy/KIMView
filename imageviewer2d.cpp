@@ -854,7 +854,7 @@ void ImageViewer2D::on_toolButtonContrast_clicked()
     if (this->ui->toolButtonContrast->isChecked())
     {
 
-        this->ui->widget->GetRenderWindow()->GetInteractor()->SetInteractorStyle(InteractorImage);
+        this->ui->widget->GetRenderWindow()->GetInteractor()->SetInteractorStyle(this->InteractorImage);
     }
 
 //    else if(!this->DoseSlice->GetPickable() && !this->ui->toolButtonContrast->isChecked())

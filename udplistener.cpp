@@ -107,7 +107,7 @@ void UDPListener::readMessage()
 
     if(this->UDPLog->open(QIODevice::WriteOnly |QIODevice::Append| QIODevice::Text))
     {
-        // We're going to streaming text to the file
+        // Streaming text to the file
         QTextStream stream(this->UDPLog);
 
         stream <<buffer <<'\n';
@@ -118,18 +118,17 @@ void UDPListener::readMessage()
 
 
 
-//    //The UDP format is [X,Y,Z,Gantry] in IEC(cm) and Varian degrees
-//    //IEC to LPS conversion, simple approach as it only supports HFS orientation now
-//    this->shifts[0]=buffer.split(' ')[0].toDouble()*10;//cm to mm
-//    this->shifts[1]=-buffer.split(' ')[2].toDouble()*10;//cm to mm
-//    this->shifts[2]=buffer.split(' ')[1].toDouble()*10;//cm to mm
-//    //qDebug()<<"Shifts: "<<this->shifts[0]<<""<<this->shifts[1]<<""<<this->shifts[2];
+    //The UDP format is [X,Y,Z,Gantry] in IEC(cm) and Varian degrees
+    //IEC to LPS conversion, simple approach as it only supports HFS orientation now
+    this->shifts[0]=buffer.split(' ')[0].toDouble()*10;//cm to mm
+    this->shifts[1]=-buffer.split(' ')[2].toDouble()*10;//cm to mm
+    this->shifts[2]=buffer.split(' ')[1].toDouble()*10;//cm to mm
+    //qDebug()<<"Shifts: "<<this->shifts[0]<<""<<this->shifts[1]<<""<<this->shifts[2];
 
-//    this->UpdateViews();
-//    QApplication::processEvents();
+    this->UpdateViews();
+    QApplication::processEvents();
 
 //    qDebug() <<"Rendering took" << timer.elapsed() << "milliseconds";
-
 
 }
 

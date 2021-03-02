@@ -111,6 +111,7 @@
     <addaction name="actionRotate_ROI"/>
     <addaction name="actionAdd_Arc"/>
     <addaction name="actionSend_UDP"/>
+    <addaction name="actionSync"/>
    </widget>
    <widget class="QMenu" name="menuStructures">
     <property name="title">
@@ -737,6 +738,11 @@
    </property>
    <property name="toolTip">
     <string>Stop tracking</string>
+   </property>
+  </action>
+  <action name="actionSync">
+   <property name="text">
+    <string>Sync Views</string>
    </property>
   </action>
  </widget>
