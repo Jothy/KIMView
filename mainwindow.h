@@ -141,8 +141,6 @@ private slots:
 
     void on_actionStop_triggered();
 
-    void on_actionSync_triggered();
-
 private:
     Ui::MainWindow *ui;
     vtkSmartPointer<vtkRenderer>renderer;

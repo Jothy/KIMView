@@ -36,13 +36,9 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.showMaximized();
     a.setStyle(QStyleFactory::create("Fusion"));
-
-    //Set organization detials so every QSettings don't need to be called with them
     a.setOrganizationName("ImageX");
-    a.setOrganizationDomain("https://image-x.sydney.edu.au");
+    a.setOrganizationDomain("https://image-x.sydney.edu.au/");
     a.setApplicationName("KIMView");
-
-
 
 
     return a.exec();

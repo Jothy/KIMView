@@ -101,18 +101,6 @@ SOFTWARE.
 #include<vtkArrowSource.h>
 #include<vtkGlyph3D.h>
 
-#include <vtkSphereSource.h>
-#include <vtkProperty.h>
-#include <vtkPolyData.h>
-#include <vtkSmartPointer.h>
-#include <vtkPolyDataMapper.h>
-#include <vtkActor.h>
-#include <vtkRenderWindow.h>
-#include <vtkRenderer.h>
-#include <vtkRenderWindowInteractor.h>
-#include <vtkCursor3D.h>
-
-
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -1042,7 +1030,6 @@ void MainWindow::on_actionStart_triggered()
     this->listener->SagittalViewer=this->SagittalViewer;
     this->listener->CoronalViewer=this->CoronalViewer;
     this->listener->BEVViewer=this->BEVViewer;
-    this->listener->PatientID=this->PatientInfo["PatientID"];
     this->listener->StartListening();
     QApplication::processEvents();
 }
@@ -1051,16 +1038,5 @@ void MainWindow::on_actionStop_triggered()
 {
     this->ui->statusBar->clearMessage();
     this->listener->StopListening();
-
-}
-
-void MainWindow::on_actionSync_triggered()
-{
-
-
-
-
-
-
 
 }

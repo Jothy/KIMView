@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>272</width>
-    <height>179</height>
+    <width>231</width>
+    <height>138</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -32,13 +32,6 @@
            </widget>
           </item>
           <item>
-           <widget class="QLabel" name="label_2">
-            <property name="text">
-             <string>KIM Port:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
            <widget class="QLabel" name="label_3">
             <property name="text">
              <string>KIMView Port:</string>
@@ -53,13 +46,6 @@
            <widget class="QLineEdit" name="lineEdit_KIMIP">
             <property name="text">
              <string>127.0.0.1</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="lineEdit_KIMPort">
-            <property name="text">
-             <string>55930</string>
             </property>
            </widget>
           </item>
