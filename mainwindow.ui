@@ -17,7 +17,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string>KIMView</string>
+   <string>KIMView  1.0.0a</string>
   </property>
   <property name="windowIcon">
    <iconset resource="RC.qrc">
@@ -46,7 +46,7 @@
      <x>0</x>
      <y>0</y>
      <width>988</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
