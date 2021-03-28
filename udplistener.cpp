@@ -146,9 +146,9 @@ void UDPListener::readMessage() {
   //   The UDP format is [X,Y,Z,Gantry] in IEC(cm) and Varian degrees
   //   IEC to LPS conversion, simple approach as it only supports HFS
   //   orientation now
-  this->shifts[0] = UDPShifts->shiftX * 10;   // cm to mm
-  this->shifts[1] = -UDPShifts->shiftZ * 10;  // cm to mm
-  this->shifts[2] = UDPShifts->shiftY * 10;   // cm to mm
+  this->shifts[0] = UDPShifts->shiftX * 10;  // cm to mm
+  this->shifts[1] = -UDPShifts->shiftZ * 10; // cm to mm
+  this->shifts[2] = UDPShifts->shiftY * 10;  // cm to mm
 
   delete UDPShifts;
   shiftXArray.clear();
@@ -167,19 +167,14 @@ void UDPListener::readMessage() {
 }
 
 void UDPListener::StartListening() {
-  //    //qDebug()<<"Start";
-  //    //Receiver port
-  //    QSettings settings("ImageX","KIMView");
-  //    int KIMViewPort=settings.value("KIMViewPort").toInt();
-  //    socket->bind(KIMViewPort);
-  //    //KIM IP and port
-  //    QString KIMIP=settings.value("KIMIP").toString();
-  //    int KIMPort=settings.value("KIMPort").toInt();
-  //    socket->connectToHost(QHostAddress(KIMIP),KIMPort);
-  //    //socket->waitForConnected(1000);
-  //    connect(socket, SIGNAL(readyRead()), this, SLOT(readMessage()));
+  // Receiver port
+  QSettings settings("ImageX", "KIMView");
 
-  socket->bind(QHostAddress("127.0.0.1"), 45617);
+  // KIM IP and KIMView port
+  QString KIMIP = settings.value("KIMIP").toString();
+  int KIMViewPort = settings.value("KIMViewPort").toInt();
+
+  socket->bind(QHostAddress(KIMIP), 45617);
   connect(socket, SIGNAL(readyRead()), this, SLOT(readMessage()));
 }
 
@@ -187,6 +182,10 @@ void UDPListener::StopListening() { socket->close(); }
 
 void UDPListener::UpdateViews() {
   /*******************************Tracking.......................................*/
+  // Time the rendering
+  QElapsedTimer timer;
+  timer.start();
+
   // Remove previous last actors
   this->BEVViewer->ModelRenderer->RemoveViewProp(this->TrackingActor3D);
   this->AxialViewer->ViewRenderer->RemoveViewProp(this->TrackingActorAxial);
@@ -230,4 +229,6 @@ void UDPListener::UpdateViews() {
   this->TrackingActorCoronal->GetProperty()->SetLineWidth(3.0);
   this->CoronalViewer->ViewRenderer->AddActor(this->TrackingActorCoronal);
   this->CoronalViewer->ViewRenderer->GetRenderWindow()->Render();
+
+  qDebug() << "Rendering took: " << timer.elapsed() << " milliseconds";
 }
