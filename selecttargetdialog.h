@@ -34,7 +34,7 @@ class SelectTargetDialog;
 class SelectTargetDialog : public QDialog {
   Q_OBJECT
 
- public:
+public:
   explicit SelectTargetDialog(QWidget *parent = nullptr);
   ~SelectTargetDialog();
   QWidget *parent;
@@ -44,11 +44,11 @@ class SelectTargetDialog : public QDialog {
   void setROINames();
   bool ROISelected = false;
 
- private:
+private:
   Ui::SelectTargetDialog *ui;
 
- private slots:
+private slots:
   void on_buttonBox_accepted();
 };
 
-#endif  // SELECTTARGETDIALOG_H
+#endif // SELECTTARGETDIALOG_H

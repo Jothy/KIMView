@@ -56,7 +56,8 @@ UDPListener::UDPListener(QObject *parent) : QObject(parent) {
   this->TrackingActorCoronal = vtkSmartPointer<vtkActor>::New();
 
   this->TrackingMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-  // this->TrackingMapper->ImmediateModeRenderingOn();
+
+  connect(socket, SIGNAL(readyRead()), this, SLOT(readMessage()));
 }
 
 UDPListener::~UDPListener() {
@@ -148,9 +149,9 @@ void UDPListener::readMessage() {
   //   The UDP format is [X,Y,Z,Gantry] in IEC(cm) and Varian degrees
   //   IEC to LPS conversion, simple approach as it only supports HFS
   //   orientation now
-  this->shifts[0] = UDPShifts->shiftX * 10;   // cm to mm
-  this->shifts[1] = -UDPShifts->shiftZ * 10;  // cm to mm
-  this->shifts[2] = UDPShifts->shiftY * 10;   // cm to mm
+  this->shifts[0] = UDPShifts->shiftX * 10;  // cm to mm
+  this->shifts[1] = -UDPShifts->shiftZ * 10; // cm to mm
+  this->shifts[2] = UDPShifts->shiftY * 10;  // cm to mm
   qDebug() << this->shifts[0] << this->shifts[1] << this->shifts[2]
            << " :Shifts";
 
@@ -171,6 +172,12 @@ void UDPListener::readMessage() {
 }
 
 void UDPListener::StartListening() {
+  // Close any existing connection
+  if (socket->state() == QUdpSocket::BoundState) {
+    this->StopListening();
+    // qDebug() << "Disconnecting...";
+  }
+
   SelectTargetDialog *SelectedTarget = new SelectTargetDialog(this->parent);
   SelectedTarget->ROINames = this->ROINames;
   SelectedTarget->ROIColors = this->ROIColors;
@@ -188,7 +195,8 @@ void UDPListener::StartListening() {
     int KIMViewPort = settings.value("KIMViewPort").toInt();
 
     socket->bind(QHostAddress(KIMIP), KIMViewPort);
-    connect(socket, SIGNAL(readyRead()), this, SLOT(readMessage()));
+    this->connectionState = true;
+
   }
 
   else {
@@ -198,7 +206,30 @@ void UDPListener::StartListening() {
   }
 }
 
-void UDPListener::StopListening() { socket->close(); }
+void UDPListener::StopListening() {
+  if (socket->state() == QUdpSocket::BoundState) {
+    socket->close();
+    this->connectionState = false;
+  }
+
+  try {
+    // Remove previous last actors
+    this->BEVViewer->ModelRenderer->RemoveViewProp(this->TrackingActor3D);
+    this->AxialViewer->ViewRenderer->RemoveViewProp(this->TrackingActorAxial);
+    this->SagittalViewer->ViewRenderer->RemoveViewProp(
+        this->TrackingActorSagittal);
+    this->CoronalViewer->ViewRenderer->RemoveViewProp(
+        this->TrackingActorCoronal);
+
+    this->BEVViewer->ModelRenderer->GetRenderWindow()->Render();
+    this->AxialViewer->ViewRenderer->GetRenderWindow()->Render();
+    this->SagittalViewer->ViewRenderer->GetRenderWindow()->Render();
+    this->CoronalViewer->ViewRenderer->GetRenderWindow()->Render();
+
+  } catch (...) {
+    // qDebug()<<"No ROI exists";
+  }
+}
 
 void UDPListener::UpdateViews() {
   /*******************************Tracking.......................................*/

@@ -68,11 +68,10 @@ SOFTWARE.
 #include <QSettings>
 #include <QTime>
 #include <QTreeWidgetItem>
+#include <QUdpSocket>
 #include <iostream>
 #include <itksys/SystemTools.hxx>
 
-#include "createobjects.h"
-#include "imageviewer2d.h"
 #include "ipconfigdialog.h"
 #include "itkCastImageFilter.h"
 #include "itkCommand.h"
@@ -86,9 +85,13 @@ SOFTWARE.
 #include "itkNumericSeriesFileNames.h"
 #include "itkSmartPointer.h"
 #include "itkVersion.h"
+
+#include "createobjects.h"
+#include "imageviewer2d.h"
 #include "meshreader.h"
 #include "rangesliderdialog.h"
 #include "rtstructreaderdialog.h"
+#include "udplistener.h"
 #include "ui_mainwindow.h"
 
 // Testing
@@ -106,8 +109,6 @@ MainWindow::MainWindow(QWidget *parent)
 
   this->listener = new UDPListener;
   this->listener->parent = this;
-
-  // this->loadSettings();
 
   // Avoid error window popping
   vtkSmartPointer<vtkFileOutputWindow> fileOutputWindow =
@@ -211,7 +212,7 @@ void MainWindow::on_actionCT_triggered() {
     //        curIOP=QString::fromStdString(val2);
 
     QString supportedIOP =
-        "HFS ";  // DICOM seems to be hvaving a space after as "HFS "
+        "HFS "; // DICOM seems to be hvaving a space after as "HFS "
     // QString supportedIOP="1\\0.0\\0.0\\0.0\\1\\0.0 ";//DICOM seems to be
     // hvaving a space at the end "
     // qDebug()<<curIOP<<"**********"<<supportedIOP;
@@ -264,8 +265,8 @@ void MainWindow::on_actionCT_triggered() {
       this->ui->mdiAreaView->addSubWindow(
           this->SagittalViewer,
           Qt::WindowMaximizeButtonHint |
-              Qt::WindowTitleHint);  // add to make borderless window
-                                     // Qt::FramelessWindowHint
+              Qt::WindowTitleHint); // add to make borderless window
+                                    // Qt::FramelessWindowHint
       this->SagittalViewer->setWindowTitle("Sagittal");
       this->SagittalViewer->show();
 
@@ -274,9 +275,9 @@ void MainWindow::on_actionCT_triggered() {
       this->CoronalViewer->SetImageData(this->CTImage);
       this->CoronalViewer->SetSliceOrientation(2);
       this->CoronalViewer->SetUpView();
-      this->ui->mdiAreaView->addSubWindow(
-          this->CoronalViewer,
-          Qt::WindowMaximizeButtonHint | Qt::WindowTitleHint);
+      this->ui->mdiAreaView->addSubWindow(this->CoronalViewer,
+                                          Qt::WindowMaximizeButtonHint |
+                                              Qt::WindowTitleHint);
       this->CoronalViewer->setWindowTitle("Coronal");
       this->CoronalViewer->show();
 
@@ -285,9 +286,9 @@ void MainWindow::on_actionCT_triggered() {
       this->AxialViewer->SetImageData(this->CTImage);
       this->AxialViewer->SetSliceOrientation(0);
       this->AxialViewer->SetUpView();
-      this->ui->mdiAreaView->addSubWindow(
-          this->AxialViewer,
-          Qt::WindowMaximizeButtonHint | Qt::WindowTitleHint);
+      this->ui->mdiAreaView->addSubWindow(this->AxialViewer,
+                                          Qt::WindowMaximizeButtonHint |
+                                              Qt::WindowTitleHint);
       this->AxialViewer->setWindowTitle("Axial");
       this->AxialViewer->show();
 
@@ -349,7 +350,7 @@ void MainWindow::on_actionStructures_triggered() {
     RTStructReaderDialog *meshReaderDlg = new RTStructReaderDialog(this);
     meshReaderDlg->exec();
 
-    if (meshReaderDlg->ROINames.size() > 0)  // Check any ROI exist or not
+    if (meshReaderDlg->ROINames.size() > 0) // Check any ROI exist or not
     {
       QList<int> selectedStructsList = meshReaderDlg->selectedItems;
       // qDebug()<<selectedStructsList[0]<<"ROI";
@@ -361,11 +362,11 @@ void MainWindow::on_actionStructures_triggered() {
       RTStructReader->getROIMeshes(
           this->CTImage, this->CTImage->GetSpacing()[2], this->TargetReduction,
           meshReaderDlg->selectedItems,
-          this);  // Reads ROI name as well as structs
+          this); // Reads ROI name as well as structs
       QCoreApplication::processEvents();
       this->MeshList = RTStructReader->meshes;
       this->MeshActors = RTStructReader->ROIActors;
-      this->ROIVisibleFlag = 1;  // structs imported
+      this->ROIVisibleFlag = 1; // structs imported
 
       for (int i = 0; i < meshReaderDlg->selectedItems.size(); i++) {
         this->ROIColors[i][0] = RTStructReader->ROIColors[i][0];
@@ -442,7 +443,7 @@ void MainWindow::on_actionDose_triggered() {
       vtkSmartPointer<vtkGDCMImageReader> DoseReader =
           vtkSmartPointer<vtkGDCMImageReader>::New();
       DoseReader->SetFileName(DoseFile.toLatin1());
-      DoseReader->FileLowerLeftOn();  // otherwise flips the image
+      DoseReader->FileLowerLeftOn(); // otherwise flips the image
       DoseReader->SetDataScalarTypeToDouble();
       DoseReader->Update();
       this->RTDose->DeepCopy(DoseReader->GetOutput());
@@ -737,21 +738,20 @@ void MainWindow::on_actionReset_WL_WW_triggered() {
 void MainWindow::on_actionRender_Bones_triggered() {}
 
 void MainWindow::on_actionHello_UDP_triggered() {
-  if (this->ui->actionHello_UDP->isChecked() == true) {
-    this->listener->TrackingTarget->DeepCopy(this->MeshList[0]);
-    this->listener->AxialViewer = this->AxialViewer;
-    this->listener->SagittalViewer = this->SagittalViewer;
-    this->listener->CoronalViewer = this->CoronalViewer;
-    this->listener->BEVViewer = this->BEVViewer;
-    this->listener->StartListening();
-    this->ui->statusBar->showMessage("Listening to UPD sender...");
-  }
+  //  if (this->ui->actionHello_UDP->isChecked() == true) {
+  //    this->listener->TrackingTarget->DeepCopy(this->MeshList[0]);
+  //    this->listener->AxialViewer = this->AxialViewer;
+  //    this->listener->SagittalViewer = this->SagittalViewer;
+  //    this->listener->CoronalViewer = this->CoronalViewer;
+  //    this->listener->BEVViewer = this->BEVViewer;
+  //    this->listener->StartListening();
+  //    this->ui->statusBar->showMessage("Listening to UPD sender...");
+  //  }
 
-  else {
-    this->listener->StopListening();
-    this->ui->statusBar->clearMessage();
-    QApplication::processEvents();
-  }
+  //  else {
+  //    this->listener->StopListening();
+  //    this->ui->statusBar->clearMessage();
+  //    QApplication::processEvents();
 }
 
 void MainWindow::on_actionMove_ROI_triggered() {
@@ -924,7 +924,9 @@ void MainWindow::on_actionStart_triggered() {
 
 void MainWindow::on_actionStop_triggered() {
   this->ui->statusBar->clearMessage();
-  this->listener->StopListening();
+  if (this->listener->connectionState) {
+    this->listener->StopListening();
+  }
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
@@ -936,6 +938,7 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     event->ignore();
   } else {
     this->listener->StopListening();
+    delete this->listener;
     event->accept();
   }
 }

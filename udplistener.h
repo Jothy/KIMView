@@ -40,7 +40,7 @@ SOFTWARE.
 
 class UDPListener : public QObject {
   Q_OBJECT
- public:
+public:
   explicit UDPListener(QObject *parent = nullptr);
   ~UDPListener();
   void HelloUDP();
@@ -56,7 +56,7 @@ class UDPListener : public QObject {
   vtkSmartPointer<vtkActor> TrackingActorCoronal;
   vtkSmartPointer<vtkPolyData> TrackingPolyData;
   vtkSmartPointer<vtkPolyData> TrackingTarget;
-  std::vector<vtkSmartPointer<vtkPolyData> > MeshList;
+  std::vector<vtkSmartPointer<vtkPolyData>> MeshList;
   ImageViewer2D *AxialViewer;
   ImageViewer2D *CoronalViewer;
   ImageViewer2D *SagittalViewer;
@@ -66,28 +66,29 @@ class UDPListener : public QObject {
   double (*ROIColors)[3];
   unsigned int selectedStructureNum;
   QList<QString> ROINames;
+  bool connectionState = false; // disconnected by default
 
   QWidget *parent;
   struct UDPMsg {
-    double shiftX;
-    double shiftY;
-    double shiftZ;
-    double rotationX;
-    double rotationY;
-    double rotationZ;
-    double gantryAngle;
-    bool beamHold;
+    double shiftX = 0.0;
+    double shiftY = 0.0;
+    double shiftZ = 0.0;
+    double rotationX = 0.0;
+    double rotationY = 0.0;
+    double rotationZ = 0.0;
+    double gantryAngle = 0.0;
+    bool beamHold = false;
   };
 
- signals:
+signals:
 
- public slots:
+public slots:
   void readMessage();
   void StartListening();
   void StopListening();
 
- private:
+private:
   QUdpSocket *socket;
 };
 
-#endif  // UDPLISTENER_H
+#endif // UDPLISTENER_H
