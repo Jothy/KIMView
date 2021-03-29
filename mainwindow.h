@@ -84,7 +84,8 @@ class MainWindow : public QMainWindow {
   unsigned int BeamNum = 0;
   double DoseGridSpacing = 3.0;  // 3mm default
 
-  double TargetReduction = 0.10;
+  // Higher the fraction, lesser vertices
+  double TargetReduction = 0.30;
   bool ROIVisibleFlag = 1;  // Visible by default
   int DefaultTargetIdx = 0;
 

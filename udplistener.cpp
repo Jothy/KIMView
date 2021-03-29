@@ -146,9 +146,9 @@ void UDPListener::readMessage() {
   //   The UDP format is [X,Y,Z,Gantry] in IEC(cm) and Varian degrees
   //   IEC to LPS conversion, simple approach as it only supports HFS
   //   orientation now
-  this->shifts[0] = UDPShifts->shiftX * 10;  // cm to mm
-  this->shifts[1] = -UDPShifts->shiftZ * 10; // cm to mm
-  this->shifts[2] = UDPShifts->shiftY * 10;  // cm to mm
+  this->shifts[0] = UDPShifts->shiftX * 10;   // cm to mm
+  this->shifts[1] = -UDPShifts->shiftZ * 10;  // cm to mm
+  this->shifts[2] = UDPShifts->shiftY * 10;   // cm to mm
 
   delete UDPShifts;
   shiftXArray.clear();
@@ -174,7 +174,7 @@ void UDPListener::StartListening() {
   QString KIMIP = settings.value("KIMIP").toString();
   int KIMViewPort = settings.value("KIMViewPort").toInt();
 
-  socket->bind(QHostAddress(KIMIP), 45617);
+  socket->bind(QHostAddress(KIMIP), KIMViewPort);
   connect(socket, SIGNAL(readyRead()), this, SLOT(readMessage()));
 }
 

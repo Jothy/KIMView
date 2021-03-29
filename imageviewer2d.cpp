@@ -23,19 +23,8 @@ SOFTWARE.
 ********************************************************************************/
 
 #include "imageviewer2d.h"
-#include "ui_imageviewer2d.h"
 
-#include <QAction>
-#include <QDebug>
-#include <QFileDialog>
-#include <QKeyEvent>
-#include <QList>
-#include <QMessageBox>
-#include <QPixmap>
-#include <QString>
-#include <QWheelEvent>
-#include <QWidget>
-
+#include <alignimageinteractorstyle.h>
 #include <vtkActor.h>
 #include <vtkActorCollection.h>
 #include <vtkAngleRepresentation2D.h>
@@ -48,7 +37,10 @@ SOFTWARE.
 #include <vtkBoxWidget2.h>
 #include <vtkCamera.h>
 #include <vtkCellPicker.h>
+#include <vtkChartXY.h>
 #include <vtkColorSeries.h>
+#include <vtkContextScene.h>
+#include <vtkContextView.h>
 #include <vtkContourTriangulator.h>
 #include <vtkCoordinate.h>
 #include <vtkCornerAnnotation.h>
@@ -57,11 +49,13 @@ SOFTWARE.
 #include <vtkDataSetMapper.h>
 #include <vtkDistanceRepresentation2D.h>
 #include <vtkDistanceWidget.h>
+#include <vtkFloatArray.h>
 #include <vtkImageActor.h>
 #include <vtkImageData.h>
 #include <vtkImageMapToColors.h>
 #include <vtkImageMapper3D.h>
 #include <vtkImagePlaneWidget.h>
+#include <vtkImageProperty.h>
 #include <vtkImageReslice.h>
 #include <vtkInteractorStyleImage.h>
 #include <vtkInteractorStyleRubberBandZoom.h>
@@ -72,11 +66,17 @@ SOFTWARE.
 #include <vtkLineWidget2.h>
 #include <vtkLookupTable.h>
 #include <vtkMatrix4x4.h>
+#include <vtkNew.h>
 #include <vtkObject.h>
 #include <vtkOrientationMarkerWidget.h>
+#include <vtkPen.h>
 #include <vtkPlane.h>
+#include <vtkPlot.h>
+#include <vtkPointData.h>
+#include <vtkPolyData.h>
 #include <vtkPolyDataMapper.h>
 #include <vtkPolyDataNormals.h>
+#include <vtkProp.h>
 #include <vtkProperty.h>
 #include <vtkProperty2D.h>
 #include <vtkRenderWindow.h>
@@ -84,47 +84,31 @@ SOFTWARE.
 #include <vtkRenderer.h>
 #include <vtkScalarBarActor.h>
 #include <vtkScalarBarWidget.h>
+#include <vtkScalarsToColors.h>
 #include <vtkSmartPointer.h>
 #include <vtkTIFFWriter.h>
+#include <vtkTable.h>
 #include <vtkTextActor.h>
 #include <vtkTextProperty.h>
 #include <vtkTransform.h>
+#include <vtkVersion.h>
 #include <vtkWindowToImageFilter.h>
-
-#include <alignimageinteractorstyle.h>
+#include <vtkXMLPolyDataReader.h>
 #include <vtkinteractorstyleimagecustom.h>
 #include <vtklinecallbackdose.h>
 
-#include <vtkAxesActor.h>
-#include <vtkChartXY.h>
-#include <vtkContextScene.h>
-#include <vtkContextView.h>
-#include <vtkFloatArray.h>
-#include <vtkNew.h>
-#include <vtkPen.h>
-#include <vtkPlot.h>
-#include <vtkRenderWindow.h>
-#include <vtkRenderWindowInteractor.h>
-#include <vtkRenderer.h>
-#include <vtkSmartPointer.h>
-#include <vtkTable.h>
-#include <vtkVersion.h>
+#include <QAction>
+#include <QDebug>
+#include <QFileDialog>
+#include <QKeyEvent>
+#include <QList>
+#include <QMessageBox>
+#include <QPixmap>
+#include <QString>
+#include <QWheelEvent>
+#include <QWidget>
 
-#include <vtkAssembly.h>
-#include <vtkCamera.h>
-#include <vtkImageProperty.h>
-#include <vtkInteractorStyleImage.h>
-#include <vtkPointData.h>
-#include <vtkPolyData.h>
-#include <vtkPolyDataMapper.h>
-#include <vtkProp.h>
-#include <vtkProperty.h>
-#include <vtkRenderWindow.h>
-#include <vtkRenderWindowInteractor.h>
-#include <vtkRenderer.h>
-#include <vtkScalarsToColors.h>
-#include <vtkTransform.h>
-#include <vtkXMLPolyDataReader.h>
+#include "ui_imageviewer2d.h"
 
 ImageViewer2D::ImageViewer2D(QWidget *parent, QActionGroup *contextMenus)
     : QWidget(parent), ui(new Ui::ImageViewer2D) {
@@ -151,7 +135,7 @@ ImageViewer2D::ImageViewer2D(QWidget *parent, QActionGroup *contextMenus)
   //    this->WindowLow=-1500.0;
   //    this->WindowUp=8500.0;
 
-  this->SliceStep = 3.0; // Default slice step
+  this->SliceStep = 3.0;  // Default slice step
 
   // initialize class members
   this->ImageData = vtkSmartPointer<vtkImageData>::New();
@@ -199,7 +183,7 @@ ImageViewer2D::ImageViewer2D(QWidget *parent, QActionGroup *contextMenus)
   this->WLWAnnotation->SetText(3, WLW->toLatin1().data());
   this->ViewRenderer->AddViewProp(this->WLWAnnotation);
 
-  this->SliceOrientation = 0; // Axial by default
+  this->SliceOrientation = 0;  // Axial by default
 
   // Setup renderer and interactor style (no interaction -hohoo..)
   this->ui->widget->GetRenderWindow()->GetInteractor()->SetInteractorStyle(
@@ -208,7 +192,7 @@ ImageViewer2D::ImageViewer2D(QWidget *parent, QActionGroup *contextMenus)
 
   // Enable anti-aliasing
   this->ui->widget->GetRenderWindow()
-      ->LineSmoothingOff(); // Off to avoid color issues with MPR ROIs
+      ->LineSmoothingOff();  // Off to avoid color issues with MPR ROIs
   this->ui->widget->GetRenderWindow()->PolygonSmoothingOn();
   this->ui->widget->GetRenderWindow()->PointSmoothingOff();
 
@@ -264,7 +248,7 @@ ImageViewer2D::ImageViewer2D(QWidget *parent, QActionGroup *contextMenus)
   this->AxesWidget->SetOrientationMarker(this->Axes);
   this->AxesWidget->SetInteractor(
       this->ViewRenderer->GetRenderWindow()->GetInteractor());
-  this->AxesWidget->SetViewport(0.0, 0.7, 0.1, 1.0); //[Xmin,Ymin.Xmax,Ymax]
+  this->AxesWidget->SetViewport(0.0, 0.7, 0.1, 1.0);  //[Xmin,Ymin.Xmax,Ymax]
   this->AxesWidget->SetEnabled(1);
   this->AxesWidget->InteractiveOff();
 
@@ -334,19 +318,19 @@ void ImageViewer2D::SetUpView() {
   // Setup scroll bounds
   double *Bounds = new double[6];
   this->ImageData->GetBounds(Bounds);
-  if (this->SliceOrientation == 0) // Axial
+  if (this->SliceOrientation == 0)  // Axial
   {
     this->ui->verticalScrollBar->setMinimum(this->Bounds[4]);
     this->ui->verticalScrollBar->setMaximum(this->Bounds[5]);
     // this->setWindowTitle("Axial");
 
-  } else if (this->SliceOrientation == 1) // Sagittal
+  } else if (this->SliceOrientation == 1)  // Sagittal
   {
     this->ui->verticalScrollBar->setMinimum(this->Bounds[0]);
     this->ui->verticalScrollBar->setMaximum(this->Bounds[1]);
     // this->setWindowTitle("Sagittal");
 
-  } else if (this->SliceOrientation == 2) // Coronal
+  } else if (this->SliceOrientation == 2)  // Coronal
   {
     this->ui->verticalScrollBar->setMinimum(this->Bounds[2]);
     this->ui->verticalScrollBar->setMaximum(this->Bounds[3]);
@@ -456,23 +440,23 @@ void ImageViewer2D::SliceImageAndDose(double SliceLoc) {
   }
 
   switch (this->SliceOrientation) {
-  case 0:
-    resliceAxes->SetElement(0, 3, 0);
-    resliceAxes->SetElement(1, 3, 0);
-    resliceAxes->SetElement(2, 3, SliceLoc);
-    break;
+    case 0:
+      resliceAxes->SetElement(0, 3, 0);
+      resliceAxes->SetElement(1, 3, 0);
+      resliceAxes->SetElement(2, 3, SliceLoc);
+      break;
 
-  case 1:
-    resliceAxes->SetElement(0, 3, SliceLoc);
-    resliceAxes->SetElement(1, 3, 0);
-    resliceAxes->SetElement(2, 3, 0);
-    break;
+    case 1:
+      resliceAxes->SetElement(0, 3, SliceLoc);
+      resliceAxes->SetElement(1, 3, 0);
+      resliceAxes->SetElement(2, 3, 0);
+      break;
 
-  case 2:
-    resliceAxes->SetElement(0, 3, 0);
-    resliceAxes->SetElement(1, 3, SliceLoc);
-    resliceAxes->SetElement(2, 3, 0);
-    break;
+    case 2:
+      resliceAxes->SetElement(0, 3, 0);
+      resliceAxes->SetElement(1, 3, SliceLoc);
+      resliceAxes->SetElement(2, 3, 0);
+      break;
   }
 
   // Extract a slice in the desired orientation
@@ -483,9 +467,9 @@ void ImageViewer2D::SliceImageAndDose(double SliceLoc) {
   // Create a greyscale lookup table
   vtkSmartPointer<vtkLookupTable> table =
       vtkSmartPointer<vtkLookupTable>::New();
-  table->SetRange(this->WindowLow, this->WindowUp); // image intensity range
-  table->SetValueRange(0.0, 1.0);                   // from black to white
-  table->SetSaturationRange(0, 0);                  // no color saturation
+  table->SetRange(this->WindowLow, this->WindowUp);  // image intensity range
+  table->SetValueRange(0.0, 1.0);                    // from black to white
+  table->SetSaturationRange(0, 0);                   // no color saturation
   table->SetRampToSCurve();
   table->Build();
 
@@ -516,7 +500,7 @@ void ImageViewer2D::SliceImageAndDose(double SliceLoc) {
   // Dose color wash.......................................
   // Create a greyscale lookup table
   this->DoseLUT->SetRange(this->DoseRange);
-  this->DoseLUT->SetValueRange(0.5, 1.0); // from black to white
+  this->DoseLUT->SetValueRange(0.5, 1.0);  // from black to white
   this->DoseLUT->SetSaturationRange(1.0, 1.0);
   this->DoseLUT->SetHueRange(0.667, 0.0);
   this->DoseLUT->SetAlpha(0.7);
@@ -524,7 +508,7 @@ void ImageViewer2D::SliceImageAndDose(double SliceLoc) {
   this->DoseLUT->SetNumberOfColors(256);
   this->DoseLUT->Build();
   this->DoseLUT->SetTableValue(0.0, 0, 0, 0,
-                               0); // Makes zero values totally transparent
+                               0);  // Makes zero values totally transparent
   this->DoseLUT->Build();
 
   // Map the image through the lookup table
@@ -574,7 +558,7 @@ void ImageViewer2D::ShowImageAndDose(double SliceLoc) {
     this->HumanActor->SetOrientation(0, 0, 180);
     vtkSmartPointer<vtkTransform> transform =
         vtkSmartPointer<vtkTransform>::New();
-    transform->PostMultiply(); // this is the key line
+    transform->PostMultiply();  // this is the key line
     transform->RotateX(0);
     transform->RotateY(0);
     transform->RotateZ(0);
@@ -586,7 +570,7 @@ void ImageViewer2D::ShowImageAndDose(double SliceLoc) {
     this->HumanActor->SetOrientation(0, -90, 90);
     vtkSmartPointer<vtkTransform> transform =
         vtkSmartPointer<vtkTransform>::New();
-    transform->PostMultiply(); // this is the key line
+    transform->PostMultiply();  // this is the key line
     transform->RotateX(90);
     transform->RotateY(90);
     this->Axes->SetUserTransform(transform);
@@ -597,7 +581,7 @@ void ImageViewer2D::ShowImageAndDose(double SliceLoc) {
     this->HumanActor->SetOrientation(-90, 0, -180);
     vtkSmartPointer<vtkTransform> transform =
         vtkSmartPointer<vtkTransform>::New();
-    transform->PostMultiply(); // this is the key line
+    transform->PostMultiply();  // this is the key line
     transform->RotateX(90.0);
     this->Axes->SetUserTransform(transform);
   }
@@ -633,7 +617,6 @@ void ImageViewer2D::on_toolButtonAxial_clicked() {
   //    }
 
   if (this->ui->toolButtonProbe->isChecked()) {
-
     this->ui->toolButtonProbe->setChecked(false);
     this->lineCallbackDose->doseProfiler->close();
   }
@@ -641,7 +624,7 @@ void ImageViewer2D::on_toolButtonAxial_clicked() {
   this->DisplayROIs(this->SliceLoc, this->SliceOrientation);
   this->DisplayBeams(this->SliceLoc, this->SliceOrientation);
   this->ViewRenderer
-      ->ResetCamera(); // This positions the view in the centre of the screen
+      ->ResetCamera();  // This positions the view in the centre of the screen
   this->ViewRenderer->GetRenderWindow()->Render();
   this->AxesWidget->GetInteractor()->GetRenderWindow()->Render();
 }
@@ -662,7 +645,6 @@ void ImageViewer2D::on_toolButtonSagittal_clicked() {
   //    }
 
   if (this->ui->toolButtonProbe->isChecked()) {
-
     this->ui->toolButtonProbe->setChecked(false);
     this->lineCallbackDose->doseProfiler->close();
   }
@@ -670,7 +652,7 @@ void ImageViewer2D::on_toolButtonSagittal_clicked() {
   this->DisplayROIs(this->SliceLoc, this->SliceOrientation);
   this->DisplayBeams(this->SliceLoc, this->SliceOrientation);
   this->ViewRenderer
-      ->ResetCamera(); // This position the view in the centre of the screen
+      ->ResetCamera();  // This position the view in the centre of the screen
   this->ViewRenderer->GetRenderWindow()->Render();
   this->AxesWidget->GetInteractor()->GetRenderWindow()->Render();
 }
@@ -691,7 +673,6 @@ void ImageViewer2D::on_toolButtonCoronal_clicked() {
   //    }
 
   if (this->ui->toolButtonProbe->isChecked()) {
-
     this->ui->toolButtonProbe->setChecked(false);
     this->lineCallbackDose->doseProfiler->close();
   }
@@ -699,7 +680,7 @@ void ImageViewer2D::on_toolButtonCoronal_clicked() {
   this->DisplayROIs(this->SliceLoc, this->SliceOrientation);
   this->DisplayBeams(this->SliceLoc, this->SliceOrientation);
   this->ViewRenderer
-      ->ResetCamera(); // This position the view in the centre of the screen
+      ->ResetCamera();  // This position the view in the centre of the screen
   this->ViewRenderer->GetRenderWindow()->Render();
   this->AxesWidget->GetInteractor()->GetRenderWindow()->Render();
 }
@@ -734,22 +715,21 @@ void ImageViewer2D::on_verticalScrollBar_valueChanged(int value) {
   this->ViewRenderer->GetRenderWindow()->Render();
 
   if (this->ui->toolButtonProbe->isChecked()) {
-
-    if (this->SliceOrientation == 0) // Axial
+    if (this->SliceOrientation == 0)  // Axial
     {
       this->lineCallbackDose->trZ =
           static_cast<double>(this->ui->verticalScrollBar->value());
       this->lineWidget->InvokeEvent(vtkCommand::InteractionEvent, NULL);
     }
 
-    else if (this->SliceOrientation == 1) // Sagittal
+    else if (this->SliceOrientation == 1)  // Sagittal
     {
       this->lineCallbackDose->trX =
           static_cast<double>(this->ui->verticalScrollBar->value());
       this->lineWidget->InvokeEvent(vtkCommand::InteractionEvent, NULL);
     }
 
-    else if (this->SliceOrientation == 2) // Coronal
+    else if (this->SliceOrientation == 2)  // Coronal
     {
       this->lineCallbackDose->trY =
           static_cast<double>(this->ui->verticalScrollBar->value());
@@ -783,7 +763,6 @@ void ImageViewer2D::MoveToLocation(double loc) {
 
 void ImageViewer2D::on_toolButtonContrast_clicked() {
   if (this->ui->toolButtonContrast->isChecked()) {
-
     this->ui->widget->GetRenderWindow()->GetInteractor()->SetInteractorStyle(
         InteractorImage);
   }
@@ -804,7 +783,6 @@ void ImageViewer2D::on_toolButtonContrast_clicked() {
 
 // Connect ShowImage to PgUp & PgDown key presses for scrolling
 void ImageViewer2D::keyPressEvent(QKeyEvent *event) {
-
   if (event->key() == Qt::Key_PageUp) {
     if (this->SliceOrientation == 0) {
       this->ui->verticalScrollBar->setValue(
@@ -952,18 +930,18 @@ vtkSmartPointer<vtkActor> ImageViewer2D::CutROI(vtkPolyData *mesh,
   // Create a plane to cut
   vtkSmartPointer<vtkPlane> plane = vtkSmartPointer<vtkPlane>::New();
   switch (Orientation) {
-  case 0: // axial
-    plane->SetOrigin(0, 0, sliceNo);
-    plane->SetNormal(0, 0, 1);
-    break;
-  case 1: // sagittal
-    plane->SetOrigin(sliceNo, 0, 0);
-    plane->SetNormal(1, 0, 0);
-    break;
-  case 2: // coronal
-    plane->SetOrigin(0, sliceNo, 1);
-    plane->SetNormal(0, 1, 0);
-    break;
+    case 0:  // axial
+      plane->SetOrigin(0, 0, sliceNo);
+      plane->SetNormal(0, 0, 1);
+      break;
+    case 1:  // sagittal
+      plane->SetOrigin(sliceNo, 0, 0);
+      plane->SetNormal(1, 0, 0);
+      break;
+    case 2:  // coronal
+      plane->SetOrigin(0, sliceNo, 1);
+      plane->SetNormal(0, 1, 0);
+      break;
   }
 
   // Create cutter
@@ -972,26 +950,26 @@ vtkSmartPointer<vtkActor> ImageViewer2D::CutROI(vtkPolyData *mesh,
   cutter->SetInputData(mesh);
   cutter->Update();
 
-  //    vtkSmartPointer<vtkPolyDataMapper>cutterMapper =
-  //            vtkSmartPointer<vtkPolyDataMapper>::New();
-  //    cutterMapper->SetResolveCoincidentTopologyToPolygonOffset();
-  //    //cutterMapper->SetResolveCoincidentTopologyPolygonOffsetParameters(10,10);
-  //    cutterMapper->SetInputConnection(cutter->GetOutputPort());
-  //    cutterMapper->ScalarVisibilityOff();
-  //    cutterMapper->ImmediateModeRenderingOff();
-  //    cutterMapper->Update();
-
-  /*Turn on for filled contours*/
-  vtkSmartPointer<vtkContourTriangulator> poly =
-      vtkSmartPointer<vtkContourTriangulator>::New();
-  poly->SetInputConnection(cutter->GetOutputPort());
-
-  vtkSmartPointer<vtkDataSetMapper> cutterMapper =
-      vtkSmartPointer<vtkDataSetMapper>::New();
-  // cutterMapper->SetResolveCoincidentTopologyToPolygonOffset();
-  cutterMapper->SetInputConnection(poly->GetOutputPort());
+  vtkSmartPointer<vtkPolyDataMapper> cutterMapper =
+      vtkSmartPointer<vtkPolyDataMapper>::New();
+  cutterMapper->SetResolveCoincidentTopologyToPolygonOffset();
+  // cutterMapper->SetResolveCoincidentTopologyPolygonOffsetParameters(10,10);
+  cutterMapper->SetInputConnection(cutter->GetOutputPort());
   cutterMapper->ScalarVisibilityOff();
+  cutterMapper->ImmediateModeRenderingOff();
   cutterMapper->Update();
+
+  //  /*Turn on for filled contours*/
+  //  vtkSmartPointer<vtkContourTriangulator> poly =
+  //      vtkSmartPointer<vtkContourTriangulator>::New();
+  //  poly->SetInputConnection(cutter->GetOutputPort());
+
+  //  vtkSmartPointer<vtkDataSetMapper> cutterMapper =
+  //      vtkSmartPointer<vtkDataSetMapper>::New();
+  //  // cutterMapper->SetResolveCoincidentTopologyToPolygonOffset();
+  //  cutterMapper->SetInputConnection(poly->GetOutputPort());
+  //  cutterMapper->ScalarVisibilityOff();
+  //  cutterMapper->Update();
 
   // Create ROI actor
   vtkSmartPointer<vtkActor> cutROI = vtkSmartPointer<vtkActor>::New();
@@ -1039,7 +1017,6 @@ void ImageViewer2D::DisplayROIs(double SliceLoc, int Orientation) {
   this->ContourActors->RemoveAllItems();
 
   if (this->ContourVisibility == 1) {
-
     for (unsigned int i = 0; i < this->MeshList.size(); i++) {
       double R = this->ROIColors[i][0] / 255.0;
       double G = this->ROIColors[i][1] / 255.0;
@@ -1067,7 +1044,6 @@ void ImageViewer2D::DisplayBeams(double SliceLoc, int Orientation) {
   this->BeamActors->RemoveAllItems();
 
   if (this->BeamVisibility == 1) {
-
     for (int i = 0; i < this->BeamList.size(); i++) {
       //            //Zero index color is black, so start from 1
       //            double R=this->BeamColors->GetColor(i+1)[0]/255.0;
@@ -1094,9 +1070,7 @@ void ImageViewer2D::DisplayPOIs(double SliceLoc, int Orientation) {
   this->POIActors->RemoveAllItems();
 
   if (this->POIVisibility == 1) {
-
     for (int i = 0; i < this->POIList.size(); i++) {
-
       vtkSmartPointer<vtkActor> POIActor = vtkSmartPointer<vtkActor>::New();
       POIActor =
           this->CutROI(this->POIList[i], SliceLoc, 1.0, 1.0, 0.0, Orientation);
@@ -1157,7 +1131,6 @@ void ImageViewer2D::wheelEvent(QWheelEvent *event) {
 
 void ImageViewer2D::on_toolButtonProbe_clicked() {
   if (this->RTDose->GetScalarRange()[1] > 1.0) {
-
     if (this->ui->toolButtonProbe->isChecked()) {
       this->lineWidget = vtkSmartPointer<vtkLineWidget2>::New();
       // Dose plotter
@@ -1170,10 +1143,10 @@ void ImageViewer2D::on_toolButtonProbe_clicked() {
 
       this->lineWidget->GetLineRepresentation()
           ->GetEndPointProperty()
-          ->SetColor(0, 255, 0); // starting point green
+          ->SetColor(0, 255, 0);  // starting point green
       this->lineWidget->GetLineRepresentation()
           ->GetEndPoint2Property()
-          ->SetColor(255, 0, 0); // starting point red
+          ->SetColor(255, 0, 0);  // starting point red
 
       static_cast<vtkLineRepresentation *>(
           this->lineWidget->GetRepresentation())
@@ -1195,19 +1168,19 @@ void ImageViewer2D::on_toolButtonProbe_clicked() {
           ->SetOpacity(1.0);
 
       // z=-5 so the widget always stays on top of the slice
-      double lineBds[6] = {-50, 50, 0, 0, -5, -5}; // initial length to 10cm
+      double lineBds[6] = {-50, 50, 0, 0, -5, -5};  // initial length to 10cm
       static_cast<vtkLineRepresentation *>(
           this->lineWidget->GetRepresentation())
           ->PlaceWidget(lineBds);
 
-      if (this->SliceOrientation == 0) // Axial
+      if (this->SliceOrientation == 0)  // Axial
       {
         this->lineCallbackDose->SliceOrientation = 0;
         this->lineCallbackDose->trZ =
             static_cast<double>(this->ui->verticalScrollBar->value());
       }
 
-      else if (this->SliceOrientation == 1) // Sagittal
+      else if (this->SliceOrientation == 1)  // Sagittal
       {
         this->lineCallbackDose->SliceOrientation = 1;
         this->lineCallbackDose->trX =
@@ -1215,7 +1188,7 @@ void ImageViewer2D::on_toolButtonProbe_clicked() {
 
       }
 
-      else if (this->SliceOrientation == 2) // Coronal
+      else if (this->SliceOrientation == 2)  // Coronal
       {
         this->lineCallbackDose->SliceOrientation = 2;
         this->lineCallbackDose->trY =
@@ -1236,7 +1209,7 @@ void ImageViewer2D::on_toolButtonProbe_clicked() {
     else {
       this->lineWidget->Off();
       this->lineCallbackDose->doseProfiler->close();
-      this->ViewRenderer->GetRenderWindow()->Render(); // update renderer
+      this->ViewRenderer->GetRenderWindow()->Render();  // update renderer
     }
   } else {
     QMessageBox *msgBox = new QMessageBox(this);
@@ -1273,7 +1246,6 @@ void ImageViewer2D::on_toolButtonScalarBar_clicked() {
 }
 
 void ImageViewer2D::on_actionShowContours_triggered() {
-
   if (this->ui->actionShowContours->isChecked()) {
     this->ContourVisibility = 1;
     this->DisplayROIs(this->SliceLoc, this->SliceOrientation);
@@ -1305,7 +1277,6 @@ void ImageViewer2D::on_actionShowDose_triggered() {
 }
 
 void ImageViewer2D::on_actionRubberBandZoom_triggered() {
-
   if (this->ui->actionRubberBandZoom->isChecked()) {
     vtkSmartPointer<vtkInteractorStyleRubberBandZoom> rubberStyleZoom =
         vtkSmartPointer<vtkInteractorStyleRubberBandZoom>::New();
@@ -1339,17 +1310,14 @@ void ImageViewer2D::on_actionShowBeams_triggered() {
 }
 
 void ImageViewer2D::TriggerActionShowBeams() {
-
   this->ui->actionShowBeams->trigger();
 }
 
 void ImageViewer2D::TriggerActionShowDose() {
-
   this->ui->actionShowDose->trigger();
 }
 
 void ImageViewer2D::TriggerActionShowContours() {
-
   this->ui->actionShowContours->trigger();
 }
 
@@ -1446,23 +1414,23 @@ void ImageViewer2D::AdjustDoseRange(double min, double max) {
   }
 
   switch (this->SliceOrientation) {
-  case 0:
-    resliceAxes->SetElement(0, 3, 0);
-    resliceAxes->SetElement(1, 3, 0);
-    resliceAxes->SetElement(2, 3, this->SliceLoc);
-    break;
+    case 0:
+      resliceAxes->SetElement(0, 3, 0);
+      resliceAxes->SetElement(1, 3, 0);
+      resliceAxes->SetElement(2, 3, this->SliceLoc);
+      break;
 
-  case 1:
-    resliceAxes->SetElement(0, 3, this->SliceLoc);
-    resliceAxes->SetElement(1, 3, 0);
-    resliceAxes->SetElement(2, 3, 0);
-    break;
+    case 1:
+      resliceAxes->SetElement(0, 3, this->SliceLoc);
+      resliceAxes->SetElement(1, 3, 0);
+      resliceAxes->SetElement(2, 3, 0);
+      break;
 
-  case 2:
-    resliceAxes->SetElement(0, 3, 0);
-    resliceAxes->SetElement(1, 3, this->SliceLoc);
-    resliceAxes->SetElement(2, 3, 0);
-    break;
+    case 2:
+      resliceAxes->SetElement(0, 3, 0);
+      resliceAxes->SetElement(1, 3, this->SliceLoc);
+      resliceAxes->SetElement(2, 3, 0);
+      break;
   }
 
   // Extract a dose slice in the desired orientation
@@ -1479,7 +1447,7 @@ void ImageViewer2D::AdjustDoseRange(double min, double max) {
   // Dose color wash.......................................
   // Create a greyscale lookup table
   this->DoseLUT->SetRange(this->DoseRange);
-  this->DoseLUT->SetValueRange(0.5, 1.0); // from black to white
+  this->DoseLUT->SetValueRange(0.5, 1.0);  // from black to white
   this->DoseLUT->SetSaturationRange(1.0, 1.0);
   this->DoseLUT->SetHueRange(0.667, 0.0);
   this->DoseLUT->SetAlpha(0.7);
@@ -1487,7 +1455,7 @@ void ImageViewer2D::AdjustDoseRange(double min, double max) {
   this->DoseLUT->SetNumberOfColors(256);
   this->DoseLUT->Build();
   this->DoseLUT->SetTableValue(0.0, 0, 0, 0,
-                               0); // Makes zero values totally transparent
+                               0);  // Makes zero values totally transparent
   this->DoseLUT->Build();
 
   // Map the image through the lookup table
