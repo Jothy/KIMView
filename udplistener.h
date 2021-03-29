@@ -32,7 +32,9 @@ SOFTWARE.
 #include <bevwidget.h>
 #include <imageviewer2d.h>
 #include <vtkActor.h>
+#include <vtkPolyData.h>
 #include <vtkPolyDataMapper.h>
+#include <vtkSmartPointer.h>
 #include <vtkTransform.h>
 #include <vtkTransformPolyDataFilter.h>
 
@@ -54,11 +56,18 @@ class UDPListener : public QObject {
   vtkSmartPointer<vtkActor> TrackingActorCoronal;
   vtkSmartPointer<vtkPolyData> TrackingPolyData;
   vtkSmartPointer<vtkPolyData> TrackingTarget;
+  std::vector<vtkSmartPointer<vtkPolyData> > MeshList;
   ImageViewer2D *AxialViewer;
   ImageViewer2D *CoronalViewer;
   ImageViewer2D *SagittalViewer;
   BEVWidget *BEVViewer;
+  unsigned int SelectROINum;
   void UpdateViews();
+  double (*ROIColors)[3];
+  unsigned int selectedStructureNum;
+  QList<QString> ROINames;
+
+  QWidget *parent;
   struct UDPMsg {
     double shiftX;
     double shiftY;

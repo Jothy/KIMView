@@ -24,10 +24,12 @@ SOFTWARE.
 
 #include "udplistener.h"
 
+#include <selecttargetdialog.h>
 #include <udplistener.h>
 
 #include <QApplication>
 #include <QElapsedTimer>
+#include <QMessageBox>
 #include <QSettings>
 #include <QUdpSocket>
 
@@ -138,10 +140,10 @@ void UDPListener::readMessage() {
   UDPShifts->gantryAngle = *(double *)(gantryArray.remove(0, 48).constData());
   UDPShifts->beamHold = *(bool *)(gantryArray.remove(0, 56).constData());
 
-  qDebug() << UDPShifts->shiftX << "" << UDPShifts->shiftY << ""
-           << UDPShifts->shiftZ << "" << UDPShifts->rotationX << ""
-           << UDPShifts->rotationY << "" << UDPShifts->rotationZ << ""
-           << UDPShifts->gantryAngle << "" << UDPShifts->beamHold;
+  //  qDebug() << UDPShifts->shiftX << "" << UDPShifts->shiftY << ""
+  //           << UDPShifts->shiftZ << "" << UDPShifts->rotationX << ""
+  //           << UDPShifts->rotationY << "" << UDPShifts->rotationZ << ""
+  //           << UDPShifts->gantryAngle << "" << UDPShifts->beamHold;
 
   //   The UDP format is [X,Y,Z,Gantry] in IEC(cm) and Varian degrees
   //   IEC to LPS conversion, simple approach as it only supports HFS
@@ -149,6 +151,8 @@ void UDPListener::readMessage() {
   this->shifts[0] = UDPShifts->shiftX * 10;   // cm to mm
   this->shifts[1] = -UDPShifts->shiftZ * 10;  // cm to mm
   this->shifts[2] = UDPShifts->shiftY * 10;   // cm to mm
+  qDebug() << this->shifts[0] << this->shifts[1] << this->shifts[2]
+           << " :Shifts";
 
   delete UDPShifts;
   shiftXArray.clear();
@@ -167,15 +171,31 @@ void UDPListener::readMessage() {
 }
 
 void UDPListener::StartListening() {
-  // Receiver port
-  QSettings settings("ImageX", "KIMView");
+  SelectTargetDialog *SelectedTarget = new SelectTargetDialog(this->parent);
+  SelectedTarget->ROINames = this->ROINames;
+  SelectedTarget->ROIColors = this->ROIColors;
+  SelectedTarget->setROINames();
+  SelectedTarget->exec();
 
-  // KIM IP and KIMView port
-  QString KIMIP = settings.value("KIMIP").toString();
-  int KIMViewPort = settings.value("KIMViewPort").toInt();
+  if (SelectedTarget->ROISelected) {
+    this->SelectROINum = SelectedTarget->selectedROINum;
+    this->TrackingTarget->DeepCopy(this->MeshList[this->SelectROINum]);
 
-  socket->bind(QHostAddress(KIMIP), KIMViewPort);
-  connect(socket, SIGNAL(readyRead()), this, SLOT(readMessage()));
+    // Receiver port
+    QSettings settings("ImageX", "KIMView");
+    // KIM IP and KIMView port
+    QString KIMIP = settings.value("KIMIP").toString();
+    int KIMViewPort = settings.value("KIMViewPort").toInt();
+
+    socket->bind(QHostAddress(KIMIP), KIMViewPort);
+    connect(socket, SIGNAL(readyRead()), this, SLOT(readMessage()));
+  }
+
+  else {
+    QMessageBox messageBox;
+    messageBox.critical(this->parent, "Error", "No target selected");
+    messageBox.setFixedSize(500, 200);
+  }
 }
 
 void UDPListener::StopListening() { socket->close(); }

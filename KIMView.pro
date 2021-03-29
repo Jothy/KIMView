@@ -17,6 +17,7 @@ SOURCES += \
     dvhcalc.cpp \
     dvhdialog.cpp \
     imageviewer2d.cpp \
+    selecttargetdialog.cpp \
     utilities.cpp   \
     main.cpp \
     mainwindow.cpp \
@@ -36,6 +37,7 @@ HEADERS += \
     createobjects.h \    \
     doseprofiledialog.h \
     dvhcalc.h \
+    selecttargetdialog.h \
     utilities.h \
     dvhdialog.h \    
     imageviewer2d.h \   
@@ -58,7 +60,8 @@ FORMS += \
     ipconfigdialog.ui \
     mainwindow.ui \
     rangesliderdialog.ui \
-    rtstructreaderdialog.ui
+    rtstructreaderdialog.ui \
+    selecttargetdialog.ui
 
 TRANSLATIONS += \
     KIMView_en_AU.ts
