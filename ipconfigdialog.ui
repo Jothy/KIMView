@@ -27,7 +27,7 @@
           <item>
            <widget class="QLabel" name="label">
             <property name="text">
-             <string>KIM IP:</string>
+             <string>KIMView IP:</string>
             </property>
            </widget>
           </item>
@@ -43,7 +43,7 @@
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item>
-           <widget class="QLineEdit" name="lineEdit_KIMIP">
+           <widget class="QLineEdit" name="lineEdit_KIMViewIP">
             <property name="text">
              <string>127.0.0.1</string>
             </property>
