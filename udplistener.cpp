@@ -150,9 +150,9 @@ void UDPListener::readMessage() {
   //   The UDP format is [X,Y,Z,Gantry] in IEC(cm) and Varian degrees
   //   IEC to LPS conversion, simple approach as it only supports HFS
   //   orientation now
-  this->shifts[0] = UDPShifts->shiftX * 10;   // cm to mm
-  this->shifts[1] = -UDPShifts->shiftZ * 10;  // cm to mm
-  this->shifts[2] = UDPShifts->shiftY * 10;   // cm to mm
+  this->shifts[0] = UDPShifts->shiftX * 10;  // cm to mm
+  this->shifts[1] = -UDPShifts->shiftZ * 10; // cm to mm
+  this->shifts[2] = UDPShifts->shiftY * 10;  // cm to mm
   qDebug() << this->shifts[0] << this->shifts[1] << this->shifts[2]
            << " :Shifts";
 
@@ -234,7 +234,7 @@ void UDPListener::StopListening() {
 
 void UDPListener::UpdateViews() {
   /*******************************Tracking.......................................*/
-  QTextBrowser *timeLog = new QTextBrowser();
+  // QTextBrowser *timeLog = new QTextBrowser();
 
   // Time the rendering
   QElapsedTimer timer;
@@ -247,8 +247,8 @@ void UDPListener::UpdateViews() {
       this->TrackingActorSagittal);
   this->CoronalViewer->ViewRenderer->RemoveViewProp(this->TrackingActorCoronal);
   qDebug() << "E1: " << timer.elapsed() << " milliseconds";
-  QString t1 = QString::number(timer.elapsed());
-  timeLog->append(t1);
+  // QString t1 = QString::number(timer.elapsed());
+  // timeLog->append(t1);
 
   // Transform actor
   this->TrackingTransform->Identity();
@@ -259,20 +259,20 @@ void UDPListener::UpdateViews() {
       this->TrackingPolydataTransform->GetOutputPort());
   this->TrackingActor3D->SetMapper(this->TrackingMapper);
   qDebug() << "E2: " << timer.elapsed() << " milliseconds";
-  QString t2 = QString::number(timer.elapsed());
-  timeLog->append(t2);
+  // QString t2 = QString::number(timer.elapsed());
+  // timeLog->append(t2);
 
   this->BEVViewer->ModelRenderer->AddViewProp(this->TrackingActor3D);
   this->BEVViewer->ModelRenderer->GetRenderWindow()->Render();
   qDebug() << "E3: " << timer.elapsed() << " milliseconds";
-  QString t3 = QString::number(timer.elapsed());
-  timeLog->append(t3);
+  // QString t3 = QString::number(timer.elapsed());
+  // timeLog->append(t3);
 
   this->TrackingPolyData->DeepCopy(
       this->TrackingPolydataTransform->GetOutput());
   qDebug() << "E4: " << timer.elapsed() << " milliseconds";
-  QString t4 = QString::number(timer.elapsed());
-  timeLog->append(t4);
+  //  QString t4 = QString::number(timer.elapsed());
+  //  timeLog->append(t4);
 
   // Update 2D views
   this->TrackingActorAxial = this->AxialViewer->CutROI(
@@ -282,8 +282,8 @@ void UDPListener::UpdateViews() {
   this->AxialViewer->ViewRenderer->AddActor(this->TrackingActorAxial);
   this->AxialViewer->ViewRenderer->GetRenderWindow()->Render();
   qDebug() << "E5: " << timer.elapsed() << " milliseconds";
-  QString t5 = QString::number(timer.elapsed());
-  timeLog->append(t5);
+  //  QString t5 = QString::number(timer.elapsed());
+  //  timeLog->append(t5);
 
   this->TrackingActorSagittal = this->SagittalViewer->CutROI(
       this->TrackingPolyData, this->SagittalViewer->SliceLoc, 1, 1, 0,
@@ -292,8 +292,8 @@ void UDPListener::UpdateViews() {
   this->SagittalViewer->ViewRenderer->AddActor(this->TrackingActorSagittal);
   this->SagittalViewer->ViewRenderer->GetRenderWindow()->Render();
   qDebug() << "E6: " << timer.elapsed() << " milliseconds";
-  QString t6 = QString::number(timer.elapsed());
-  timeLog->append(t6);
+  //  QString t6 = QString::number(timer.elapsed());
+  //  timeLog->append(t6);
 
   this->TrackingActorCoronal = this->CoronalViewer->CutROI(
       this->TrackingPolyData, this->CoronalViewer->SliceLoc, 1, 1, 0,
@@ -302,9 +302,9 @@ void UDPListener::UpdateViews() {
   this->CoronalViewer->ViewRenderer->AddActor(this->TrackingActorCoronal);
   this->CoronalViewer->ViewRenderer->GetRenderWindow()->Render();
   qDebug() << "E7: " << timer.elapsed() << " milliseconds";
-  QString t7 = QString::number(timer.elapsed());
-  timeLog->append(t7);
+  //  QString t7 = QString::number(timer.elapsed());
+  //  timeLog->append(t7);
 
   qDebug() << "Rendering took: " << timer.elapsed() << " milliseconds";
-  timeLog->show();
+  // timeLog->show();
 }

@@ -25,7 +25,7 @@ SOFTWARE.
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#define vtkRenderingCore_AUTOINIT \
+#define vtkRenderingCore_AUTOINIT                                              \
   3(vtkInteractionStyle, vtkRenderingFreeType, vtkRenderingOpenGL2)
 
 #include <vtkBoxWidget2.h>
@@ -59,7 +59,7 @@ class MainWindow;
 class MainWindow : public QMainWindow {
   Q_OBJECT
 
- public:
+public:
   explicit MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
   QActionGroup *ContextMenus;
@@ -80,13 +80,13 @@ class MainWindow : public QMainWindow {
   vtkSmartPointer<vtkImageData> CTImage;
   QList<float> PhaseInfo;
   double DoseVOI[6];
-  double Isocentre[3] = {0.0, 0.0, 0.0};  // zero by default (CT origin)
+  double Isocentre[3] = {0.0, 0.0, 0.0}; // zero by default (CT origin)
   unsigned int BeamNum = 0;
-  double DoseGridSpacing = 3.0;  // 3mm default
+  double DoseGridSpacing = 3.0; // 3mm default
 
   // Higher the fraction, lesser vertices
-  double TargetReduction = 0.90;
-  bool ROIVisibleFlag = 1;  // Visible by default
+  double TargetReduction = 0.10;
+  bool ROIVisibleFlag = 1; // Visible by default
   int DefaultTargetIdx = 0;
 
   vtkSmartPointer<vtkInteractorStyleTrackballCamera> InteractorTrackball;
@@ -100,7 +100,7 @@ class MainWindow : public QMainWindow {
 
   QMap<QString, QString> PatientInfo;
 
- private slots:
+private slots:
   void on_actionDose_triggered();
   void on_actionCT_triggered();
   void on_actionStructures_triggered();
@@ -139,12 +139,12 @@ class MainWindow : public QMainWindow {
 
   void on_actionStop_triggered();
 
- private:
+private:
   Ui::MainWindow *ui;
   vtkSmartPointer<vtkRenderer> renderer;
 
- protected:
+protected:
   void closeEvent(QCloseEvent *event);
 };
 
-#endif  // MAINWINDOW_H
+#endif // MAINWINDOW_H
