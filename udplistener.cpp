@@ -87,9 +87,9 @@ void UDPListener::readMessage() {
 
   socket->readDatagram(buffer.data(), buffer.size(), &sender, &senderPort);
 
-  //    qDebug() << "Message from: " << sender.toString();
-  //    qDebug() << "Message port: " << senderPort;
-  //    qDebug() << "Message: " << buffer;
+  // qDebug() << "Message from: " << sender.toString();
+  //  qDebug() << "Message port: " << senderPort;
+  //  qDebug() << "Message: " << buffer;
 
   UDPMsg *UDPShifts = new UDPMsg;
 
@@ -153,8 +153,8 @@ void UDPListener::readMessage() {
   this->shifts[0] = UDPShifts->shiftX * 10;  // cm to mm
   this->shifts[1] = -UDPShifts->shiftZ * 10; // cm to mm
   this->shifts[2] = UDPShifts->shiftY * 10;  // cm to mm
-  qDebug() << this->shifts[0] << this->shifts[1] << this->shifts[2]
-           << " :Shifts";
+  //  qDebug() << this->shifts[0] << this->shifts[1] << this->shifts[2]
+  //           << UDPShifts->gantryAngle << " :Shifts";
 
   delete UDPShifts;
   shiftXArray.clear();
@@ -167,7 +167,7 @@ void UDPListener::readMessage() {
   beamHold.clear();
 
   this->UpdateViews();
-  QApplication::processEvents();
+  // QCoreApplication::processEvents();
 
   //    qDebug() <<"Rendering took" << timer.elapsed() << "milliseconds";
 }
@@ -236,9 +236,9 @@ void UDPListener::UpdateViews() {
   /*******************************Tracking.......................................*/
   // QTextBrowser *timeLog = new QTextBrowser();
 
-  // Time the rendering
-  QElapsedTimer timer;
-  timer.start();
+  //  // Time the rendering
+  //  QElapsedTimer timer;
+  //  timer.start();
 
   // Remove previous last actors
   this->BEVViewer->ModelRenderer->RemoveViewProp(this->TrackingActor3D);
@@ -246,7 +246,7 @@ void UDPListener::UpdateViews() {
   this->SagittalViewer->ViewRenderer->RemoveViewProp(
       this->TrackingActorSagittal);
   this->CoronalViewer->ViewRenderer->RemoveViewProp(this->TrackingActorCoronal);
-  qDebug() << "E1: " << timer.elapsed() << " milliseconds";
+  // qDebug() << "E1: " << timer.elapsed() << " milliseconds";
   // QString t1 = QString::number(timer.elapsed());
   // timeLog->append(t1);
 
@@ -258,19 +258,19 @@ void UDPListener::UpdateViews() {
   this->TrackingMapper->SetInputConnection(
       this->TrackingPolydataTransform->GetOutputPort());
   this->TrackingActor3D->SetMapper(this->TrackingMapper);
-  qDebug() << "E2: " << timer.elapsed() << " milliseconds";
+  // qDebug() << "E2: " << timer.elapsed() << " milliseconds";
   // QString t2 = QString::number(timer.elapsed());
   // timeLog->append(t2);
 
   this->BEVViewer->ModelRenderer->AddViewProp(this->TrackingActor3D);
   this->BEVViewer->ModelRenderer->GetRenderWindow()->Render();
-  qDebug() << "E3: " << timer.elapsed() << " milliseconds";
+  // qDebug() << "E3: " << timer.elapsed() << " milliseconds";
   // QString t3 = QString::number(timer.elapsed());
   // timeLog->append(t3);
 
   this->TrackingPolyData->DeepCopy(
       this->TrackingPolydataTransform->GetOutput());
-  qDebug() << "E4: " << timer.elapsed() << " milliseconds";
+  // qDebug() << "E4: " << timer.elapsed() << " milliseconds";
   //  QString t4 = QString::number(timer.elapsed());
   //  timeLog->append(t4);
 
@@ -281,7 +281,7 @@ void UDPListener::UpdateViews() {
   this->TrackingActorAxial->GetProperty()->SetLineWidth(3.0);
   this->AxialViewer->ViewRenderer->AddActor(this->TrackingActorAxial);
   this->AxialViewer->ViewRenderer->GetRenderWindow()->Render();
-  qDebug() << "E5: " << timer.elapsed() << " milliseconds";
+  // qDebug() << "E5: " << timer.elapsed() << " milliseconds";
   //  QString t5 = QString::number(timer.elapsed());
   //  timeLog->append(t5);
 
@@ -291,7 +291,7 @@ void UDPListener::UpdateViews() {
   this->TrackingActorSagittal->GetProperty()->SetLineWidth(3.0);
   this->SagittalViewer->ViewRenderer->AddActor(this->TrackingActorSagittal);
   this->SagittalViewer->ViewRenderer->GetRenderWindow()->Render();
-  qDebug() << "E6: " << timer.elapsed() << " milliseconds";
+  // qDebug() << "E6: " << timer.elapsed() << " milliseconds";
   //  QString t6 = QString::number(timer.elapsed());
   //  timeLog->append(t6);
 
@@ -301,10 +301,10 @@ void UDPListener::UpdateViews() {
   this->TrackingActorCoronal->GetProperty()->SetLineWidth(3.0);
   this->CoronalViewer->ViewRenderer->AddActor(this->TrackingActorCoronal);
   this->CoronalViewer->ViewRenderer->GetRenderWindow()->Render();
-  qDebug() << "E7: " << timer.elapsed() << " milliseconds";
+  // qDebug() << "E7: " << timer.elapsed() << " milliseconds";
   //  QString t7 = QString::number(timer.elapsed());
   //  timeLog->append(t7);
 
-  qDebug() << "Rendering took: " << timer.elapsed() << " milliseconds";
+  // qDebug() << "Rendering took: " << timer.elapsed() << " milliseconds";
   // timeLog->show();
 }

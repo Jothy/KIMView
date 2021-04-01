@@ -106,9 +106,6 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
 
-  this->listener = new UDPListener;
-  this->listener->parent = this;
-
   // Avoid error window popping
   vtkSmartPointer<vtkFileOutputWindow> fileOutputWindow =
       vtkSmartPointer<vtkFileOutputWindow>::New();
@@ -211,7 +208,7 @@ void MainWindow::on_actionCT_triggered() {
     //        curIOP=QString::fromStdString(val2);
 
     QString supportedIOP =
-        "HFS ";  // DICOM seems to be hvaving a space after as "HFS "
+        "HFS "; // DICOM seems to be hvaving a space after as "HFS "
     // QString supportedIOP="1\\0.0\\0.0\\0.0\\1\\0.0 ";//DICOM seems to be
     // hvaving a space at the end "
     // qDebug()<<curIOP<<"**********"<<supportedIOP;
@@ -264,8 +261,8 @@ void MainWindow::on_actionCT_triggered() {
       this->ui->mdiAreaView->addSubWindow(
           this->SagittalViewer,
           Qt::WindowMaximizeButtonHint |
-              Qt::WindowTitleHint);  // add to make borderless window
-                                     // Qt::FramelessWindowHint
+              Qt::WindowTitleHint); // add to make borderless window
+                                    // Qt::FramelessWindowHint
       this->SagittalViewer->setWindowTitle("Sagittal");
       this->SagittalViewer->show();
 
@@ -274,9 +271,9 @@ void MainWindow::on_actionCT_triggered() {
       this->CoronalViewer->SetImageData(this->CTImage);
       this->CoronalViewer->SetSliceOrientation(2);
       this->CoronalViewer->SetUpView();
-      this->ui->mdiAreaView->addSubWindow(
-          this->CoronalViewer,
-          Qt::WindowMaximizeButtonHint | Qt::WindowTitleHint);
+      this->ui->mdiAreaView->addSubWindow(this->CoronalViewer,
+                                          Qt::WindowMaximizeButtonHint |
+                                              Qt::WindowTitleHint);
       this->CoronalViewer->setWindowTitle("Coronal");
       this->CoronalViewer->show();
 
@@ -285,9 +282,9 @@ void MainWindow::on_actionCT_triggered() {
       this->AxialViewer->SetImageData(this->CTImage);
       this->AxialViewer->SetSliceOrientation(0);
       this->AxialViewer->SetUpView();
-      this->ui->mdiAreaView->addSubWindow(
-          this->AxialViewer,
-          Qt::WindowMaximizeButtonHint | Qt::WindowTitleHint);
+      this->ui->mdiAreaView->addSubWindow(this->AxialViewer,
+                                          Qt::WindowMaximizeButtonHint |
+                                              Qt::WindowTitleHint);
       this->AxialViewer->setWindowTitle("Axial");
       this->AxialViewer->show();
 
@@ -349,7 +346,7 @@ void MainWindow::on_actionStructures_triggered() {
     RTStructReaderDialog *meshReaderDlg = new RTStructReaderDialog(this);
     meshReaderDlg->exec();
 
-    if (meshReaderDlg->ROINames.size() > 0)  // Check any ROI exist or not
+    if (meshReaderDlg->ROINames.size() > 0) // Check any ROI exist or not
     {
       QList<int> selectedStructsList = meshReaderDlg->selectedItems;
       // qDebug()<<selectedStructsList[0]<<"ROI";
@@ -361,11 +358,11 @@ void MainWindow::on_actionStructures_triggered() {
       RTStructReader->getROIMeshes(
           this->CTImage, this->CTImage->GetSpacing()[2], this->TargetReduction,
           meshReaderDlg->selectedItems,
-          this);  // Reads ROI name as well as structs
+          this); // Reads ROI name as well as structs
       QCoreApplication::processEvents();
       this->MeshList = RTStructReader->meshes;
       this->MeshActors = RTStructReader->ROIActors;
-      this->ROIVisibleFlag = 1;  // structs imported
+      this->ROIVisibleFlag = 1; // structs imported
 
       for (int i = 0; i < meshReaderDlg->selectedItems.size(); i++) {
         this->ROIColors[i][0] = RTStructReader->ROIColors[i][0];
@@ -442,7 +439,7 @@ void MainWindow::on_actionDose_triggered() {
       vtkSmartPointer<vtkGDCMImageReader> DoseReader =
           vtkSmartPointer<vtkGDCMImageReader>::New();
       DoseReader->SetFileName(DoseFile.toLatin1());
-      DoseReader->FileLowerLeftOn();  // otherwise flips the image
+      DoseReader->FileLowerLeftOn(); // otherwise flips the image
       DoseReader->SetDataScalarTypeToDouble();
       DoseReader->Update();
       this->RTDose->DeepCopy(DoseReader->GetOutput());
@@ -908,6 +905,9 @@ void MainWindow::on_actionIP_COnfiguration_triggered() {
 void MainWindow::on_actionStart_triggered() {
   this->ui->statusBar->showMessage("Listening to KIM");
 
+  this->listener = new UDPListener(this);
+  this->listener->parent = this;
+
   this->listener->ROINames = this->ROINames;
   this->listener->ROIColors = this->ROIColors;
   this->listener->MeshList = this->MeshList;
@@ -918,7 +918,7 @@ void MainWindow::on_actionStart_triggered() {
   this->listener->BEVViewer = this->BEVViewer;
   this->listener->StartListening();
 
-  QApplication::processEvents();
+  // QApplication::processEvents();
 }
 
 void MainWindow::on_actionStop_triggered() {
@@ -926,6 +926,7 @@ void MainWindow::on_actionStop_triggered() {
   if (this->listener->connectionState) {
     this->listener->StopListening();
   }
+  delete this->listener;
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
