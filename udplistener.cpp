@@ -57,8 +57,6 @@ UDPListener::UDPListener(QObject *parent) : QObject(parent) {
   this->TrackingActorCoronal = vtkSmartPointer<vtkActor>::New();
 
   this->TrackingMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-
-  connect(socket, SIGNAL(readyRead()), this, SLOT(readMessage()));
 }
 
 UDPListener::~UDPListener() {
@@ -150,9 +148,9 @@ void UDPListener::readMessage() {
   //   The UDP format is [X,Y,Z,Gantry] in IEC(cm) and Varian degrees
   //   IEC to LPS conversion, simple approach as it only supports HFS
   //   orientation now
-  this->shifts[0] = UDPShifts->shiftX * 10;  // cm to mm
-  this->shifts[1] = -UDPShifts->shiftZ * 10; // cm to mm
-  this->shifts[2] = UDPShifts->shiftY * 10;  // cm to mm
+  this->shifts[0] = UDPShifts->shiftX * 10;   // cm to mm
+  this->shifts[1] = -UDPShifts->shiftZ * 10;  // cm to mm
+  this->shifts[2] = UDPShifts->shiftY * 10;   // cm to mm
   //  qDebug() << this->shifts[0] << this->shifts[1] << this->shifts[2]
   //           << UDPShifts->gantryAngle << " :Shifts";
 
@@ -196,6 +194,7 @@ void UDPListener::StartListening() {
     int KIMViewPort = settings.value("KIMViewPort").toInt();
 
     socket->bind(QHostAddress(KIMViewIP), KIMViewPort);
+    connect(socket, SIGNAL(readyRead()), this, SLOT(readMessage()));
     this->connectionState = true;
 
   }
