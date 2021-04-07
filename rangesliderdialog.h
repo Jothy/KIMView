@@ -25,41 +25,38 @@ SOFTWARE.
 #ifndef RANGESLIDERDIALOG_H
 #define RANGESLIDERDIALOG_H
 
-#include <QDialog>
+#include <bevwidget.h>
+#include <imageviewer2d.h>
 
-#include<imageviewer2d.h>
-#include<bevwidget.h>
+#include <QDialog>
 
 namespace Ui {
 class RangeSliderDialog;
 }
 
-class RangeSliderDialog : public QDialog
-{
-    Q_OBJECT
+class RangeSliderDialog : public QDialog {
+  Q_OBJECT
 
-public:
-    explicit RangeSliderDialog(QWidget *parent = nullptr);
-    ~RangeSliderDialog();
-    void SetDoseRange();
-    double minDose=0;
-    double maxDose=100;
-    ImageViewer2D *AxialViewer;
-    ImageViewer2D *CoronalViewer;
-    ImageViewer2D *SagittalViewer;
-    BEVWidget *ModelViewer;
+ public:
+  explicit RangeSliderDialog(QWidget *parent = nullptr);
+  ~RangeSliderDialog();
+  void SetDoseRange();
+  double minDose = 0;
+  double maxDose = 100;
+  ImageViewer2D *AxialViewer;
+  ImageViewer2D *CoronalViewer;
+  ImageViewer2D *SagittalViewer;
+  BEVWidget *ModelViewer;
 
+ private slots:
+  void on_SpinBoxMinDose_editingFinished();
+  void on_SpinBoxMaxDose_editingFinished();
+  void on_horizontalSlider_valueChanged(double);
 
-private slots:
-    void on_SpinBoxMinDose_editingFinished();
-    void on_SpinBoxMaxDose_editingFinished();    
-    void on_horizontalSlider_valueChanged(double);
+  void on_pushButton_clicked();
 
-
-    void on_pushButton_clicked();
-
-private:
-    Ui::RangeSliderDialog *ui;
+ private:
+  Ui::RangeSliderDialog *ui;
 };
 
-#endif // RANGESLIDERDIALOG_H
+#endif  // RANGESLIDERDIALOG_H

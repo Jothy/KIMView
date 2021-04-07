@@ -8,7 +8,7 @@ CONFIG += c++11
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-SOURCES += \
+SOURCES +=\
     alignimageinteractorstyle.cpp \
     bevwidget.cpp \
     createobjects.cpp \
@@ -23,23 +23,26 @@ SOURCES += \
     mainwindow.cpp \
     meshreader.cpp \
     qDoubleSlider.cpp \
-    rangesliderdialog.cpp \   
+    rangesliderdialog.cpp \
+    wlwwdialog.cpp  \
     rtstructreaderdialog.cpp \    
     udplistener.cpp \
     vtkinteractorstyleimagecustom.cpp \    
-    vtklinecallbackdose.cpp \
+    vtklinecallbackdose.cpp
 
 
-HEADERS += \
+
+HEADERS +=\
     alignimageinteractorstyle.h \
     bevwidget.h \
     ipconfigdialog.h \
-    createobjects.h \    \
+    createobjects.h \
     doseprofiledialog.h \
     dvhcalc.h \
     selecttargetdialog.h \
     utilities.h \
-    dvhdialog.h \    
+    dvhdialog.h \
+    wlwwdialog.h \
     imageviewer2d.h \   
     mainwindow.h \
     meshreader.h \
@@ -48,7 +51,7 @@ HEADERS += \
     rtstructreaderdialog.h \   
     udplistener.h \
     vtkinteractorstyleimagecustom.h \   
-    vtklinecallbackdose.h \
+    vtklinecallbackdose.h
 
 
 
@@ -61,9 +64,10 @@ FORMS += \
     mainwindow.ui \
     rangesliderdialog.ui \
     rtstructreaderdialog.ui \
-    selecttargetdialog.ui
+    selecttargetdialog.ui \
+    wlwwdialog.ui
 
-TRANSLATIONS += \
+TRANSLATIONS += 
     KIMView_en_AU.ts
 
 # Default rules for deployment.

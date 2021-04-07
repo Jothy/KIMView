@@ -94,6 +94,7 @@
      <string>Tools</string>
     </property>
     <addaction name="actionCalc_DVH"/>
+    <addaction name="actionWL_WW"/>
    </widget>
    <widget class="QMenu" name="menuDose">
     <property name="title">
@@ -737,6 +738,15 @@
    </property>
    <property name="toolTip">
     <string>Stop tracking</string>
+   </property>
+  </action>
+  <action name="actionWL_WW">
+   <property name="icon">
+    <iconset resource="RC.qrc">
+     <normaloff>:/Icons/Contrast.png</normaloff>:/Icons/Contrast.png</iconset>
+   </property>
+   <property name="text">
+    <string>WL/WW</string>
    </property>
   </action>
  </widget>

@@ -92,6 +92,7 @@ SOFTWARE.
 #include "rtstructreaderdialog.h"
 #include "udplistener.h"
 #include "ui_mainwindow.h"
+#include "wlwwdialog.h"
 
 // Testing
 #include <vtkArcSource.h>
@@ -767,64 +768,7 @@ void MainWindow::on_actionMove_ROI_triggered() {
   messageBox.show();
 }
 
-void MainWindow::on_actionRotate_ROI_triggered() {
-  //    //Create a cone
-  //    vtkSmartPointer<vtkConeSource> coneSource1 =
-  //            vtkSmartPointer<vtkConeSource>::New();
-  //    coneSource1->SetHeight(10.0);
-  //    coneSource1->Update();
-
-  //    vtkSmartPointer<vtkTransform> transform =
-  //            vtkSmartPointer<vtkTransform>::New();
-  //    //transform->RotateWXYZ(double angle, double x, double y, double z);
-  //    transform->RotateWXYZ(90,0.5,0.5,0.5);
-
-  //    vtkSmartPointer<vtkTransformPolyDataFilter> transformFilter =
-  //            vtkSmartPointer<vtkTransformPolyDataFilter>::New();
-  //    transformFilter->SetTransform(transform);
-  //    transformFilter->SetInputConnection(coneSource1->GetOutputPort());
-  //    transformFilter->Update();
-
-  //    //Create a mapper and actor
-  //    vtkSmartPointer<vtkPolyDataMapper> mapper1 =
-  //            vtkSmartPointer<vtkPolyDataMapper>::New();
-  //    mapper1->SetInputConnection(coneSource1->GetOutputPort());
-
-  //    vtkSmartPointer<vtkActor> actor1 =
-  //            vtkSmartPointer<vtkActor>::New();
-  //    actor1->SetMapper(mapper1);
-  //    actor1->GetProperty()->SetColor(1,0,0);
-
-  //    //TRansformed actor
-  //    //Create a mapper and actor
-  //    vtkSmartPointer<vtkPolyDataMapper> mapper2 =
-  //            vtkSmartPointer<vtkPolyDataMapper>::New();
-  //    mapper2->SetInputConnection(transformFilter->GetOutputPort());
-
-  //    vtkSmartPointer<vtkActor> actor2 =
-  //            vtkSmartPointer<vtkActor>::New();
-  //    actor2->SetMapper(mapper2);
-  //    actor2->GetProperty()->SetColor(0,1,0);
-
-  //    //Create a renderer, render window, and interactor
-  //    vtkSmartPointer<vtkRenderer> renderer =
-  //            vtkSmartPointer<vtkRenderer>::New();
-  //    vtkSmartPointer<vtkRenderWindow> renderWindow =
-  //            vtkSmartPointer<vtkRenderWindow>::New();
-  //    renderWindow->AddRenderer(renderer);
-  //    vtkSmartPointer<vtkRenderWindowInteractor> renderWindowInteractor=
-  //            vtkSmartPointer<vtkRenderWindowInteractor>::New();
-  //    renderWindowInteractor->SetRenderWindow(renderWindow);
-
-  //    //Add the actors to the scene
-  //    renderer->AddActor(actor1);
-  //    renderer->AddActor(actor2);
-  //    renderer->SetBackground(0,0,0); // Background color dark red
-
-  //    //Render and interact
-  //    renderWindow->Render();
-  //    renderWindowInteractor->Start();
-}
+void MainWindow::on_actionRotate_ROI_triggered() {}
 
 void MainWindow::on_actionAdd_Arc_triggered() {
   double radius = 400;
@@ -943,4 +887,12 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 
     event->accept();
   }
+}
+
+void MainWindow::on_actionWL_WW_triggered() {
+  WLWWDialog *WLWlDlg = new WLWWDialog(this);
+  WLWlDlg->AxialViewer = this->AxialViewer;
+  WLWlDlg->SagittalViewer = this->SagittalViewer;
+  WLWlDlg->CoronalViewer = this->CoronalViewer;
+  WLWlDlg->show();
 }
