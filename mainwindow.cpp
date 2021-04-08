@@ -326,6 +326,7 @@ void MainWindow::on_actionCT_triggered() {
       this->ui->actionStructures->setEnabled(true);
       this->ui->actionDose->setEnabled(true);
       this->ui->actionAdjust_Range->setEnabled(true);
+      this->ui->actionWL_WW->setEnabled(true);
 
     } else {
       QMessageBox messageBox;

@@ -741,6 +741,9 @@
    </property>
   </action>
   <action name="actionWL_WW">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="RC.qrc">
      <normaloff>:/Icons/Contrast.png</normaloff>:/Icons/Contrast.png</iconset>
