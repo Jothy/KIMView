@@ -904,8 +904,8 @@ void ImageViewer2D::ShowCursor(double *Bounds) {
 }
 
 void ImageViewer2D::on_actionReset_WL_WW_triggered() {
-  // qDebug()<<"Level: "<<this->ImageSlice->GetProperty()->GetColorLevel();
-  // qDebug()<<"Width: "<<this->ImageSlice->GetProperty()->GetColorWindow();
+  // qDebug() << "Level: " << this->ImageSlice->GetProperty()->GetColorLevel();
+  // qDebug() << "Width: " << this->ImageSlice->GetProperty()->GetColorWindow();
 
   // qDebug()<<"Resetting W/L";
   this->ImageSlice->GetProperty()->SetColorLevel(this->Windowlevel);

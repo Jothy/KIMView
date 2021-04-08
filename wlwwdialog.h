@@ -51,6 +51,12 @@ class WLWWDialog : public QDialog {
 
   void on_ScrollBar_width_sliderMoved(int position);
 
+  void on_lineEditWidth_editingFinished();
+
+  void on_lineEditLevel_editingFinished();
+
+  void updateWLWW();
+
  private:
   Ui::WLWWDialog *ui;
 };

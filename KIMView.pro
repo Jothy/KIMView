@@ -17,6 +17,7 @@ SOURCES +=\
     dvhcalc.cpp \
     dvhdialog.cpp \
     imageviewer2d.cpp \
+    presetwlwwdialog.cpp \
     selecttargetdialog.cpp \
     utilities.cpp   \
     main.cpp \
@@ -39,6 +40,7 @@ HEADERS +=\
     createobjects.h \
     doseprofiledialog.h \
     dvhcalc.h \
+    presetwlwwdialog.h \
     selecttargetdialog.h \
     utilities.h \
     dvhdialog.h \
@@ -62,6 +64,7 @@ FORMS += \
     imageviewer2d.ui \
     ipconfigdialog.ui \
     mainwindow.ui \
+    presetwlwwdialog.ui \
     rangesliderdialog.ui \
     rtstructreaderdialog.ui \
     selecttargetdialog.ui \

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PresetWLWWDialog</class>
+ <widget class="QDialog" name="PresetWLWWDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>243</width>
+    <height>48</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QComboBox" name="comboBox">
+     <item>
+      <property name="text">
+       <string>Abdomen</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Bone</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Breast</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Head</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Lung</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Neck</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Pelvis</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Thorax</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Custom1</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Custom2</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Custom3</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
