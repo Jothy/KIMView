@@ -72,6 +72,7 @@ SOFTWARE.
 #include <iostream>
 #include <itksys/SystemTools.hxx>
 
+#include "aboutdialog.h"
 #include "createobjects.h"
 #include "imageviewer2d.h"
 #include "ipconfigdialog.h"
@@ -770,8 +771,8 @@ void MainWindow::on_actionMove_ROI_triggered() {
 }
 
 void MainWindow::on_actionRotate_ROI_triggered() {
-  qDebug() << this->AxialViewer->ImageSlice->GetInput()->GetScalarRange()[0];
-  qDebug() << this->AxialViewer->ImageSlice->GetInput()->GetScalarRange()[1];
+  // qDebug() << this->AxialViewer->ImageSlice->GetInput()->GetScalarRange()[0];
+  // qDebug() << this->AxialViewer->ImageSlice->GetInput()->GetScalarRange()[1];
 }
 
 void MainWindow::on_actionAdd_Arc_triggered() {
@@ -899,4 +900,9 @@ void MainWindow::on_actionWL_WW_triggered() {
   WLWlDlg->SagittalViewer = this->SagittalViewer;
   WLWlDlg->CoronalViewer = this->CoronalViewer;
   WLWlDlg->show();
+}
+
+void MainWindow::on_actionAbout_triggered() {
+  AboutDialog *abtDlg = new AboutDialog(this);
+  abtDlg->exec();
 }

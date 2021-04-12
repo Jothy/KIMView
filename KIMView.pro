@@ -9,6 +9,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES +=\
+    aboutdialog.cpp \
     alignimageinteractorstyle.cpp \
     bevwidget.cpp \
     createobjects.cpp \
@@ -34,6 +35,7 @@ SOURCES +=\
 
 
 HEADERS +=\
+    aboutdialog.h \
     alignimageinteractorstyle.h \
     bevwidget.h \
     ipconfigdialog.h \
@@ -58,6 +60,7 @@ HEADERS +=\
 
 
 FORMS += \
+    aboutdialog.ui \
     bevwidget.ui \
     doseprofiledialog.ui \
     dvhdialog.ui \

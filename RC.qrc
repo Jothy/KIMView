@@ -38,5 +38,6 @@
         <file>Icons/Zoom-Out.png</file>
         <file>Icons/Zoom-Reset.png</file>
         <file>Icons/Legend.png</file>
+        <file>Icons/About.png</file>
     </qresource>
 </RCC>

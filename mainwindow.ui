@@ -130,6 +130,7 @@
      <string>About</string>
     </property>
     <addaction name="actionAbout_QT"/>
+    <addaction name="actionAbout"/>
    </widget>
    <widget class="QMenu" name="menuSettings">
     <property name="title">
@@ -750,6 +751,15 @@
    </property>
    <property name="text">
     <string>WL/WW</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="icon">
+    <iconset resource="RC.qrc">
+     <normaloff>:/Icons/About.png</normaloff>:/Icons/About.png</iconset>
+   </property>
+   <property name="text">
+    <string>About</string>
    </property>
   </action>
  </widget>
