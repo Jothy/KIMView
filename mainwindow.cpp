@@ -769,7 +769,10 @@ void MainWindow::on_actionMove_ROI_triggered() {
   messageBox.show();
 }
 
-void MainWindow::on_actionRotate_ROI_triggered() {}
+void MainWindow::on_actionRotate_ROI_triggered() {
+  qDebug() << this->AxialViewer->ImageSlice->GetInput()->GetScalarRange()[0];
+  qDebug() << this->AxialViewer->ImageSlice->GetInput()->GetScalarRange()[1];
+}
 
 void MainWindow::on_actionAdd_Arc_triggered() {
   double radius = 400;

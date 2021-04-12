@@ -98,6 +98,7 @@ class ImageViewer2D : public QWidget {
   void UpdateView();
   void MoveToLocation(double loc);
   void AdjustDoseRange(double min, double max);
+  void AdjustImageWLWW();
 
   double SliceStep;
   int SliceOrientation;                     // Axial by default
@@ -188,8 +189,6 @@ class ImageViewer2D : public QWidget {
   void on_actionShowBeams_triggered();
 
   void on_actionShow_Image_Extent_triggered();
-
-  void on_toolButtonContrast_triggered(QAction *arg1);
 
  private:
   Ui::ImageViewer2D *ui;
