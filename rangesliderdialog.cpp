@@ -74,14 +74,11 @@ void RangeSliderDialog::on_SpinBoxMaxDose_editingFinished() {
   }
 }
 
-void RangeSliderDialog::on_horizontalSlider_valueChanged(double) {
-  this->ui->SpinBoxMinDose->setValue(this->ui->horizontalSlider->value());
-  this->AxialViewer->AdjustDoseRange(this->ui->horizontalSlider->value(),
-                                     this->maxDose);
-  this->SagittalViewer->AdjustDoseRange(this->ui->horizontalSlider->value(),
-                                        this->maxDose);
-  this->CoronalViewer->AdjustDoseRange(this->ui->horizontalSlider->value(),
-                                       this->maxDose);
+void RangeSliderDialog::on_horizontalSlider_valueChanged(double value) {
+  this->ui->SpinBoxMinDose->setValue(value);
+  this->AxialViewer->AdjustDoseRange(value, this->maxDose);
+  this->SagittalViewer->AdjustDoseRange(value, this->maxDose);
+  this->CoronalViewer->AdjustDoseRange(value, this->maxDose);
   this->ModelViewer->ShowIsodoseSurface(this->minDose, this->minDose);
   this->ModelViewer->ModelRenderer->GetRenderWindow()->Render();
   this->ModelViewer->show();

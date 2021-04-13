@@ -51,7 +51,7 @@ class RangeSliderDialog : public QDialog {
  private slots:
   void on_SpinBoxMinDose_editingFinished();
   void on_SpinBoxMaxDose_editingFinished();
-  void on_horizontalSlider_valueChanged(double);
+  void on_horizontalSlider_valueChanged(double value);
 
   void on_pushButton_clicked();
 
