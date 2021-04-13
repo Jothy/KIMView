@@ -186,8 +186,8 @@ ImageViewer2D::ImageViewer2D(QWidget *parent, QActionGroup *contextMenus)
   this->SliceOrientation = 0;  // Axial by default
 
   // Setup renderer and interactor style (no interaction -hohoo..)
-  this->ui->widget->GetRenderWindow()->GetInteractor()->SetInteractorStyle(
-      InteractorImage2D);
+  //  this->ui->widget->GetRenderWindow()->GetInteractor()->SetInteractorStyle(
+  //      InteractorImage2D);
   this->ui->widget->GetRenderWindow()->AddRenderer(this->ViewRenderer);
 
   // Enable anti-aliasing

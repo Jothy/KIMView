@@ -100,6 +100,7 @@ SOFTWARE.
 #include <vtkArrowSource.h>
 #include <vtkConeSource.h>
 #include <vtkGlyph3D.h>
+#include <vtkLineSource.h>
 #include <vtkPolarAxesActor.h>
 
 #include <QTimer>
@@ -776,11 +777,11 @@ void MainWindow::on_actionRotate_ROI_triggered() {
 }
 
 void MainWindow::on_actionAdd_Arc_triggered() {
-  double radius = 400;
+  double radius = 300;
   double xCord1 = radius * cos(vtkMath::RadiansFromDegrees(0.0));
   double yCord1 = radius * sin(vtkMath::RadiansFromDegrees(0.0));
-  double xCord2 = radius * cos(vtkMath::RadiansFromDegrees(359.9));
-  double yCord2 = radius * sin(vtkMath::RadiansFromDegrees(359.9));
+  double xCord2 = radius * cos(vtkMath::RadiansFromDegrees(45.0));
+  double yCord2 = radius * sin(vtkMath::RadiansFromDegrees(45.0));
 
   vtkSmartPointer<vtkArcSource> arcSource =
       vtkSmartPointer<vtkArcSource>::New();
@@ -804,33 +805,50 @@ void MainWindow::on_actionAdd_Arc_triggered() {
   arcActor->SetPosition(-12, 126, -32);
   arcActor->RotateZ(-90);
 
-  // Add arrow
-  // Create an arrow.
-  vtkSmartPointer<vtkArrowSource> arrowSource =
-      vtkSmartPointer<vtkArrowSource>::New();
-  arrowSource->SetShaftRadius(50);
-  arrowSource->SetTipLength(125);
+  vtkSmartPointer<vtkLineSource> line1 = vtkSmartPointer<vtkLineSource>::New();
+  line1->SetPoint1(0, 0, 0);
+  line1->SetPoint2(xCord2, yCord2, 0);
 
-  vtkSmartPointer<vtkPolyDataMapper> arrowMapper =
+  // Visualize
+  vtkSmartPointer<vtkPolyDataMapper> mapper2 =
       vtkSmartPointer<vtkPolyDataMapper>::New();
-  arrowMapper->SetInputData(arrowSource->GetOutput());
+  mapper2->SetInputConnection(line1->GetOutputPort());
 
-  vtkSmartPointer<vtkActor> arrowActor = vtkSmartPointer<vtkActor>::New();
-  arrowActor->SetMapper(arrowMapper);
-  arrowActor->GetProperty()->SetColor(1, 0, 0);
-  arrowActor->SetPosition(0, 0, 0);
+  vtkSmartPointer<vtkActor> arcActor2 = vtkSmartPointer<vtkActor>::New();
+  arcActor2->SetMapper(mapper2);
+  arcActor2->GetProperty()->SetColor(1, 0, 0);
+  arcActor2->GetProperty()->SetLineWidth(2.0);
+  arcActor2->SetPosition(-12, 126, -32);
+  arcActor2->RotateZ(-90);
 
-  vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
-  actor = arcActor;
-  actor->SetPosition(-12, 126, 0);
+  vtkSmartPointer<vtkLineSource> line2 = vtkSmartPointer<vtkLineSource>::New();
+  line2->SetPoint2(0, 0, 0);
+  line2->SetPoint2(xCord1, yCord1, 0);
+
+  // Visualize
+  vtkSmartPointer<vtkPolyDataMapper> mapper3 =
+      vtkSmartPointer<vtkPolyDataMapper>::New();
+  mapper3->SetInputConnection(line2->GetOutputPort());
+
+  vtkSmartPointer<vtkActor> arcActor3 = vtkSmartPointer<vtkActor>::New();
+  arcActor3->SetMapper(mapper3);
+  arcActor3->GetProperty()->SetColor(0, 1, 0);
+  arcActor3->GetProperty()->SetLineWidth(2.0);
+  arcActor3->SetPosition(-12, 126, -32);
+  arcActor3->RotateZ(-90);
 
   this->BEVViewer->ModelRenderer->AddViewProp(arcActor);
-  this->BEVViewer->ModelRenderer->AddViewProp(arrowActor);
+  this->BEVViewer->ModelRenderer->AddViewProp(arcActor2);
+  this->BEVViewer->ModelRenderer->AddViewProp(arcActor3);
   this->BEVViewer->show();
-  this->BEVViewer->ModelRenderer->GetRenderWindow()->Render();
+  // this->BEVViewer->ModelRenderer->GetRenderWindow()->Render();
 
-  this->AxialViewer->ViewRenderer->AddActor(actor);
-  this->AxialViewer->ViewRenderer->GetRenderWindow()->Render();
+  this->AxialViewer->ViewRenderer->AddActor(arcActor);
+  this->AxialViewer->ViewRenderer->AddActor(arcActor2);
+  this->AxialViewer->ViewRenderer->AddActor(arcActor3);
+  this->AxialViewer->show();
+  this->AxialViewer->UpdateView();
+  // this->AxialViewer->ViewRenderer->GetRenderWindow()->Render();
 }
 
 void MainWindow::on_actionSend_UDP_triggered() {
