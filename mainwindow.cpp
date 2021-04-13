@@ -211,7 +211,7 @@ void MainWindow::on_actionCT_triggered() {
     //        curIOP=QString::fromStdString(val2);
 
     QString supportedIOP =
-        "HFS ";  // DICOM seems to be hvaving a space after as "HFS "
+        "HFS "; // DICOM seems to be hvaving a space after as "HFS "
     // QString supportedIOP="1\\0.0\\0.0\\0.0\\1\\0.0 ";//DICOM seems to be
     // hvaving a space at the end "
     // qDebug()<<curIOP<<"**********"<<supportedIOP;
@@ -264,8 +264,8 @@ void MainWindow::on_actionCT_triggered() {
       this->ui->mdiAreaView->addSubWindow(
           this->SagittalViewer,
           Qt::WindowMaximizeButtonHint |
-              Qt::WindowTitleHint);  // add to make borderless window
-                                     // Qt::FramelessWindowHint
+              Qt::WindowTitleHint); // add to make borderless window
+                                    // Qt::FramelessWindowHint
       this->SagittalViewer->setWindowTitle("Sagittal");
       this->SagittalViewer->show();
 
@@ -274,9 +274,9 @@ void MainWindow::on_actionCT_triggered() {
       this->CoronalViewer->SetImageData(this->CTImage);
       this->CoronalViewer->SetSliceOrientation(2);
       this->CoronalViewer->SetUpView();
-      this->ui->mdiAreaView->addSubWindow(
-          this->CoronalViewer,
-          Qt::WindowMaximizeButtonHint | Qt::WindowTitleHint);
+      this->ui->mdiAreaView->addSubWindow(this->CoronalViewer,
+                                          Qt::WindowMaximizeButtonHint |
+                                              Qt::WindowTitleHint);
       this->CoronalViewer->setWindowTitle("Coronal");
       this->CoronalViewer->show();
 
@@ -285,9 +285,9 @@ void MainWindow::on_actionCT_triggered() {
       this->AxialViewer->SetImageData(this->CTImage);
       this->AxialViewer->SetSliceOrientation(0);
       this->AxialViewer->SetUpView();
-      this->ui->mdiAreaView->addSubWindow(
-          this->AxialViewer,
-          Qt::WindowMaximizeButtonHint | Qt::WindowTitleHint);
+      this->ui->mdiAreaView->addSubWindow(this->AxialViewer,
+                                          Qt::WindowMaximizeButtonHint |
+                                              Qt::WindowTitleHint);
       this->AxialViewer->setWindowTitle("Axial");
       this->AxialViewer->show();
 
@@ -350,7 +350,7 @@ void MainWindow::on_actionStructures_triggered() {
     RTStructReaderDialog *meshReaderDlg = new RTStructReaderDialog(this);
     meshReaderDlg->exec();
 
-    if (meshReaderDlg->ROINames.size() > 0)  // Check any ROI exist or not
+    if (meshReaderDlg->ROINames.size() > 0) // Check any ROI exist or not
     {
       QList<int> selectedStructsList = meshReaderDlg->selectedItems;
       // qDebug()<<selectedStructsList[0]<<"ROI";
@@ -362,11 +362,11 @@ void MainWindow::on_actionStructures_triggered() {
       RTStructReader->getROIMeshes(
           this->CTImage, this->CTImage->GetSpacing()[2], this->TargetReduction,
           meshReaderDlg->selectedItems,
-          this);  // Reads ROI name as well as structs
+          this); // Reads ROI name as well as structs
       QCoreApplication::processEvents();
       this->MeshList = RTStructReader->meshes;
       this->MeshActors = RTStructReader->ROIActors;
-      this->ROIVisibleFlag = 1;  // structs imported
+      this->ROIVisibleFlag = 1; // structs imported
 
       for (int i = 0; i < meshReaderDlg->selectedItems.size(); i++) {
         this->ROIColors[i][0] = RTStructReader->ROIColors[i][0];
@@ -443,7 +443,7 @@ void MainWindow::on_actionDose_triggered() {
       vtkSmartPointer<vtkGDCMImageReader> DoseReader =
           vtkSmartPointer<vtkGDCMImageReader>::New();
       DoseReader->SetFileName(DoseFile.toLatin1());
-      DoseReader->FileLowerLeftOn();  // otherwise flips the image
+      DoseReader->FileLowerLeftOn(); // otherwise flips the image
       DoseReader->SetDataScalarTypeToDouble();
       DoseReader->Update();
       this->RTDose->DeepCopy(DoseReader->GetOutput());
@@ -778,19 +778,30 @@ void MainWindow::on_actionRotate_ROI_triggered() {
 
 void MainWindow::on_actionAdd_Arc_triggered() {
   double radius = 300;
-  double xCord1 = radius * cos(vtkMath::RadiansFromDegrees(0.0));
-  double yCord1 = radius * sin(vtkMath::RadiansFromDegrees(0.0));
-  double xCord2 = radius * cos(vtkMath::RadiansFromDegrees(45.0));
-  double yCord2 = radius * sin(vtkMath::RadiansFromDegrees(45.0));
+  double startAngle = 179.0;
+  double stopAngle = 181.0;
+  QString dir = "CW";
+  double arcAngle = 358; // stopAngle - startAngle;
+  double clipAngle = 360.0 - arcAngle;
+
+  double xCord1 = radius * cos(vtkMath::RadiansFromDegrees(startAngle));
+  double yCord1 = radius * sin(vtkMath::RadiansFromDegrees(startAngle));
+  double xCord2 = radius * cos(vtkMath::RadiansFromDegrees(stopAngle));
+  double yCord2 = radius * sin(vtkMath::RadiansFromDegrees(stopAngle));
 
   vtkSmartPointer<vtkArcSource> arcSource =
       vtkSmartPointer<vtkArcSource>::New();
-  // arcSource->SetAngle(90);
   arcSource->SetResolution(360);
   arcSource->SetPoint1(xCord1, yCord1, 0);
   arcSource->SetPoint2(xCord2, yCord2, 0);
-  arcSource->NegativeOn();
-  arcSource->UseNormalAndAngleOff();
+  if (clipAngle < arcAngle) {
+    arcSource->NegativeOn();
+  }
+
+  else if (clipAngle >= arcAngle) {
+    arcSource->NegativeOff();
+  }
+
   arcSource->Update();
 
   // Visualize
