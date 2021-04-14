@@ -173,6 +173,7 @@
    <addaction name="actionCT"/>
    <addaction name="actionStructures"/>
    <addaction name="actionDose"/>
+   <addaction name="actionPlan"/>
    <addaction name="actionZoom_In_All"/>
    <addaction name="actionZoom_Out_All"/>
    <addaction name="actionReset_Zoom"/>
@@ -184,7 +185,6 @@
    <addaction name="actionIP_COnfiguration"/>
    <addaction name="actionStart"/>
    <addaction name="actionStop"/>
-   <addaction name="actionPlan"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="dockWidget">
@@ -477,8 +477,8 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset>
-     <normaloff>:/RC/Icons1/applications.png</normaloff>:/RC/Icons1/applications.png</iconset>
+    <iconset resource="RC.qrc">
+     <normaloff>:/Icons/Plan.png</normaloff>:/Icons/Plan.png</iconset>
    </property>
    <property name="text">
     <string>Plan</string>

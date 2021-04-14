@@ -67,6 +67,7 @@ SOFTWARE.
 #include <QProgressDialog>
 #include <QSettings>
 #include <QTime>
+#include <QTimer>
 #include <QTreeWidgetItem>
 #include <QUdpSocket>
 #include <iostream>
@@ -89,6 +90,7 @@ SOFTWARE.
 #include "itkSmartPointer.h"
 #include "itkVersion.h"
 #include "meshreader.h"
+#include "planreader.h"
 #include "rangesliderdialog.h"
 #include "rtstructreaderdialog.h"
 #include "udplistener.h"
@@ -103,8 +105,6 @@ SOFTWARE.
 #include <vtkGlyph3D.h>
 #include <vtkLineSource.h>
 #include <vtkPolarAxesActor.h>
-
-#include <QTimer>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
@@ -330,6 +330,7 @@ void MainWindow::on_actionCT_triggered() {
       this->ui->actionDose->setEnabled(true);
       this->ui->actionAdjust_Range->setEnabled(true);
       this->ui->actionWL_WW->setEnabled(true);
+      this->ui->actionPlan->setEnabled(true);
 
     } else {
       QMessageBox messageBox;
@@ -943,4 +944,10 @@ void MainWindow::on_actionWL_WW_triggered() {
 void MainWindow::on_actionAbout_triggered() {
   AboutDialog *abtDlg = new AboutDialog(this);
   abtDlg->exec();
+}
+
+void MainWindow::on_actionPlan_triggered() {
+  PlanReader *myPlanReader = new PlanReader();
+  myPlanReader->readRTPlan();
+  qDebug() << "Frs: " << myPlanReader->fractionsPlanned;
 }

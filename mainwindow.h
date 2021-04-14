@@ -143,6 +143,8 @@ class MainWindow : public QMainWindow {
 
   void on_actionAbout_triggered();
 
+  void on_actionPlan_triggered();
+
  private:
   Ui::MainWindow *ui;
   vtkSmartPointer<vtkRenderer> renderer;
