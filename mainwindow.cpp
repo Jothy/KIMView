@@ -98,6 +98,7 @@ SOFTWARE.
 // Testing
 #include <vtkArcSource.h>
 #include <vtkArrowSource.h>
+#include <vtkAssembly.h>
 #include <vtkConeSource.h>
 #include <vtkGlyph3D.h>
 #include <vtkLineSource.h>
@@ -211,7 +212,7 @@ void MainWindow::on_actionCT_triggered() {
     //        curIOP=QString::fromStdString(val2);
 
     QString supportedIOP =
-        "HFS "; // DICOM seems to be hvaving a space after as "HFS "
+        "HFS ";  // DICOM seems to be hvaving a space after as "HFS "
     // QString supportedIOP="1\\0.0\\0.0\\0.0\\1\\0.0 ";//DICOM seems to be
     // hvaving a space at the end "
     // qDebug()<<curIOP<<"**********"<<supportedIOP;
@@ -264,8 +265,8 @@ void MainWindow::on_actionCT_triggered() {
       this->ui->mdiAreaView->addSubWindow(
           this->SagittalViewer,
           Qt::WindowMaximizeButtonHint |
-              Qt::WindowTitleHint); // add to make borderless window
-                                    // Qt::FramelessWindowHint
+              Qt::WindowTitleHint);  // add to make borderless window
+                                     // Qt::FramelessWindowHint
       this->SagittalViewer->setWindowTitle("Sagittal");
       this->SagittalViewer->show();
 
@@ -274,9 +275,9 @@ void MainWindow::on_actionCT_triggered() {
       this->CoronalViewer->SetImageData(this->CTImage);
       this->CoronalViewer->SetSliceOrientation(2);
       this->CoronalViewer->SetUpView();
-      this->ui->mdiAreaView->addSubWindow(this->CoronalViewer,
-                                          Qt::WindowMaximizeButtonHint |
-                                              Qt::WindowTitleHint);
+      this->ui->mdiAreaView->addSubWindow(
+          this->CoronalViewer,
+          Qt::WindowMaximizeButtonHint | Qt::WindowTitleHint);
       this->CoronalViewer->setWindowTitle("Coronal");
       this->CoronalViewer->show();
 
@@ -285,9 +286,9 @@ void MainWindow::on_actionCT_triggered() {
       this->AxialViewer->SetImageData(this->CTImage);
       this->AxialViewer->SetSliceOrientation(0);
       this->AxialViewer->SetUpView();
-      this->ui->mdiAreaView->addSubWindow(this->AxialViewer,
-                                          Qt::WindowMaximizeButtonHint |
-                                              Qt::WindowTitleHint);
+      this->ui->mdiAreaView->addSubWindow(
+          this->AxialViewer,
+          Qt::WindowMaximizeButtonHint | Qt::WindowTitleHint);
       this->AxialViewer->setWindowTitle("Axial");
       this->AxialViewer->show();
 
@@ -350,7 +351,7 @@ void MainWindow::on_actionStructures_triggered() {
     RTStructReaderDialog *meshReaderDlg = new RTStructReaderDialog(this);
     meshReaderDlg->exec();
 
-    if (meshReaderDlg->ROINames.size() > 0) // Check any ROI exist or not
+    if (meshReaderDlg->ROINames.size() > 0)  // Check any ROI exist or not
     {
       QList<int> selectedStructsList = meshReaderDlg->selectedItems;
       // qDebug()<<selectedStructsList[0]<<"ROI";
@@ -362,11 +363,11 @@ void MainWindow::on_actionStructures_triggered() {
       RTStructReader->getROIMeshes(
           this->CTImage, this->CTImage->GetSpacing()[2], this->TargetReduction,
           meshReaderDlg->selectedItems,
-          this); // Reads ROI name as well as structs
+          this);  // Reads ROI name as well as structs
       QCoreApplication::processEvents();
       this->MeshList = RTStructReader->meshes;
       this->MeshActors = RTStructReader->ROIActors;
-      this->ROIVisibleFlag = 1; // structs imported
+      this->ROIVisibleFlag = 1;  // structs imported
 
       for (int i = 0; i < meshReaderDlg->selectedItems.size(); i++) {
         this->ROIColors[i][0] = RTStructReader->ROIColors[i][0];
@@ -443,7 +444,7 @@ void MainWindow::on_actionDose_triggered() {
       vtkSmartPointer<vtkGDCMImageReader> DoseReader =
           vtkSmartPointer<vtkGDCMImageReader>::New();
       DoseReader->SetFileName(DoseFile.toLatin1());
-      DoseReader->FileLowerLeftOn(); // otherwise flips the image
+      DoseReader->FileLowerLeftOn();  // otherwise flips the image
       DoseReader->SetDataScalarTypeToDouble();
       DoseReader->Update();
       this->RTDose->DeepCopy(DoseReader->GetOutput());
@@ -778,16 +779,25 @@ void MainWindow::on_actionRotate_ROI_triggered() {
 
 void MainWindow::on_actionAdd_Arc_triggered() {
   double radius = 300;
-  double startAngle = 179.0;
-  double stopAngle = 181.0;
-  QString dir = "CW";
-  double arcAngle = 358; // stopAngle - startAngle;
+  double startAngle = 345.0;
+  double stopAngle = 90.0;
+  QString direction = "CCW";
+  double arcAngle = 358;  // stopAngle - startAngle;
   double clipAngle = 360.0 - arcAngle;
+
+  float angle = startAngle - stopAngle;
+  float rad = angle * vtkMath::Pi() / 180.0;
+  float radOutside = (2 * vtkMath::Pi()) - rad;
+
+  float arc_length = radOutside * radius;
 
   double xCord1 = radius * cos(vtkMath::RadiansFromDegrees(startAngle));
   double yCord1 = radius * sin(vtkMath::RadiansFromDegrees(startAngle));
   double xCord2 = radius * cos(vtkMath::RadiansFromDegrees(stopAngle));
   double yCord2 = radius * sin(vtkMath::RadiansFromDegrees(stopAngle));
+
+  vtkSmartPointer<vtkAssembly> arcAssembly =
+      vtkSmartPointer<vtkAssembly>::New();
 
   vtkSmartPointer<vtkArcSource> arcSource =
       vtkSmartPointer<vtkArcSource>::New();
@@ -801,7 +811,6 @@ void MainWindow::on_actionAdd_Arc_triggered() {
   else if (clipAngle >= arcAngle) {
     arcSource->NegativeOff();
   }
-
   arcSource->Update();
 
   // Visualize
@@ -816,50 +825,50 @@ void MainWindow::on_actionAdd_Arc_triggered() {
   arcActor->SetPosition(-12, 126, -32);
   arcActor->RotateZ(-90);
 
-  vtkSmartPointer<vtkLineSource> line1 = vtkSmartPointer<vtkLineSource>::New();
-  line1->SetPoint1(0, 0, 0);
-  line1->SetPoint2(xCord2, yCord2, 0);
+  vtkSmartPointer<vtkLineSource> arcStart =
+      vtkSmartPointer<vtkLineSource>::New();
+  arcStart->SetPoint1(0, 0, 0);
+  arcStart->SetPoint2(xCord2, yCord2, 0);
 
   // Visualize
-  vtkSmartPointer<vtkPolyDataMapper> mapper2 =
+  vtkSmartPointer<vtkPolyDataMapper> arcStartMapper =
       vtkSmartPointer<vtkPolyDataMapper>::New();
-  mapper2->SetInputConnection(line1->GetOutputPort());
+  arcStartMapper->SetInputConnection(arcStart->GetOutputPort());
 
-  vtkSmartPointer<vtkActor> arcActor2 = vtkSmartPointer<vtkActor>::New();
-  arcActor2->SetMapper(mapper2);
-  arcActor2->GetProperty()->SetColor(1, 0, 0);
-  arcActor2->GetProperty()->SetLineWidth(2.0);
-  arcActor2->SetPosition(-12, 126, -32);
-  arcActor2->RotateZ(-90);
+  vtkSmartPointer<vtkActor> arcStartActor = vtkSmartPointer<vtkActor>::New();
+  arcStartActor->SetMapper(arcStartMapper);
+  arcStartActor->GetProperty()->SetColor(1, 0, 0);
+  arcStartActor->GetProperty()->SetLineWidth(2.0);
+  arcStartActor->SetPosition(-12, 126, -32);
+  arcStartActor->RotateZ(-90);
 
-  vtkSmartPointer<vtkLineSource> line2 = vtkSmartPointer<vtkLineSource>::New();
-  line2->SetPoint2(0, 0, 0);
-  line2->SetPoint2(xCord1, yCord1, 0);
+  vtkSmartPointer<vtkLineSource> arcStop =
+      vtkSmartPointer<vtkLineSource>::New();
+  arcStop->SetPoint2(0, 0, 0);
+  arcStop->SetPoint2(xCord1, yCord1, 0);
 
   // Visualize
-  vtkSmartPointer<vtkPolyDataMapper> mapper3 =
+  vtkSmartPointer<vtkPolyDataMapper> arcStopMapper =
       vtkSmartPointer<vtkPolyDataMapper>::New();
-  mapper3->SetInputConnection(line2->GetOutputPort());
+  arcStopMapper->SetInputConnection(arcStop->GetOutputPort());
 
-  vtkSmartPointer<vtkActor> arcActor3 = vtkSmartPointer<vtkActor>::New();
-  arcActor3->SetMapper(mapper3);
-  arcActor3->GetProperty()->SetColor(0, 1, 0);
-  arcActor3->GetProperty()->SetLineWidth(2.0);
-  arcActor3->SetPosition(-12, 126, -32);
-  arcActor3->RotateZ(-90);
+  vtkSmartPointer<vtkActor> arcStopActor = vtkSmartPointer<vtkActor>::New();
+  arcStopActor->SetMapper(arcStopMapper);
+  arcStopActor->GetProperty()->SetColor(0, 1, 0);
+  arcStopActor->GetProperty()->SetLineWidth(2.0);
+  arcStopActor->SetPosition(-12, 126, -32);
+  arcStopActor->RotateZ(-90);
 
-  this->BEVViewer->ModelRenderer->AddViewProp(arcActor);
-  this->BEVViewer->ModelRenderer->AddViewProp(arcActor2);
-  this->BEVViewer->ModelRenderer->AddViewProp(arcActor3);
-  this->BEVViewer->show();
-  // this->BEVViewer->ModelRenderer->GetRenderWindow()->Render();
+  arcAssembly->AddPart(arcActor);
+  arcAssembly->AddPart(arcStartActor);
+  arcAssembly->AddPart(arcStopActor);
 
-  this->AxialViewer->ViewRenderer->AddActor(arcActor);
-  this->AxialViewer->ViewRenderer->AddActor(arcActor2);
-  this->AxialViewer->ViewRenderer->AddActor(arcActor3);
-  this->AxialViewer->show();
-  this->AxialViewer->UpdateView();
-  // this->AxialViewer->ViewRenderer->GetRenderWindow()->Render();
+  this->BEVViewer->ModelRenderer->AddViewProp(arcAssembly);
+  this->BEVViewer->ModelRenderer->GetRenderWindow()->Render();
+
+  this->AxialViewer->ViewRenderer->AddActor(arcAssembly);
+  this->AxialViewer->ViewRenderer->ResetCamera();
+  this->AxialViewer->ViewRenderer->GetRenderWindow()->Render();
 }
 
 void MainWindow::on_actionSend_UDP_triggered() {

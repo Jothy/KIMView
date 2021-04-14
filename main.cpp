@@ -37,5 +37,15 @@ int main(int argc, char *argv[]) {
   a.setOrganizationDomain("https://image-x.sydney.edu.au/");
   a.setApplicationName("KIMView");
 
+  //  double startAngle = 345.0;
+  //  double stopAngle = 90.0;
+
+  //  double angle = startAngle - stopAngle;
+  //  double rad = angle * vtkMath::Pi() / 180.0;
+  //  double radOutside = (2 * vtkMath::Pi()) - rad;
+
+  //  qDebug() << angle << "" << vtkMath::DegreesFromRadians(rad) << ""
+  //           << vtkMath::DegreesFromRadians(radOutside);
+
   return a.exec();
 }
