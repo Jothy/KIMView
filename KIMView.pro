@@ -18,6 +18,7 @@ SOURCES +=\
     dvhcalc.cpp \
     dvhdialog.cpp \
     imageviewer2d.cpp \
+    planreader.cpp \
     presetwlwwdialog.cpp \
     selecttargetdialog.cpp \
     utilities.cpp   \
@@ -42,6 +43,7 @@ HEADERS +=\
     createobjects.h \
     doseprofiledialog.h \
     dvhcalc.h \
+    planreader.h \
     presetwlwwdialog.h \
     selecttargetdialog.h \
     utilities.h \
