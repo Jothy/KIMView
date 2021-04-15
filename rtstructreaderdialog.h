@@ -28,30 +28,29 @@ SOFTWARE.
 #include <QDialog>
 
 namespace Ui {
-    class RTStructReaderDialog;
+class RTStructReaderDialog;
 }
 
-class RTStructReaderDialog : public QDialog
-{
-    Q_OBJECT
+class RTStructReaderDialog : public QDialog {
+  Q_OBJECT
 
 public:
-    explicit RTStructReaderDialog(QWidget *parent = 0);
-    ~RTStructReaderDialog();
-    int NumberOfROIs;
-    double ROIColors[50][3]; //No. of ROIs,RGB- maximum 50 ROIs supported for now
-    QList<QString> ROINames;
-    QList<int>selectedItems;
-    QString structFileName;
-    void getSelectedItems();
-
+  explicit RTStructReaderDialog(QWidget *parent = 0);
+  ~RTStructReaderDialog();
+  int NumberOfROIs;
+  double ROIColors[50][3]; // No. of ROIs,RGB- maximum 50 ROIs supported for now
+  QList<QString> ROINames;
+  QList<int> selectedItems;
+  QString structFileName;
+  QString structSetLabel;
+  void getSelectedItems();
 
 private:
-    Ui::RTStructReaderDialog *ui;
+  Ui::RTStructReaderDialog *ui;
 
 private slots:
-    void on_pushButtonRead_clicked();
-    void on_pushButtonChooseFile_clicked();
+  void on_pushButtonRead_clicked();
+  void on_pushButtonChooseFile_clicked();
 };
 
 #endif // RTSTRUCTREADERDIALOG_H
