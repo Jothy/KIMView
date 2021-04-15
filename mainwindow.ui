@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>988</width>
-    <height>586</height>
+    <width>1155</width>
+    <height>663</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -45,7 +45,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>988</width>
+     <width>1155</width>
      <height>22</height>
     </rect>
    </property>
@@ -251,8 +251,8 @@
          <string>Images</string>
         </property>
         <property name="icon">
-         <iconset>
-          <normaloff>:/RC/Icons1/shape_move_forwards.png</normaloff>:/RC/Icons1/shape_move_forwards.png</iconset>
+         <iconset resource="RC.qrc">
+          <normaloff>:/Icons/CT.png</normaloff>:/Icons/CT.png</iconset>
         </property>
        </item>
        <item>
@@ -260,17 +260,17 @@
          <string>Structures</string>
         </property>
         <property name="icon">
-         <iconset>
-          <normaloff>:/RC/Icons2/Polygon.png</normaloff>:/RC/Icons2/Polygon.png</iconset>
+         <iconset resource="RC.qrc">
+          <normaloff>:/Icons/Polygon.png</normaloff>:/Icons/Polygon.png</iconset>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>Beams</string>
+         <string>Plan</string>
         </property>
         <property name="icon">
-         <iconset>
-          <normaloff>:/RC/Icons1/shape_flip_horizontal.png</normaloff>:/RC/Icons1/shape_flip_horizontal.png</iconset>
+         <iconset resource="RC.qrc">
+          <normaloff>:/Icons/Plan.png</normaloff>:/Icons/Plan.png</iconset>
         </property>
        </item>
        <item>
@@ -278,13 +278,13 @@
          <string>Dose</string>
         </property>
         <property name="icon">
-         <iconset>
-          <normaloff>:/RC/Icons1/SphericalDose.PNG</normaloff>:/RC/Icons1/SphericalDose.PNG</iconset>
+         <iconset resource="RC.qrc">
+          <normaloff>:/Icons/Dose.png</normaloff>:/Icons/Dose.png</iconset>
         </property>
        </item>
        <item>
         <property name="text">
-         <string>POI</string>
+         <string/>
         </property>
         <property name="icon">
          <iconset>
@@ -310,13 +310,19 @@
     <layout class="QGridLayout" name="gridLayout_3">
      <item row="0" column="0">
       <widget class="QTableWidget" name="tableWidget">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="font">
         <font>
          <pointsize>10</pointsize>
         </font>
        </property>
        <property name="toolTip">
-        <string>All distances are in mm</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;All distances are in cm&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="inputMethodHints">
+        <set>Qt::ImhNone</set>
        </property>
        <property name="alternatingRowColors">
         <bool>true</bool>
@@ -331,9 +337,6 @@
         <property name="text">
          <string>Beam ID</string>
         </property>
-        <property name="textAlignment">
-         <set>AlignCenter</set>
-        </property>
        </column>
        <column>
         <property name="text">
@@ -342,7 +345,32 @@
        </column>
        <column>
         <property name="text">
-         <string>Gantry</string>
+         <string>Machine</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Type</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Energy</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Gantry Start</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Gantry Stop</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Direction</string>
         </property>
        </column>
        <column>
@@ -393,6 +421,11 @@
        <column>
         <property name="text">
          <string>SSD</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>MU</string>
         </property>
        </column>
       </widget>

@@ -41,6 +41,7 @@ THE SOFTWARE.
 #include <gdcmValue.h>
 #include <vtkMedicalImageProperties.h>
 
+#include <QDebug>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <algorithm>
@@ -126,12 +127,12 @@ void PlanReader::readRTPlan() {
           // qDebug()<<beamName.GetValue()<<"Beam Name";
 
           // Get beam No.
-          gdcm::Attribute<0x300a, 0x00c0> beamNo;
-          beamNo.SetFromDataElement(beamds.GetDataElement(beamNo.GetTag()));
-          details.beamNo = beamNo.GetValue();
+          gdcm::Attribute<0x300a, 0x00c0> beamNum;
+          beamNum.SetFromDataElement(beamds.GetDataElement(beamNum.GetTag()));
+          details.beamNum = beamNum.GetValue();
           // qDebug()<<beamNo.GetValue()<<"Beam No";
 
-          // Get beam name
+          // Get beam type
           gdcm::Attribute<0x300a, 0x00c4> beamType;
           beamType.SetFromDataElement(beamds.GetDataElement(beamType.GetTag()));
           details.beamType = beamType.GetValue();
@@ -148,6 +149,7 @@ void PlanReader::readRTPlan() {
           std::vector<std::vector<double> > mlcX2PosPerBeam;
           std::vector<double> muWeightsCurbeam;
 
+          // Reading control point details
           for (int j = 1; j <= cptSqs->GetNumberOfItems(); j++) {
             gdcm::Item& cptitem = cptSqs->GetItem(j);
             const gdcm::DataSet& cptds =
@@ -155,7 +157,7 @@ void PlanReader::readRTPlan() {
 
             // Except RapidArc and VMAT the beam details except mlc leaf
             // positions remain same for all ctrl pts
-            // may vary for varian large field IMRT, where jaws carriages are
+            // may vary for varian large field IMRT, where jaw carriages are
             // moved in the same field
 
             // Start of reading basic field details other than MLC
@@ -166,6 +168,12 @@ void PlanReader::readRTPlan() {
                   cptds.GetDataElement(beamEnergy.GetTag()));
               details.beamEnergy = beamEnergy.GetValue();
               // qDebug()<<beamEnergy.GetValue()<<"Beam Energy";
+
+              // Get arc direction
+              gdcm::Attribute<0x300a, 0x011f> arcDir;
+              arcDir.SetFromDataElement(cptds.GetDataElement(arcDir.GetTag()));
+              details.arcDirection = arcDir.GetValue();
+              // qDebug() << arcDir.GetValue() << "Arc direction";
 
               // Get Gantry angle
               gdcm::Attribute<0x300a, 0x011e> beamAngle;
@@ -245,6 +253,15 @@ void PlanReader::readRTPlan() {
             }
             // End of reading basic field details other than MLC
 
+            if (j <= cptSqs->GetNumberOfItems()) {
+              // Get Gantry angle
+              gdcm::Attribute<0x300a, 0x011e> beamStopAngle;
+              beamStopAngle.SetFromDataElement(
+                  cptds.GetDataElement(beamStopAngle.GetTag()));
+              details.beamStopAngle = beamStopAngle.GetValue();
+              // qDebug()<<beamAngle.GetValue()<<"Beam Angle ";
+            }
+
             // Get beam energy
             gdcm::Attribute<0x300a, 0x0134> beamWeight;
             beamWeight.SetFromDataElement(
@@ -305,6 +322,8 @@ void PlanReader::readRTPlan() {
             imrtMLCDetails.mlcX2Pos = mlcX2PosPerBeam;
           }
 
+          // Read last ctrl pt beam angle (=arc stop angle for VMAT)
+
           this->planDetailStruct.push_back(details);
           this->mlcDetailStruct.push_back(imrtMLCDetails);
           this->muWeights.push_back(muWeightsCurbeam);
@@ -322,7 +341,7 @@ void PlanReader::readRTPlan() {
         for (int i = 1; i <= refBeamItems->GetNumberOfItems(); i++) {
           this->planDetailStruct[i].mu = 0.0;
           this->planDetailStruct[i].beamDose = 0.0;
-          beamNoList.push_back(this->planDetailStruct[i - 1].beamNo);
+          beamNoList.push_back(this->planDetailStruct[i - 1].beamNum);
         }
 
         for (int i = 1; i <= refBeamItems->GetNumberOfItems(); i++) {
@@ -343,7 +362,7 @@ void PlanReader::readRTPlan() {
           beamDose.SetFromDataElement(
               refBeamItem.GetDataElement(beamDose.GetTag()));
           // Put the MU corresponding to the beam reference No.
-          unsigned int beamNoRef = this->planDetailStruct[i - 1].beamNo;
+          unsigned int beamNoRef = this->planDetailStruct[i - 1].beamNum;
           unsigned int index = beamNoList.indexOf(beamNoRef);
           this->planDetailStruct[index].mu = meterSet.GetValue();
           // qDebug()<<beamDose.GetValue()<<"Beam Dose";

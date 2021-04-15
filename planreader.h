@@ -46,9 +46,11 @@ class PlanReader {
     double ssd;
     QString beamName;
     QString beamType;
-    int beamEnergy;
-    unsigned int beamNo;
+    unsigned int beamEnergy;
+    unsigned int beamNum;
     double beamAngle;
+    double beamStopAngle =
+        -1;  // By default, if this is not set corectly the plan is not VMAT
     double collAngle;
     double couchAngle;
     double fieldX1;
@@ -60,12 +62,14 @@ class PlanReader {
     double icZ;  // Isocenter z
     double mu;
     double beamDose;
+    QString arcDirection;
   };
 
   struct mlcDetail {
     int leafPairs;
     double cmsw;  // Cumulative meter set weight
     QString beamName;
+    QString arcDirection;
     int beamNo;
     double beamAngle;
     double collAngle;

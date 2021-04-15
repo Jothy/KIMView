@@ -24,13 +24,15 @@ SOFTWARE.
 
 #include "mainwindow.h"
 
+#include <QVTKWidget.h>
 #include <gdcmAttribute.h>
 #include <gdcmDataElement.h>
 #include <gdcmItem.h>
 #include <gdcmNestedModuleEntries.h>
 #include <gdcmTag.h>
-
-#include <QVTKWidget.h>
+#include <itkMetaDataDictionary.h>
+#include <omp.h>
+#include <stdlib.h>
 #include <vtkActorCollection.h>
 #include <vtkCamera.h>
 #include <vtkCommand.h>
@@ -69,11 +71,14 @@ SOFTWARE.
 #include <QTimer>
 #include <QTreeWidgetItem>
 #include <QUdpSocket>
-
 #include <iostream>
-#include <omp.h>
-#include <stdlib.h>
+#include <itksys/SystemTools.hxx>
 
+#include "aboutdialog.h"
+#include "createobjects.h"
+#include "dvhdialog.h"
+#include "imageviewer2d.h"
+#include "ipconfigdialog.h"
 #include "itkCastImageFilter.h"
 #include "itkCommand.h"
 #include "itkGDCMImageIO.h"
@@ -86,13 +91,6 @@ SOFTWARE.
 #include "itkNumericSeriesFileNames.h"
 #include "itkSmartPointer.h"
 #include "itkVersion.h"
-#include <itkMetaDataDictionary.h>
-#include <itksys/SystemTools.hxx>
-
-#include "aboutdialog.h"
-#include "createobjects.h"
-#include "imageviewer2d.h"
-#include "ipconfigdialog.h"
 #include "meshreader.h"
 #include "planreader.h"
 #include "rangesliderdialog.h"
@@ -100,7 +98,6 @@ SOFTWARE.
 #include "udplistener.h"
 #include "ui_mainwindow.h"
 #include "wlwwdialog.h"
-#include <dvhdialog.h>
 
 // Testing
 #include <vtkArcSource.h>
@@ -114,6 +111,9 @@ SOFTWARE.
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
+
+  // Make tabel widget read only
+  this->ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
   // Avoid error window popping
   vtkSmartPointer<vtkFileOutputWindow> fileOutputWindow =
@@ -152,12 +152,11 @@ MainWindow::MainWindow(QWidget *parent)
   this->BEVViewer->setWindowTitle("Model");
 
   // By default plan information dock widget is hidden
-  this->ui->dockWidget_2->setVisible(false);
+  this->ui->dockWidget_2->setVisible(true);
   this->ui->mdiAreaView->tileSubWindows();
 }
 
 MainWindow::~MainWindow() { delete ui; }
-
 void MainWindow::on_actionCT_triggered() {
   const unsigned int InputDimension = 3;
   typedef signed short PixelType;
@@ -217,7 +216,7 @@ void MainWindow::on_actionCT_triggered() {
     //        curIOP=QString::fromStdString(val2);
 
     QString supportedIOP =
-        "HFS "; // DICOM seems to be hvaving a space after as "HFS "
+        "HFS ";  // DICOM seems to be hvaving a space after as "HFS "
     // QString supportedIOP="1\\0.0\\0.0\\0.0\\1\\0.0 ";//DICOM seems to be
     // hvaving a space at the end "
     // qDebug()<<curIOP<<"**********"<<supportedIOP;
@@ -259,8 +258,9 @@ void MainWindow::on_actionCT_triggered() {
       NameIDStr.append(PatientInfo["PatientID"]);
       this->ui->treeWidget->setHeaderLabel(NameIDStr);
       this->setWindowTitle(NameIDStr);
+
       // Hide information tree widget
-      this->ui->actionInformation->trigger();
+      // this->ui->actionInformation->trigger();
 
       // Display the data
       this->SagittalViewer =
@@ -271,8 +271,8 @@ void MainWindow::on_actionCT_triggered() {
       this->ui->mdiAreaView->addSubWindow(
           this->SagittalViewer,
           Qt::WindowMaximizeButtonHint |
-              Qt::WindowTitleHint); // add to make borderless window
-                                    // Qt::FramelessWindowHint
+              Qt::WindowTitleHint);  // add to make borderless window
+                                     // Qt::FramelessWindowHint
       this->SagittalViewer->setWindowTitle("Sagittal");
       this->SagittalViewer->show();
 
@@ -281,9 +281,9 @@ void MainWindow::on_actionCT_triggered() {
       this->CoronalViewer->SetImageData(this->CTImage);
       this->CoronalViewer->SetSliceOrientation(2);
       this->CoronalViewer->SetUpView();
-      this->ui->mdiAreaView->addSubWindow(this->CoronalViewer,
-                                          Qt::WindowMaximizeButtonHint |
-                                              Qt::WindowTitleHint);
+      this->ui->mdiAreaView->addSubWindow(
+          this->CoronalViewer,
+          Qt::WindowMaximizeButtonHint | Qt::WindowTitleHint);
       this->CoronalViewer->setWindowTitle("Coronal");
       this->CoronalViewer->show();
 
@@ -292,9 +292,9 @@ void MainWindow::on_actionCT_triggered() {
       this->AxialViewer->SetImageData(this->CTImage);
       this->AxialViewer->SetSliceOrientation(0);
       this->AxialViewer->SetUpView();
-      this->ui->mdiAreaView->addSubWindow(this->AxialViewer,
-                                          Qt::WindowMaximizeButtonHint |
-                                              Qt::WindowTitleHint);
+      this->ui->mdiAreaView->addSubWindow(
+          this->AxialViewer,
+          Qt::WindowMaximizeButtonHint | Qt::WindowTitleHint);
       this->AxialViewer->setWindowTitle("Axial");
       this->AxialViewer->show();
 
@@ -358,7 +358,7 @@ void MainWindow::on_actionStructures_triggered() {
     RTStructReaderDialog *meshReaderDlg = new RTStructReaderDialog(this);
     meshReaderDlg->exec();
 
-    if (meshReaderDlg->ROINames.size() > 0) // Check any ROI exist or not
+    if (meshReaderDlg->ROINames.size() > 0)  // Check any ROI exist or not
     {
       QList<int> selectedStructsList = meshReaderDlg->selectedItems;
       // qDebug()<<selectedStructsList[0]<<"ROI";
@@ -370,11 +370,11 @@ void MainWindow::on_actionStructures_triggered() {
       RTStructReader->getROIMeshes(
           this->CTImage, this->CTImage->GetSpacing()[2], this->TargetReduction,
           meshReaderDlg->selectedItems,
-          this); // Reads ROI name as well as structs
+          this);  // Reads ROI name as well as structs
       QCoreApplication::processEvents();
       this->MeshList = RTStructReader->meshes;
       this->MeshActors = RTStructReader->ROIActors;
-      this->ROIVisibleFlag = 1; // structs imported
+      this->ROIVisibleFlag = 1;  // structs imported
 
       for (int i = 0; i < meshReaderDlg->selectedItems.size(); i++) {
         this->ROIColors[i][0] = RTStructReader->ROIColors[i][0];
@@ -451,7 +451,7 @@ void MainWindow::on_actionDose_triggered() {
       vtkSmartPointer<vtkGDCMImageReader> DoseReader =
           vtkSmartPointer<vtkGDCMImageReader>::New();
       DoseReader->SetFileName(DoseFile.toLatin1());
-      DoseReader->FileLowerLeftOn(); // otherwise flips the image
+      DoseReader->FileLowerLeftOn();  // otherwise flips the image
       DoseReader->SetDataScalarTypeToDouble();
       DoseReader->Update();
       this->RTDose->DeepCopy(DoseReader->GetOutput());
@@ -789,7 +789,7 @@ void MainWindow::on_actionAdd_Arc_triggered() {
   double startAngle = 345.0;
   double stopAngle = 90.0;
   QString direction = "CCW";
-  double arcAngle = 358; // stopAngle - startAngle;
+  double arcAngle = 358;  // stopAngle - startAngle;
   double clipAngle = 360.0 - arcAngle;
 
   float angle = startAngle - stopAngle;
@@ -956,19 +956,143 @@ void MainWindow::on_actionPlan_triggered() {
   PlanReader *myPlanReader = new PlanReader();
   myPlanReader->readRTPlan();
   // qDebug() << "Frs: " << myPlanReader->fractionsPlanned;
-  qDebug() << "No. of beams: " << myPlanReader->numOfBeams;
-  qDebug() << "Plan name: " << myPlanReader->planDetailStruct[0].beamType;
+  // qDebug() << "No. of beams: " << myPlanReader->numOfBeams;
+  // qDebug() << "Plan name: " << myPlanReader->planDetailStruct[0].beamType;
+  // qDebug() << myPlanReader->planDetailStruct[0].beamAngle;
+  // qDebug() << myPlanReader->planDetailStruct[0].beamStopAngle;
 
-  this->ui->tableWidget->setRowCount(5);
+  this->ui->tableWidget->setRowCount(0);
 
-  //  QTableWidgetItem *itemX = this->ui->tableWidget->item(0, 1);
-  //  itemX->setText(
-  //      QCoreApplication::translate("MainWindow", "sdsdgsdg", nullptr));
+  this->ui->treeWidget->topLevelItem(2)->setText(
+      0, QString(myPlanReader->planLabel));
 
-  //  this->ui->tableWidget->item(i, 0)->setText(
-  //      tr(myPlanReader->planDetailStruct[i].beamType.toLatin1()));
+  this->ui->tableWidget->setRowCount(myPlanReader->numOfBeams);
 
-  QTableWidgetItem *item = new QTableWidgetItem;
-  item->setText(tr(myPlanReader->planDetailStruct[0].beamType.toLatin1()));
-  ui->tableWidget->setItem(2, 2, item);
+  for (int i = 0; i < myPlanReader->numOfBeams; i++) {
+    // Add a treeWidegtItem for each beam
+    QTreeWidgetItem *wItem = new QTreeWidgetItem(
+        (QTreeWidget *)nullptr,
+        QStringList(QString(myPlanReader->planDetailStruct[i].beamName)));
+    wItem->setCheckState(0, Qt::Checked);
+    QIcon icon;
+    icon.addFile(QString::fromUtf8(":/Icons/Plan.png"), QSize(12, 12),
+                 QIcon::Normal, QIcon::Off);
+    wItem->setIcon(0, icon);
+    this->ui->treeWidget->topLevelItem(2)->addChild(wItem);
+    this->ui->treeWidget->expandAll();
+
+    QTableWidgetItem *item1 = new QTableWidgetItem;
+    item1->setText(QString::number(myPlanReader->planDetailStruct[i].beamNum));
+    item1->setTextAlignment(Qt::AlignCenter);
+    this->ui->tableWidget->setItem(i, 0, item1);
+
+    QTableWidgetItem *item2 = new QTableWidgetItem;
+    item2->setText(myPlanReader->planDetailStruct[i].beamName.toLatin1());
+    item2->setTextAlignment(Qt::AlignCenter);
+    this->ui->tableWidget->setItem(i, 1, item2);
+
+    QTableWidgetItem *item3 = new QTableWidgetItem;
+    item3->setText(tr(myPlanReader->planDetailStruct[i].mcName.toLatin1()));
+    item3->setTextAlignment(Qt::AlignCenter);
+    this->ui->tableWidget->setItem(i, 2, item3);
+
+    QTableWidgetItem *item4 = new QTableWidgetItem;
+    item4->setText(tr(myPlanReader->planDetailStruct[i].beamType.toLatin1()));
+    item4->setTextAlignment(Qt::AlignCenter);
+    this->ui->tableWidget->setItem(i, 3, item4);
+
+    QTableWidgetItem *item5 = new QTableWidgetItem;
+    item5->setText(
+        QString::number(myPlanReader->planDetailStruct[i].beamEnergy));
+    item5->setTextAlignment(Qt::AlignCenter);
+    this->ui->tableWidget->setItem(i, 4, item5);
+
+    // gantry info goes here later.......................
+
+    QTableWidgetItem *item6 = new QTableWidgetItem;
+    item6->setText(
+        QString::number(myPlanReader->planDetailStruct[i].beamAngle, 'f', 1));
+    item6->setTextAlignment(Qt::AlignCenter);
+    this->ui->tableWidget->setItem(i, 5, item6);
+
+    QTableWidgetItem *item7 = new QTableWidgetItem;
+    item7->setText(QString::number(
+        myPlanReader->planDetailStruct[i].beamStopAngle, 'f', 1));
+    item7->setTextAlignment(Qt::AlignCenter);
+    this->ui->tableWidget->setItem(i, 6, item7);
+
+    QTableWidgetItem *item8 = new QTableWidgetItem;
+    item8->setText(
+        tr(myPlanReader->planDetailStruct[i].arcDirection.toLatin1()));
+    item8->setTextAlignment(Qt::AlignCenter);
+    this->ui->tableWidget->setItem(i, 7, item8);
+
+    QTableWidgetItem *item9 = new QTableWidgetItem;
+    item9->setText(
+        QString::number(myPlanReader->planDetailStruct[i].collAngle, 'f', 1));
+    item9->setTextAlignment(Qt::AlignCenter);
+    this->ui->tableWidget->setItem(i, 8, item9);
+
+    QTableWidgetItem *item10 = new QTableWidgetItem;
+    item10->setText(
+        QString::number(myPlanReader->planDetailStruct[i].couchAngle, 'f', 1));
+    item10->setTextAlignment(Qt::AlignCenter);
+    this->ui->tableWidget->setItem(i, 9, item10);
+
+    QTableWidgetItem *item11 = new QTableWidgetItem;
+    item11->setText(
+        QString::number(myPlanReader->planDetailStruct[i].fieldX1, 'f', 1));
+    item11->setTextAlignment(Qt::AlignCenter);
+    this->ui->tableWidget->setItem(i, 10, item11);
+
+    QTableWidgetItem *item12 = new QTableWidgetItem;
+    item12->setText(
+        QString::number(myPlanReader->planDetailStruct[i].fieldX2, 'f', 1));
+    item12->setTextAlignment(Qt::AlignCenter);
+    this->ui->tableWidget->setItem(i, 11, item12);
+
+    QTableWidgetItem *item13 = new QTableWidgetItem;
+    item13->setText(
+        QString::number(myPlanReader->planDetailStruct[i].fieldY1, 'f', 1));
+    item13->setTextAlignment(Qt::AlignCenter);
+    this->ui->tableWidget->setItem(i, 12, item13);
+
+    QTableWidgetItem *item14 = new QTableWidgetItem;
+    item14->setText(
+        QString::number(myPlanReader->planDetailStruct[i].fieldY2, 'f', 1));
+    item14->setTextAlignment(Qt::AlignCenter);
+    this->ui->tableWidget->setItem(i, 13, item14);
+
+    QTableWidgetItem *item15 = new QTableWidgetItem;
+    item15->setText(
+        QString::number(myPlanReader->planDetailStruct[i].icX, 'f', 1));
+    item15->setTextAlignment(Qt::AlignCenter);
+    this->ui->tableWidget->setItem(i, 14, item15);
+
+    QTableWidgetItem *item16 = new QTableWidgetItem;
+    item16->setText(
+        QString::number(myPlanReader->planDetailStruct[i].icY, 'f', 1));
+    item16->setTextAlignment(Qt::AlignCenter);
+    this->ui->tableWidget->setItem(i, 15, item16);
+
+    QTableWidgetItem *item17 = new QTableWidgetItem;
+    item17->setText(
+        QString::number(myPlanReader->planDetailStruct[i].icZ, 'f', 1));
+    item17->setTextAlignment(Qt::AlignCenter);
+    this->ui->tableWidget->setItem(i, 16, item17);
+
+    QTableWidgetItem *item18 = new QTableWidgetItem;
+    item18->setText(
+        QString::number(myPlanReader->planDetailStruct[i].ssd, 'f', 1));
+    item18->setTextAlignment(Qt::AlignCenter);
+    this->ui->tableWidget->setItem(i, 17, item18);
+
+    QTableWidgetItem *item19 = new QTableWidgetItem;
+    item19->setText(
+        QString::number(myPlanReader->planDetailStruct[i].mu, 'f', 1));
+    item19->setTextAlignment(Qt::AlignCenter);
+    this->ui->tableWidget->setItem(i, 18, item19);
+  }
+
+  delete myPlanReader;
 }
