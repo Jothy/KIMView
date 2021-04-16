@@ -108,6 +108,14 @@ SOFTWARE.
 #include <vtkLineSource.h>
 #include <vtkPolarAxesActor.h>
 
+#include <itkCenteredEuler3DTransform.h>
+#include <itkRayCastInterpolateImageFunction.h>
+#include <itkResampleImageFilter.h>
+#include <itkRescaleIntensityImageFilter.h>
+#include <itkVTKImageToImageFilter.h>
+#include <vtkImageMapToColors.h>
+#include <vtkLookupTable.h>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
@@ -768,20 +776,166 @@ void MainWindow::on_actionHello_UDP_triggered() {
 }
 
 void MainWindow::on_actionMove_ROI_triggered() {
-  // double XYZ[3]={-5,10,20};
-  QString text = QInputDialog::getText(
-      this, tr("Enter shifts (XYZ)"), tr("X,Y,Z:"), QLineEdit::Normal, "0,0,0");
-  double x = text.split(',')[0].toDouble();
-  double y = text.split(',')[1].toDouble();
-  double z = text.split(',')[2].toDouble();
+  // DRR begins
+  vtkSmartPointer<vtkImageData> imagevtk = vtkSmartPointer<vtkImageData>::New();
+  imagevtk = this->CTImage;
 
-  QElapsedTimer timer;
-  timer.start();
+  const unsigned int Dimension = 3;
+  typedef short InputPixelType;
+  typedef unsigned char OutputPixelType;
+  typedef itk::Image<InputPixelType, 3> InputImageType;
+  typedef itk::Image<OutputPixelType, 3> OutputImageType;
 
-  qDebug() << "Rendering took" << timer.elapsed() << "milliseconds";
-  QMessageBox messageBox;
-  messageBox.information(this, "Error", QString::number(timer.elapsed()));
-  messageBox.show();
+  float rx = 90.0;
+  float ry = 0.0;
+  float rz = 0.0; // 0 deg gantry
+  float tx = 0.0;
+  float ty = 0.0;
+  float tz = 0.0;
+  float cx = 0.0;
+  float cy = 0.0;
+  float cz = 0.0;
+  float sid = 1000.0; // 150 cm
+  float sx = 2.0;
+  float sy = 2.0;
+  int dx = 501;
+  int dy = 501;
+  float o2Dx = 0;
+  float o2Dy = 0;
+  double threshold = 0;
+
+  // Convert vtk image to itk image
+  typedef itk::Image<short, 3> InputImageType1;
+  typedef itk::VTKImageToImageFilter<InputImageType1> VTKImageToImageTypeInput;
+  VTKImageToImageTypeInput::Pointer converterInput =
+      VTKImageToImageTypeInput::New();
+  converterInput->SetInput(imagevtk);
+  converterInput->Update();
+  qDebug() << "Conversion done";
+
+  // image=converterInput->GetOutput();
+
+  typedef itk::ResampleImageFilter<InputImageType, InputImageType> FilterType;
+  FilterType::Pointer filter = FilterType::New();
+  filter->SetInput(converterInput->GetOutput());
+  filter->SetDefaultPixelValue(0);
+
+  typedef itk::CenteredEuler3DTransform<double> TransformType;
+  TransformType::Pointer transform = TransformType::New();
+  transform->SetComputeZYX(true);
+  TransformType::OutputVectorType translation;
+
+  translation[0] = tx;
+  translation[1] = ty;
+  translation[2] = tz;
+
+  // constant for converting degrees into radians
+  const double dtr = (vcl_atan(1.0) * 4.0) / 180.0;
+  qDebug() << "Conversion done";
+  transform->SetTranslation(translation);
+  transform->SetRotation(dtr * rx, dtr * ry, dtr * rz);
+
+  InputImageType::PointType imOrigin = converterInput->GetOutput()->GetOrigin();
+  InputImageType::SpacingType imRes = converterInput->GetOutput()->GetSpacing();
+
+  typedef InputImageType::RegionType InputImageRegionType;
+  typedef InputImageRegionType::SizeType InputImageSizeType;
+
+  InputImageRegionType imRegion =
+      converterInput->GetOutput()->GetBufferedRegion();
+  InputImageSizeType imSize = imRegion.GetSize();
+
+  imOrigin[0] += imRes[0] * static_cast<double>(imSize[0]) / 2.0;
+  imOrigin[1] += imRes[1] * static_cast<double>(imSize[1]) / 2.0;
+  imOrigin[2] += imRes[2] * static_cast<double>(imSize[2]) / 2.0;
+
+  TransformType::InputPointType center;
+  center[0] = cx + imOrigin[0];
+  center[1] = cy + imOrigin[1];
+  center[2] = cz + imOrigin[2];
+
+  transform->SetCenter(center);
+
+  typedef itk::RayCastInterpolateImageFunction<InputImageType, double>
+      InterpolatorType;
+  InterpolatorType::Pointer interpolator = InterpolatorType::New();
+  interpolator->SetTransform(transform);
+  interpolator->SetThreshold(threshold);
+
+  InterpolatorType::InputPointType focalpoint;
+
+  focalpoint[0] = imOrigin[0];
+  focalpoint[1] = imOrigin[1];
+  focalpoint[2] = imOrigin[2] - sid / 2.;
+
+  interpolator->SetFocalPoint(focalpoint);
+
+  filter->SetInterpolator(interpolator);
+  filter->SetTransform(transform);
+
+  InputImageType::SizeType size;
+  size[0] = dx; // number of pixels along X of the 2D DRR image
+  size[1] = dy; // number of pixels along Y of the 2D DRR image
+  size[2] = 1;  // only one slice
+
+  filter->SetSize(size);
+
+  InputImageType::SpacingType spacing;
+  spacing[0] = sx;  // pixel spacing along X of the 2D DRR image [mm]
+  spacing[1] = sy;  // pixel spacing along Y of the 2D DRR image [mm]
+  spacing[2] = 2.0; // slice thickness of the 2D DRR image [mm]
+  filter->SetOutputSpacing(spacing);
+
+  double origin[Dimension];
+  origin[0] = imOrigin[0] + o2Dx - sx * ((double)dx - 1.) / 2.;
+  origin[1] = imOrigin[1] + o2Dy - sy * ((double)dy - 1.) / 2.;
+  origin[2] = imOrigin[2] + sid / 2.;
+  filter->SetOutputOrigin(origin);
+
+  typedef itk::RescaleIntensityImageFilter<InputImageType, OutputImageType>
+      RescaleFilterType;
+  RescaleFilterType::Pointer rescaler = RescaleFilterType::New();
+  rescaler->SetOutputMinimum(0);
+  rescaler->SetOutputMaximum(255);
+  rescaler->SetInput(filter->GetOutput());
+  qDebug() << "Conversion done";
+
+  typedef itk::Image<unsigned char, 3> OutImageType;
+  typedef itk::ImageToVTKImageFilter<OutImageType> ImageToVTKImageType;
+  ImageToVTKImageType::Pointer converter2 = ImageToVTKImageType::New();
+  converter2->SetInput(rescaler->GetOutput());
+  converter2->Update();
+  qDebug() << "Converted back to VTK Image";
+
+  // qDebug()<<converter2->GetOutput()->GetScalarRange()[0]<<converter2->GetOutput()->GetScalarRange()[1];
+
+  // Create a greyscale lookup table
+  vtkSmartPointer<vtkLookupTable> table =
+      vtkSmartPointer<vtkLookupTable>::New();
+  table->SetRange(0, 370);             // image intensity range
+  table->SetValueRange(0, 1.0);        // from black to white
+  table->SetSaturationRange(0.0, 0.0); // no color saturation
+  table->SetRampToLinear();
+  table->Build();
+
+  // Map the image through the lookup table
+  vtkSmartPointer<vtkImageMapToColors> color =
+      vtkSmartPointer<vtkImageMapToColors>::New();
+  color->SetLookupTable(table);
+  color->SetInputData(converter2->GetOutput());
+  color->Update();
+
+  vtkSmartPointer<vtkImageActor> imgact = vtkSmartPointer<vtkImageActor>::New();
+  imgact->SetInputData(color->GetOutput());
+  // imgact->SetUserTransform(this->userTransform);
+  imgact->RotateX(90);
+  imgact->RotateY(-180);
+  double iso[3] = {-12.0, 124, -30};
+  imgact->SetPosition(iso);
+  imgact->SetOpacity(0.8);
+
+  this->BEVViewer->ModelRenderer->AddActor(imgact);
+  this->BEVViewer->ModelRenderer->Render();
 }
 
 void MainWindow::on_actionRotate_ROI_triggered() {
