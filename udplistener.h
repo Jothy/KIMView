@@ -40,7 +40,7 @@ SOFTWARE.
 
 class UDPListener : public QObject {
   Q_OBJECT
-public:
+ public:
   explicit UDPListener(QObject *parent = nullptr);
   ~UDPListener();
   void HelloUDP();
@@ -66,7 +66,7 @@ public:
   double (*ROIColors)[3];
   unsigned int selectedStructureNum;
   QList<QString> ROINames;
-  bool connectionState = false; // disconnected by default
+  bool connectionState = false;  // disconnected by default
 
   QWidget *parent;
   struct UDPMsg {
@@ -80,15 +80,15 @@ public:
     bool beamHold = false;
   };
 
-signals:
+ signals:
 
-public slots:
+ public slots:
   void readMessage();
   void StartListening();
   void StopListening();
 
-private:
+ private:
   QUdpSocket *socket;
 };
 
-#endif // UDPLISTENER_H
+#endif  // UDPLISTENER_H

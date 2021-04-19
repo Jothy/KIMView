@@ -24,25 +24,20 @@ SOFTWARE.
 
 #include "utilities.h"
 
-#include<vtkTransform.h>
-#include<vtkSmartPointer.h>
-#include<vtkMatrix4x4.h>
+#include <vtkMatrix4x4.h>
+#include <vtkSmartPointer.h>
+#include <vtkTransform.h>
 
-#include<QDebug>
+#include <QDebug>
 
-Utilities::Utilities()
-{
+Utilities::Utilities() {}
 
-}
-
-double *Utilities::IEC2LPS(double IEC[3])
-{
-    vtkSmartPointer<vtkTransform>IEC2LPSTransform=
-            vtkSmartPointer<vtkTransform>::New();
-    IEC2LPSTransform->Identity();
-    IEC2LPSTransform->RotateX(90);
-    double *LPS=IEC2LPSTransform->TransformPoint(IEC);
-    //qDebug()<<out[0] <<out[1] <<out[2];
-    return LPS;
-
+double *Utilities::IEC2LPS(double IEC[3]) {
+  vtkSmartPointer<vtkTransform> IEC2LPSTransform =
+      vtkSmartPointer<vtkTransform>::New();
+  IEC2LPSTransform->Identity();
+  IEC2LPSTransform->RotateX(90);
+  double *LPS = IEC2LPSTransform->TransformPoint(IEC);
+  // qDebug()<<out[0] <<out[1] <<out[2];
+  return LPS;
 }

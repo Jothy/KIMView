@@ -24,33 +24,34 @@ SOFTWARE.
 
 #ifndef Q_DOUBLE_SLIDER_H
 #define Q_DOUBLE_SLIDER_H
-#include <QtGui/QtGui>
+
 #include <QSlider>
-class QDoubleSlider : public QSlider
-{
-    Q_OBJECT
+#include <QtGui/QtGui>
 
-public:
-    QDoubleSlider(QWidget* pParent = NULL);
+class QDoubleSlider : public QSlider {
+  Q_OBJECT
 
-    void setRange(double Min, double Max);
-    void setMinimum(double Min);
-    double minimum() const;
-    void setMaximum(double Max);
-    double maximum() const;
-    double value() const;
+ public:
+  QDoubleSlider(QWidget* pParent = NULL);
 
-    public slots:
-    void setValue(int value);
-    void setValue(double Value, bool BlockSignals = false);
+  void setRange(double Min, double Max);
+  void setMinimum(double Min);
+  double minimum() const;
+  void setMaximum(double Max);
+  double maximum() const;
+  double value() const;
 
-    private slots:
+ public slots:
+  void setValue(int value);
+  void setValue(double Value, bool BlockSignals = false);
 
-signals :
-    void valueChanged(double Value);
-    void rangeChanged(double Min, double Max);
+ private slots:
 
-private:
-    double	m_Multiplier;
+ signals:
+  void valueChanged(double Value);
+  void rangeChanged(double Min, double Max);
+
+ private:
+  double m_Multiplier;
 };
 #endif

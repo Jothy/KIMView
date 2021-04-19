@@ -53,8 +53,8 @@ PlanReader::~PlanReader() {}
 
 void PlanReader::readRTPlan() {
   QString planFile = QFileDialog::getOpenFileName(0, "Open RT Plan");
-  this->numOfBeams = 0; // Reset to 0
-  if (planFile != NULL) // Check whether the file is selected or not
+  this->numOfBeams = 0;  // Reset to 0
+  if (planFile != NULL)  // Check whether the file is selected or not
   {
     gdcm::Reader RTreader;
     RTreader.SetFileName(planFile.toLatin1().data());
@@ -68,10 +68,10 @@ void PlanReader::readRTPlan() {
 
     else {
       const gdcm::DataSet &ds = RTreader.GetFile().GetDataSet();
-      gdcm::Tag dosecsq(0x300a, 0x0010); // Dose ref sequence
-      gdcm::Tag fgcsq(0x300a, 0x0070);   // Fraction group sequence
-      gdcm::Tag bcsq(0x300a, 0x00b0);    // Beam group sequence
-      gdcm::Tag cpcsq(0x300a, 0x0111);   // Control pt sequence
+      gdcm::Tag dosecsq(0x300a, 0x0010);  // Dose ref sequence
+      gdcm::Tag fgcsq(0x300a, 0x0070);    // Fraction group sequence
+      gdcm::Tag bcsq(0x300a, 0x00b0);     // Beam group sequence
+      gdcm::Tag cpcsq(0x300a, 0x0111);    // Control pt sequence
 
       gdcm::Attribute<0x300a, 0x0002> planLabel;
       planLabel.SetFromDataElement(ds.GetDataElement(planLabel.GetTag()));
@@ -93,7 +93,7 @@ void PlanReader::readRTPlan() {
         mlcDetail imrtMLCDetails;
         const gdcm::DataElement &fractionSq = ds.GetDataElement(fgcsq);
         gdcm::SmartPointer<gdcm::SequenceOfItems> fsqi =
-            fractionSq.GetValueAsSQ(); // fraction sequence
+            fractionSq.GetValueAsSQ();  // fraction sequence
         // qDebug()<<fsqi->GetNumberOfItems()<<"No. of fractions group";
         gdcm::Attribute<0x300a, 0x0078> fractionsPlanned;
         gdcm::Item &fgitem = fsqi->GetItem(1);
@@ -106,7 +106,7 @@ void PlanReader::readRTPlan() {
 
         const gdcm::DataElement &beamSq = ds.GetDataElement(bcsq);
         gdcm::SmartPointer<gdcm::SequenceOfItems> bsqi =
-            beamSq.GetValueAsSQ(); // fraction sequence
+            beamSq.GetValueAsSQ();  // fraction sequence
         int numOfBeams = bsqi->GetNumberOfItems();
         // qDebug()<<numOfBeams<<"No. of beams";
         this->numOfBeams = numOfBeams;
@@ -115,7 +115,7 @@ void PlanReader::readRTPlan() {
           gdcm::Item &beamitem = bsqi->GetItem(i);
           // Get m/c Name
           const gdcm::DataSet &beamds = beamitem.GetNestedDataSet();
-          gdcm::Attribute<0x300a, 0x00b2> mcName; // m/c name
+          gdcm::Attribute<0x300a, 0x00b2> mcName;  // m/c name
           mcName.SetFromDataElement(beamds.GetDataElement(mcName.GetTag()));
           details.mcName = mcName.GetValue();
           // qDebug()<<mcName.GetValue()<<"m/c Name";
@@ -141,7 +141,7 @@ void PlanReader::readRTPlan() {
           // Get control point sequence
           const gdcm::DataElement &cpSq = beamitem.GetDataElement(cpcsq);
           gdcm::SmartPointer<gdcm::SequenceOfItems> cptSqs =
-              cpSq.GetValueAsSQ(); // fraction sequence
+              cpSq.GetValueAsSQ();  // fraction sequence
           // qDebug()<<cptSqs->GetNumberOfItems() <<"No. of ctrl pts";
           imrtMLCDetails.numCtrlPts = cptSqs->GetNumberOfItems();
 
@@ -153,7 +153,7 @@ void PlanReader::readRTPlan() {
           for (int j = 1; j <= cptSqs->GetNumberOfItems(); j++) {
             gdcm::Item &cptitem = cptSqs->GetItem(j);
             const gdcm::DataSet &cptds =
-                cptitem.GetNestedDataSet(); // ctrl pt dataSet
+                cptitem.GetNestedDataSet();  // ctrl pt dataSet
 
             // Except RapidArc and VMAT the beam details except mlc leaf
             // positions remain same for all ctrl pts
@@ -200,10 +200,10 @@ void PlanReader::readRTPlan() {
               gdcm::Attribute<0x300a, 0x0130> ssd;
               gdcm::Tag ssdTag(0x300a, 0x0130);
               if (cptds.FindDataElement(
-                      ssdTag)) // May not be available in some cases
+                      ssdTag))  // May not be available in some cases
               {
                 ssd.SetFromDataElement(cptds.GetDataElement(ssd.GetTag()));
-                details.ssd = ssd.GetValue() / 10; // mm to cm
+                details.ssd = ssd.GetValue() / 10;  // mm to cm
                 // qDebug()<<ssd.GetValue()<<"SSD";
               } else {
                 details.ssd = 0.0;
@@ -215,31 +215,31 @@ void PlanReader::readRTPlan() {
               const gdcm::DataElement &beamLimitSq =
                   cptds.GetDataElement(beamLimit);
               gdcm::SmartPointer<gdcm::SequenceOfItems> beamLimitSqs =
-                  beamLimitSq.GetValueAsSQ(); // beam limit device sequence
+                  beamLimitSq.GetValueAsSQ();  // beam limit device sequence
               // qDebug()<<beamLimitSqs->GetNumberOfItems()<<"No. of beam
               // limiting devices";
 
               // Get FieldX1 & FieldX2
               gdcm::Item deviceItemX = beamLimitSqs->GetItem(1);
               const gdcm::DataSet &beamLimitdsX =
-                  deviceItemX.GetNestedDataSet(); // beam limit dataSet X
+                  deviceItemX.GetNestedDataSet();  // beam limit dataSet X
               gdcm::Attribute<0x300a, 0x011c> fieldX;
               fieldX.SetFromDataElement(
                   beamLimitdsX.GetDataElement(fieldX.GetTag()));
-              details.fieldX1 = fieldX.GetValues()[0] / 10; // mm to cm
-              details.fieldX2 = fieldX.GetValues()[1] / 10; // mm to cm
+              details.fieldX1 = fieldX.GetValues()[0] / 10;  // mm to cm
+              details.fieldX2 = fieldX.GetValues()[1] / 10;  // mm to cm
               // qDebug()<<fieldX.GetValues()[0]<<fieldX.GetValues()[1]<<"Field
               // X";
 
               // Get FieldY1 & FieldY2
               gdcm::Item deviceItemY = beamLimitSqs->GetItem(2);
               const gdcm::DataSet &beamLimitdsY =
-                  deviceItemY.GetNestedDataSet(); // beam limit dataSet Y
+                  deviceItemY.GetNestedDataSet();  // beam limit dataSet Y
               gdcm::Attribute<0x300a, 0x011c> fieldY;
               fieldY.SetFromDataElement(
                   beamLimitdsY.GetDataElement(fieldY.GetTag()));
-              details.fieldY1 = fieldY.GetValues()[0] / 10; // mm to cm
-              details.fieldY2 = fieldY.GetValues()[1] / 10; // mm to cm
+              details.fieldY1 = fieldY.GetValues()[0] / 10;  // mm to cm
+              details.fieldY2 = fieldY.GetValues()[1] / 10;  // mm to cm
               // qDebug()<<fieldY.GetValues()[0]<<fieldY.GetValues()[1]<<"Field
               // Y";
 
@@ -247,9 +247,9 @@ void PlanReader::readRTPlan() {
               gdcm::Attribute<0x300a, 0x012c> isocenter;
               isocenter.SetFromDataElement(
                   cptds.GetDataElement(isocenter.GetTag()));
-              details.icX = isocenter.GetValues()[0] / 10; // IC X (mm to cm)
-              details.icY = isocenter.GetValues()[1] / 10; // IC Y (mm to cm)
-              details.icZ = isocenter.GetValues()[2] / 10; // IC Z (mm to cm)
+              details.icX = isocenter.GetValues()[0] / 10;  // IC X (mm to cm)
+              details.icY = isocenter.GetValues()[1] / 10;  // IC Y (mm to cm)
+              details.icZ = isocenter.GetValues()[2] / 10;  // IC Z (mm to cm)
             }
             // End of reading basic field details other than MLC
 
@@ -275,7 +275,7 @@ void PlanReader::readRTPlan() {
               const gdcm::DataElement &beamLimitSq =
                   cptds.GetDataElement(beamLimit);
               gdcm::SmartPointer<gdcm::SequenceOfItems> beamLimitSqs =
-                  beamLimitSq.GetValueAsSQ(); // beam limit device sequence
+                  beamLimitSq.GetValueAsSQ();  // beam limit device sequence
               // qDebug()<<beamLimitSqs->GetNumberOfItems()<<"No. of beam
               // limiting devices";
 
@@ -290,7 +290,7 @@ void PlanReader::readRTPlan() {
               }
 
               const gdcm::DataSet &beamLimitMLC =
-                  deviceItemMLC.GetNestedDataSet(); // beam limit dataSet MLC
+                  deviceItemMLC.GetNestedDataSet();  // beam limit dataSet MLC
               gdcm::Attribute<0x300a, 0x011c> mlcLeafPositions;
 
               mlcLeafPositions.SetFromDataElement(
@@ -329,10 +329,10 @@ void PlanReader::readRTPlan() {
           this->muWeights.push_back(muWeightsCurbeam);
         }
 
-        gdcm::Tag refBeamSq(0x300c, 0x0004); // Referenced beam sequence
+        gdcm::Tag refBeamSq(0x300c, 0x0004);  // Referenced beam sequence
         const gdcm::DataElement &refBeams = fgitem.GetDataElement(refBeamSq);
         gdcm::SmartPointer<gdcm::SequenceOfItems> refBeamItems =
-            refBeams.GetValueAsSQ(); // ref beam sequence
+            refBeams.GetValueAsSQ();  // ref beam sequence
         // qDebug()<<refBeamItems->GetNumberOfItems()<<"No. of referenced
         // beams";
 

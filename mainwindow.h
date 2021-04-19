@@ -36,6 +36,8 @@ SOFTWARE.
 #include <vtkRenderWindowInteractor.h>
 #include <vtkRenderer.h>
 #include <vtkSmartPointer.h>
+#include <vtkTransform.h>
+#include <vtkTransformPolyDataFilter.h>
 
 #include <QActionGroup>
 #include <QCloseEvent>
@@ -49,8 +51,6 @@ SOFTWARE.
 #include <bevwidget.h>
 #include <imageviewer2d.h>
 #include <udplistener.h>
-#include <vtkTransform.h>
-#include <vtkTransformPolyDataFilter.h>
 
 namespace Ui {
 class MainWindow;
