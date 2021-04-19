@@ -277,6 +277,10 @@ ImageViewer2D::ImageViewer2D(QWidget *parent, QActionGroup *contextMenus)
   this->ScalarBarVisibility = 0;
 
   setAcceptDrops(true);
+
+  // Automoatically resolves contour/beams coincidence with image (being on the
+  // same plane)
+  vtkMapper::SetResolveCoincidentTopologyToPolygonOffset();
 }
 
 ImageViewer2D::~ImageViewer2D() { delete ui; }
@@ -962,7 +966,6 @@ vtkSmartPointer<vtkActor> ImageViewer2D::CutROI(vtkPolyData *mesh,
   vtkSmartPointer<vtkPolyDataMapper> cutterMapper =
       vtkSmartPointer<vtkPolyDataMapper>::New();
   cutterMapper->SetResolveCoincidentTopologyToPolygonOffset();
-  // cutterMapper->SetResolveCoincidentTopologyPolygonOffsetParameters(10,10);
   cutterMapper->SetInputConnection(cutter->GetOutputPort());
   cutterMapper->ScalarVisibilityOff();
   // cutterMapper->ImmediateModeRenderingOn();
@@ -975,7 +978,6 @@ vtkSmartPointer<vtkActor> ImageViewer2D::CutROI(vtkPolyData *mesh,
 
   //  vtkSmartPointer<vtkDataSetMapper> cutterMapper =
   //      vtkSmartPointer<vtkDataSetMapper>::New();
-  //  // cutterMapper->SetResolveCoincidentTopologyToPolygonOffset();
   //  cutterMapper->SetInputConnection(poly->GetOutputPort());
   //  cutterMapper->ScalarVisibilityOff();
   //  cutterMapper->Update();
