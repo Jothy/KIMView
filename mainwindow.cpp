@@ -278,9 +278,8 @@ void MainWindow::on_actionCT_triggered() {
       this->SagittalViewer->SetUpView();
       this->ui->mdiAreaView->addSubWindow(
           this->SagittalViewer,
-          Qt::WindowMaximizeButtonHint |
-              Qt::WindowTitleHint);  // add to make borderless window
-                                     // Qt::FramelessWindowHint
+          Qt::WindowMaximizeButtonHint | Qt::WindowTitleHint);
+      // add to make borderless window Qt::FramelessWindowHint
       this->SagittalViewer->setWindowTitle("Sagittal");
       this->SagittalViewer->show();
 
@@ -943,190 +942,23 @@ void MainWindow::on_actionRotate_ROI_triggered() {
 }
 
 void MainWindow::on_actionAdd_Arc_triggered() {
-  double radius = 250;
-  double startAngle = 180.1;
-  double stopAngle = 179.9;
-  QString direction = "CW";
-  double arcAngle = 359.8;  // stopAngle - startAngle;
-  double clipAngle = 360.0 - arcAngle;
+  CreateObjects *arcCreator = new CreateObjects;
 
-  float angle = startAngle - stopAngle;
-  float rad = angle * vtkMath::Pi() / 180.0;
-  float radOutside = (2 * vtkMath::Pi()) - rad;
+  vtkSmartPointer<vtkAssembly> arc1 = vtkSmartPointer<vtkAssembly>::New();
+  vtkSmartPointer<vtkAssembly> arc2 = vtkSmartPointer<vtkAssembly>::New();
+  arc1 = arcCreator->createArc(250.0, 181.0, 179.0, "CW", this->Isocentre);
+  arc2 = arcCreator->createArc(275.0, 160.0, 200.0, "CCW", this->Isocentre);
 
-  float arc_length = radOutside * radius;
-
-  double xCord1 = radius * cos(vtkMath::RadiansFromDegrees(startAngle));
-  double yCord1 = radius * sin(vtkMath::RadiansFromDegrees(startAngle));
-  double xCord2 = radius * cos(vtkMath::RadiansFromDegrees(stopAngle));
-  double yCord2 = radius * sin(vtkMath::RadiansFromDegrees(stopAngle));
-
-  vtkSmartPointer<vtkAssembly> arcAssembly =
-      vtkSmartPointer<vtkAssembly>::New();
-
-  vtkSmartPointer<vtkArcSource> arcSource =
-      vtkSmartPointer<vtkArcSource>::New();
-  arcSource->SetResolution(360);
-  arcSource->SetPoint1(xCord1, yCord1, 0);
-  arcSource->SetPoint2(xCord2, yCord2, 0);
-  if (clipAngle < arcAngle) {
-    arcSource->NegativeOn();
-  }
-
-  else if (clipAngle >= arcAngle) {
-    arcSource->NegativeOff();
-  }
-  arcSource->Update();
-
-  // Visualize
-  vtkSmartPointer<vtkPolyDataMapper> mapper =
-      vtkSmartPointer<vtkPolyDataMapper>::New();
-  mapper->SetInputConnection(arcSource->GetOutputPort());
-
-  vtkSmartPointer<vtkActor> arcActor = vtkSmartPointer<vtkActor>::New();
-  arcActor->SetMapper(mapper);
-  arcActor->GetProperty()->SetColor(1, 1, 0);
-  arcActor->GetProperty()->SetLineWidth(2.0);
-  arcActor->SetPosition(-12, 126, -32);
-  arcActor->RotateZ(-90);
-
-  vtkSmartPointer<vtkLineSource> arcStart =
-      vtkSmartPointer<vtkLineSource>::New();
-  arcStart->SetPoint1(0, 0, 0);
-  arcStart->SetPoint2(xCord2, yCord2, 0);
-
-  // Visualize
-  vtkSmartPointer<vtkPolyDataMapper> arcStartMapper =
-      vtkSmartPointer<vtkPolyDataMapper>::New();
-  arcStartMapper->SetInputConnection(arcStart->GetOutputPort());
-
-  vtkSmartPointer<vtkActor> arcStartActor = vtkSmartPointer<vtkActor>::New();
-  arcStartActor->SetMapper(arcStartMapper);
-  arcStartActor->GetProperty()->SetColor(1, 0, 0);
-  arcStartActor->GetProperty()->SetLineWidth(0.5);
-  arcStartActor->SetPosition(-12, 126, -32);
-  arcStartActor->RotateZ(-90);
-
-  vtkSmartPointer<vtkLineSource> arcStop =
-      vtkSmartPointer<vtkLineSource>::New();
-  arcStop->SetPoint2(0, 0, 0);
-  arcStop->SetPoint2(xCord1, yCord1, 0);
-
-  // Visualize
-  vtkSmartPointer<vtkPolyDataMapper> arcStopMapper =
-      vtkSmartPointer<vtkPolyDataMapper>::New();
-  arcStopMapper->SetInputConnection(arcStop->GetOutputPort());
-
-  vtkSmartPointer<vtkActor> arcStopActor = vtkSmartPointer<vtkActor>::New();
-  arcStopActor->SetMapper(arcStopMapper);
-  arcStopActor->GetProperty()->SetColor(0, 1, 0);
-  arcStopActor->GetProperty()->SetLineWidth(0.5);
-  arcStopActor->SetPosition(-12, 126, -32);
-  arcStopActor->RotateZ(-90);
-
-  arcAssembly->AddPart(arcActor);
-  arcAssembly->AddPart(arcStartActor);
-  arcAssembly->AddPart(arcStopActor);
-
-  this->BEVViewer->ModelRenderer->AddViewProp(arcAssembly);
+  this->BEVViewer->ModelRenderer->AddViewProp(arc1);
+  this->BEVViewer->ModelRenderer->AddViewProp(arc2);
   this->BEVViewer->ModelRenderer->GetRenderWindow()->Render();
 
-  this->AxialViewer->ViewRenderer->AddActor(arcAssembly);
+  this->AxialViewer->ViewRenderer->AddActor(arc1);
+  this->AxialViewer->ViewRenderer->AddActor(arc2);
   this->AxialViewer->ViewRenderer->ResetCamera();
   this->AxialViewer->ViewRenderer->GetRenderWindow()->Render();
 
-  /***************************************************************/
-  double radius2 = 275;
-  double startAngle2 = 195;
-  double stopAngle2 = 165;
-  QString direction2 = "CW";
-  double arcAngle2 = 250;  // stopAngle - startAngle;
-  double clipAngle2 = 360.0 - arcAngle;
-
-  float angle2 = startAngle2 - stopAngle2;
-  float rad2 = angle2 * vtkMath::Pi() / 180.0;
-  float radOutside2 = (2 * vtkMath::Pi()) - rad;
-
-  float arc_length2 = radOutside2 * radius2;
-
-  double xCord12 = radius2 * cos(vtkMath::RadiansFromDegrees(startAngle2));
-  double yCord12 = radius2 * sin(vtkMath::RadiansFromDegrees(startAngle2));
-  double xCord22 = radius2 * cos(vtkMath::RadiansFromDegrees(stopAngle2));
-  double yCord22 = radius2 * sin(vtkMath::RadiansFromDegrees(stopAngle2));
-
-  vtkSmartPointer<vtkAssembly> arcAssembly2 =
-      vtkSmartPointer<vtkAssembly>::New();
-
-  vtkSmartPointer<vtkArcSource> arcSource2 =
-      vtkSmartPointer<vtkArcSource>::New();
-  arcSource2->SetResolution(360);
-  arcSource2->SetPoint1(xCord12, yCord12, 0);
-  arcSource2->SetPoint2(xCord22, yCord22, 0);
-  if (clipAngle2 < arcAngle2) {
-    arcSource2->NegativeOn();
-  }
-
-  else if (clipAngle2 >= arcAngle2) {
-    arcSource2->NegativeOff();
-  }
-  arcSource2->Update();
-
-  // Visualize
-  vtkSmartPointer<vtkPolyDataMapper> mapper2 =
-      vtkSmartPointer<vtkPolyDataMapper>::New();
-  mapper2->SetInputConnection(arcSource2->GetOutputPort());
-
-  vtkSmartPointer<vtkActor> arcActor2 = vtkSmartPointer<vtkActor>::New();
-  arcActor2->SetMapper(mapper2);
-  arcActor2->GetProperty()->SetColor(1, 1, 0);
-  arcActor2->GetProperty()->SetLineWidth(2.0);
-  arcActor2->SetPosition(-12, 126, -32);
-  arcActor2->RotateZ(-90);
-
-  vtkSmartPointer<vtkLineSource> arcStart2 =
-      vtkSmartPointer<vtkLineSource>::New();
-  arcStart2->SetPoint1(0, 0, 0);
-  arcStart2->SetPoint2(xCord22, yCord22, 0);
-
-  // Visualize
-  vtkSmartPointer<vtkPolyDataMapper> arcStartMapper2 =
-      vtkSmartPointer<vtkPolyDataMapper>::New();
-  arcStartMapper2->SetInputConnection(arcStart2->GetOutputPort());
-
-  vtkSmartPointer<vtkActor> arcStartActor2 = vtkSmartPointer<vtkActor>::New();
-  arcStartActor2->SetMapper(arcStartMapper2);
-  arcStartActor2->GetProperty()->SetColor(1, 0, 0);
-  arcStartActor2->GetProperty()->SetLineWidth(0.5);
-  arcStartActor2->SetPosition(-12, 126, -32);
-  arcStartActor2->RotateZ(-90);
-
-  vtkSmartPointer<vtkLineSource> arcStop2 =
-      vtkSmartPointer<vtkLineSource>::New();
-  arcStop2->SetPoint2(0, 0, 0);
-  arcStop2->SetPoint2(xCord12, yCord12, 0);
-
-  // Visualize
-  vtkSmartPointer<vtkPolyDataMapper> arcStopMapper2 =
-      vtkSmartPointer<vtkPolyDataMapper>::New();
-  arcStopMapper2->SetInputConnection(arcStop2->GetOutputPort());
-
-  vtkSmartPointer<vtkActor> arcStopActor2 = vtkSmartPointer<vtkActor>::New();
-  arcStopActor2->SetMapper(arcStopMapper2);
-  arcStopActor2->GetProperty()->SetColor(0, 1, 0);
-  arcStopActor2->GetProperty()->SetLineWidth(0.5);
-  arcStopActor2->SetPosition(-12, 126, -32);
-  arcStopActor2->RotateZ(-90);
-
-  arcAssembly2->AddPart(arcActor2);
-  arcAssembly2->AddPart(arcStartActor2);
-  arcAssembly2->AddPart(arcStopActor2);
-
-  this->BEVViewer->ModelRenderer->AddViewProp(arcAssembly2);
-  this->BEVViewer->ModelRenderer->GetRenderWindow()->Render();
-
-  this->AxialViewer->ViewRenderer->AddActor(arcAssembly2);
-  this->AxialViewer->ViewRenderer->ResetCamera();
-  this->AxialViewer->ViewRenderer->GetRenderWindow()->Render();
+  delete arcCreator;
 }
 
 void MainWindow::on_actionSend_UDP_triggered() {
@@ -1345,5 +1177,63 @@ void MainWindow::on_actionPlan_triggered() {
     this->ui->tableWidget->setItem(i, 18, item19);
   }
 
+  // Update isocentre values in Mainwindow class
+  this->Isocentre[0] = myPlanReader->planDetailStruct[0].icX * 10;  // cm to mm
+  this->Isocentre[1] = myPlanReader->planDetailStruct[1].icX * 10;  // cm to mm
+  this->Isocentre[2] = myPlanReader->planDetailStruct[2].icX * 10;  // cm to mm
+
   delete myPlanReader;
+}
+
+double MainWindow::CalcSSD(double *Iso, double GantryAngle,
+                           vtkDataSet *BodyMesh) {
+  double SSD = 0.0;
+  //    //qDebug()<<this->Isocentre[0]<<this->Isocentre[1]<<this->Isocentre[2];
+  //    double SrcPosForZeroGantry[3] = {this->Isocentre[0],
+  //                                     this->Isocentre[1] - 1000.0,
+  //                                     this->Isocentre[2]}; //src position in
+  //                                     LPS
+  //    double SrcPos[3];
+  //    std::vector<double> SrcPosCurrentGantry;
+
+  //    FSPBDoseCalc *Transformer = new FSPBDoseCalc;
+
+  //    //Transform src point according to gantry angle and convert to double
+  //    array from std::vector SrcPosCurrentGantry =
+  //    Transformer->TransformPointXYZ(SrcPosForZeroGantry,
+  //                                                         this->Isocentre,
+  //                                                         0.0,
+  //                                                         GantryAngle,
+  //                                                         0.0);
+  //    SrcPos[0] = SrcPosCurrentGantry[0];
+  //    SrcPos[1] = SrcPosCurrentGantry[1];
+  //    SrcPos[2] = SrcPosCurrentGantry[2];
+
+  //    vtkSmartPointer<vtkOBBTree> OBBTree =
+  //    vtkSmartPointer<vtkOBBTree>::New(); OBBTree->SetDataSet(BodyMesh);
+  //    OBBTree->BuildLocator();
+
+  //    vtkSmartPointer<vtkPoints> Points = vtkSmartPointer<vtkPoints>::New();
+  //    vtkSmartPointer<vtkIdList> IDs = vtkSmartPointer<vtkIdList>::New();
+
+  //    int Intersections = OBBTree->IntersectWithLine(SrcPos, Iso, Points,
+  //    IDs);
+  //    //    qDebug()<<Intersections<<":Intersections";
+  //    //    qDebug()<<Points->GetNumberOfPoints()<<"Points";
+  //    //    qDebug()<<"Intersection
+  //    point1:"<<Points->GetPoint(0)[0]<<Points->GetPoint(0)[1]<<Points->GetPoint(0)[2];
+  //    //    qDebug()<<"Intersection
+  //    point2:"<<Points->GetPoint(1)[0]<<Points->GetPoint(1)[1]<<Points->GetPoint(1)[2];
+
+  //    //Intersection point on Body
+  //    double Intersection[3] = {Points->GetPoint(0)[0],
+  //                              Points->GetPoint(0)[1],
+  //                              Points->GetPoint(0)[2]};
+
+  //    //Calculate SSD
+  //    double SSD = std::sqrt(std::pow((SrcPos[0] - Intersection[0]), 2)
+  //                           + std::pow((SrcPos[2] - Intersection[2]), 2)
+  //                           + std::pow((SrcPos[1] - Intersection[1]), 2));
+  //    //qDebug()<<"SSD:"<<SSD;
+  return SSD;
 }

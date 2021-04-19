@@ -27,6 +27,7 @@ SOFTWARE.
 #include <vtkActor.h>
 #include <vtkActor2D.h>
 #include <vtkAnnotatedCubeActor.h>
+#include <vtkArcSource.h>
 #include <vtkAssembly.h>
 #include <vtkAxes.h>
 #include <vtkCaptionActor2D.h>
@@ -494,4 +495,106 @@ vtkSmartPointer<vtkAssembly> CreateObjects::createArc(double radius,
                                                       double gantryStart,
                                                       double gantryStop,
                                                       QString dir,
-                                                      double Iso[3]) {}
+                                                      double Iso[3]) {
+  double arcLength = 0.0;
+  if (dir == "CW") {
+    arcLength = gantryStart - gantryStop;
+  } else if (dir == "CCW") {
+    arcLength = gantryStop - gantryStart;
+  }
+
+  double arcLengthRadians = arcLength * vtkMath::Pi() / 180.0;
+  double arcAngleOut = (2 * vtkMath::Pi()) - arcLengthRadians;
+  double arcLengthDegrees = vtkMath::DegreesFromRadians(arcAngleOut);
+  // qDebug() << arcLengthDegrees << "arcLengthDegrees";
+
+  if (dir == "CW" && arcLengthDegrees > 360.0) {
+    arcLengthDegrees = arcLengthDegrees - 360.0;
+  }
+
+  else if (dir == "CCW" && arcLengthDegrees <= 360.0) {
+    arcLengthDegrees = arcLengthDegrees;
+  }
+
+  else if (dir == "CCW" && arcLengthDegrees > 360.0) {
+    arcLengthDegrees = arcLengthDegrees - 360.0;
+  }
+
+  qDebug() << arcLengthDegrees;
+
+  vtkSmartPointer<vtkAssembly> arcAssembly =
+      vtkSmartPointer<vtkAssembly>::New();
+
+  double xCord1 = radius * cos(vtkMath::RadiansFromDegrees(gantryStart));
+  double yCord1 = radius * sin(vtkMath::RadiansFromDegrees(gantryStart));
+  double xCord2 = radius * cos(vtkMath::RadiansFromDegrees(gantryStop));
+  double yCord2 = radius * sin(vtkMath::RadiansFromDegrees(gantryStop));
+
+  vtkSmartPointer<vtkArcSource> arcSource =
+      vtkSmartPointer<vtkArcSource>::New();
+  arcSource->SetResolution(360);
+  arcSource->SetPoint1(xCord1, yCord1, 0);
+  arcSource->SetPoint2(xCord2, yCord2, 0);
+
+  double clipAngle = 360.0 - arcLengthDegrees;
+  if (clipAngle < arcLengthDegrees) {
+    arcSource->NegativeOn();
+  }
+
+  else if (clipAngle >= arcLengthDegrees) {
+    arcSource->NegativeOff();
+  }
+  arcSource->Update();
+
+  // Visualize
+  vtkSmartPointer<vtkPolyDataMapper> mapper =
+      vtkSmartPointer<vtkPolyDataMapper>::New();
+  mapper->SetInputConnection(arcSource->GetOutputPort());
+
+  vtkSmartPointer<vtkActor> arcActor = vtkSmartPointer<vtkActor>::New();
+  arcActor->SetMapper(mapper);
+  arcActor->GetProperty()->SetColor(1, 1, 0);
+  arcActor->GetProperty()->SetLineWidth(2.0);
+  arcActor->SetPosition(Iso);
+  arcActor->RotateZ(-90);
+
+  vtkSmartPointer<vtkLineSource> arcStart =
+      vtkSmartPointer<vtkLineSource>::New();
+  arcStart->SetPoint1(0, 0, 0);
+  arcStart->SetPoint2(xCord2, yCord2, 0);
+
+  // Visualize
+  vtkSmartPointer<vtkPolyDataMapper> arcStartMapper =
+      vtkSmartPointer<vtkPolyDataMapper>::New();
+  arcStartMapper->SetInputConnection(arcStart->GetOutputPort());
+
+  vtkSmartPointer<vtkActor> arcStartActor = vtkSmartPointer<vtkActor>::New();
+  arcStartActor->SetMapper(arcStartMapper);
+  arcStartActor->GetProperty()->SetColor(1, 0, 0);
+  arcStartActor->GetProperty()->SetLineWidth(0.5);
+  arcStartActor->SetPosition(Iso);
+  arcStartActor->RotateZ(-90);
+
+  vtkSmartPointer<vtkLineSource> arcStop =
+      vtkSmartPointer<vtkLineSource>::New();
+  arcStop->SetPoint2(0, 0, 0);
+  arcStop->SetPoint2(xCord1, yCord1, 0);
+
+  // Visualize
+  vtkSmartPointer<vtkPolyDataMapper> arcStopMapper =
+      vtkSmartPointer<vtkPolyDataMapper>::New();
+  arcStopMapper->SetInputConnection(arcStop->GetOutputPort());
+
+  vtkSmartPointer<vtkActor> arcStopActor = vtkSmartPointer<vtkActor>::New();
+  arcStopActor->SetMapper(arcStopMapper);
+  arcStopActor->GetProperty()->SetColor(0, 1, 0);
+  arcStopActor->GetProperty()->SetLineWidth(0.5);
+  arcStopActor->SetPosition(Iso);
+  arcStopActor->RotateZ(-90);
+
+  arcAssembly->AddPart(arcActor);
+  arcAssembly->AddPart(arcStartActor);
+  arcAssembly->AddPart(arcStopActor);
+
+  return arcAssembly;
+}

@@ -148,9 +148,9 @@ void UDPListener::readMessage() {
   //   The UDP format is [X,Y,Z,Gantry] in IEC(cm) and Varian degrees
   //   IEC to LPS conversion, simple approach as it only supports HFS
   //   orientation now
-  this->shifts[0] = UDPShifts->shiftX * 10;  // cm to mm
-  this->shifts[1] = -UDPShifts->shiftZ * 10; // cm to mm
-  this->shifts[2] = UDPShifts->shiftY * 10;  // cm to mm
+  this->shifts[0] = UDPShifts->shiftX * 10;   // cm to mm
+  this->shifts[1] = -UDPShifts->shiftZ * 10;  // cm to mm
+  this->shifts[2] = UDPShifts->shiftY * 10;   // cm to mm
   //  qDebug() << this->shifts[0] << this->shifts[1] << this->shifts[2]
   //           << UDPShifts->gantryAngle << " :Shifts";
 
