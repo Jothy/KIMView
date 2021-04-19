@@ -159,7 +159,7 @@ MainWindow::MainWindow(QWidget *parent)
   this->BEVViewer->setWindowTitle("Model");
 
   // By default plan information dock widget is hidden
-  this->ui->dockWidget_2->setVisible(true);
+  this->ui->dockWidget_2->setVisible(false);
   this->ui->mdiAreaView->tileSubWindows();
 }
 
@@ -268,7 +268,7 @@ void MainWindow::on_actionCT_triggered() {
       this->setWindowTitle(NameIDStr);
 
       // Hide information tree widget
-      // this->ui->actionInformation->trigger();
+      this->ui->actionInformation->trigger();
 
       // Display the data
       this->SagittalViewer =
@@ -504,56 +504,56 @@ void MainWindow::on_actionDose_triggered() {
 void MainWindow::on_actionGo_To_Isocentre_triggered() {
   QList<QMdiSubWindow *> SubWindows = this->ui->mdiAreaView->subWindowList();
   if (SubWindows[1]) {
-    ImageViewer2D *Viewer =
+    ImageViewer2D *Viewer1 =
         qobject_cast<ImageViewer2D *>(SubWindows[1]->widget());
-    if (Viewer->SliceOrientation == 0) {
-      Viewer->MoveToLocation(this->Isocentre[2]);
+    if (Viewer1->SliceOrientation == 0) {
+      Viewer1->MoveToLocation(this->Isocentre[2]);
 
     }
 
-    else if (Viewer->SliceOrientation == 1) {
-      Viewer->MoveToLocation(this->Isocentre[0]);
+    else if (Viewer1->SliceOrientation == 1) {
+      Viewer1->MoveToLocation(this->Isocentre[0]);
 
     }
 
-    else if (Viewer->SliceOrientation == 2) {
-      Viewer->MoveToLocation(this->Isocentre[1]);
+    else if (Viewer1->SliceOrientation == 2) {
+      Viewer1->MoveToLocation(this->Isocentre[1]);
     }
   }
 
   if (SubWindows[2]) {
-    ImageViewer2D *Viewer =
+    ImageViewer2D *Viewer2 =
         qobject_cast<ImageViewer2D *>(SubWindows[2]->widget());
-    if (Viewer->SliceOrientation == 0) {
-      Viewer->MoveToLocation(this->Isocentre[2]);
+    if (Viewer2->SliceOrientation == 0) {
+      Viewer2->MoveToLocation(this->Isocentre[2]);
 
     }
 
-    else if (Viewer->SliceOrientation == 1) {
-      Viewer->MoveToLocation(this->Isocentre[0]);
+    else if (Viewer2->SliceOrientation == 1) {
+      Viewer2->MoveToLocation(this->Isocentre[0]);
 
     }
 
-    else if (Viewer->SliceOrientation == 2) {
-      Viewer->MoveToLocation(this->Isocentre[1]);
+    else if (Viewer2->SliceOrientation == 2) {
+      Viewer2->MoveToLocation(this->Isocentre[1]);
     }
   }
 
   if (SubWindows[3]) {
-    ImageViewer2D *Viewer =
+    ImageViewer2D *Viewer3 =
         qobject_cast<ImageViewer2D *>(SubWindows[3]->widget());
-    if (Viewer->SliceOrientation == 0) {
-      Viewer->MoveToLocation(this->Isocentre[2]);
+    if (Viewer3->SliceOrientation == 0) {
+      Viewer3->MoveToLocation(this->Isocentre[2]);
 
     }
 
-    else if (Viewer->SliceOrientation == 1) {
-      Viewer->MoveToLocation(this->Isocentre[0]);
+    else if (Viewer3->SliceOrientation == 1) {
+      Viewer3->MoveToLocation(this->Isocentre[0]);
 
     }
 
-    else if (Viewer->SliceOrientation == 2) {
-      Viewer->MoveToLocation(this->Isocentre[1]);
+    else if (Viewer3->SliceOrientation == 2) {
+      Viewer3->MoveToLocation(this->Isocentre[1]);
     }
   }
 }
@@ -1179,8 +1179,8 @@ void MainWindow::on_actionPlan_triggered() {
 
   // Update isocentre values in Mainwindow class
   this->Isocentre[0] = myPlanReader->planDetailStruct[0].icX * 10;  // cm to mm
-  this->Isocentre[1] = myPlanReader->planDetailStruct[1].icX * 10;  // cm to mm
-  this->Isocentre[2] = myPlanReader->planDetailStruct[2].icX * 10;  // cm to mm
+  this->Isocentre[1] = myPlanReader->planDetailStruct[1].icY * 10;  // cm to mm
+  this->Isocentre[2] = myPlanReader->planDetailStruct[2].icZ * 10;  // cm to mm
 
   delete myPlanReader;
 }

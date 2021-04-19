@@ -520,7 +520,7 @@ vtkSmartPointer<vtkAssembly> CreateObjects::createArc(double radius,
     arcLengthDegrees = arcLengthDegrees - 360.0;
   }
 
-  qDebug() << arcLengthDegrees;
+  // qDebug() << arcLengthDegrees;
 
   vtkSmartPointer<vtkAssembly> arcAssembly =
       vtkSmartPointer<vtkAssembly>::New();
