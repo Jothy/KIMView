@@ -502,6 +502,9 @@ void MainWindow::on_actionDose_triggered() {
 }
 
 void MainWindow::on_actionGo_To_Isocentre_triggered() {
+  qDebug() << "Iso: " << this->Isocentre[0] << this->Isocentre[1]
+           << this->Isocentre[2];
+
   QList<QMdiSubWindow *> SubWindows = this->ui->mdiAreaView->subWindowList();
   if (SubWindows[1]) {
     ImageViewer2D *Viewer1 =
@@ -944,18 +947,24 @@ void MainWindow::on_actionRotate_ROI_triggered() {
 void MainWindow::on_actionAdd_Arc_triggered() {
   CreateObjects *arcCreator = new CreateObjects;
 
-  vtkSmartPointer<vtkAssembly> arc1 = vtkSmartPointer<vtkAssembly>::New();
-  vtkSmartPointer<vtkAssembly> arc2 = vtkSmartPointer<vtkAssembly>::New();
-  arc1 = arcCreator->createArc(250.0, 181.0, 179.0, "CW", this->Isocentre);
-  arc2 = arcCreator->createArc(275.0, 160.0, 200.0, "CCW", this->Isocentre);
+  for (int i = 0; i < this->ui->tableWidget->rowCount(); i++) {
+    double gantryStart = this->ui->tableWidget->item(i, 5)->text().toDouble();
+    double gantryStop = this->ui->tableWidget->item(i, 6)->text().toDouble();
+    QString dir = this->ui->tableWidget->item(i, 7)->text();
+    // qDebug() << gantryStart << gantryStop << dir;
 
-  this->BEVViewer->ModelRenderer->AddViewProp(arc1);
-  this->BEVViewer->ModelRenderer->AddViewProp(arc2);
-  this->BEVViewer->ModelRenderer->GetRenderWindow()->Render();
+    double radius = 250.0 + (25 * i);
 
-  this->AxialViewer->ViewRenderer->AddActor(arc1);
-  this->AxialViewer->ViewRenderer->AddActor(arc2);
+    vtkSmartPointer<vtkAssembly> arc = vtkSmartPointer<vtkAssembly>::New();
+    arc = arcCreator->createArc(radius, gantryStart, gantryStop, dir,
+                                this->Isocentre);
+
+    this->BEVViewer->ModelRenderer->AddActor(arc);
+    this->AxialViewer->ViewRenderer->AddActor(arc);
+  }
+
   this->AxialViewer->ViewRenderer->ResetCamera();
+  this->BEVViewer->ModelRenderer->GetRenderWindow()->Render();
   this->AxialViewer->ViewRenderer->GetRenderWindow()->Render();
 
   delete arcCreator;
