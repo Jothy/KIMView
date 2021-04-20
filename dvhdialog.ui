@@ -2084,8 +2084,8 @@
            <string>Save Figure</string>
           </property>
           <property name="icon">
-           <iconset>
-            <normaloff>:/Icons/Icons/picture_save.png</normaloff>:/Icons/Icons/picture_save.png</iconset>
+           <iconset resource="RC.qrc">
+            <normaloff>:/Icons/Camera.png</normaloff>:/Icons/Camera.png</iconset>
           </property>
           <property name="default">
            <bool>true</bool>
@@ -2105,8 +2105,8 @@
              <string>Reset View</string>
             </property>
             <property name="icon">
-             <iconset>
-              <normaloff>:/Icons/Icons/arrow_out.png</normaloff>:/Icons/Icons/arrow_out.png</iconset>
+             <iconset resource="RC.qrc">
+              <normaloff>:/Icons/Reset.png</normaloff>:/Icons/Reset.png</iconset>
             </property>
             <property name="default">
              <bool>true</bool>
@@ -2124,8 +2124,8 @@
              <string>Calculate</string>
             </property>
             <property name="icon">
-             <iconset>
-              <normaloff>:/Icons/Icons/chart_curve.png</normaloff>:/Icons/Icons/chart_curve.png</iconset>
+             <iconset resource="RC.qrc">
+              <normaloff>:/Icons/Charts.png</normaloff>:/Icons/Charts.png</iconset>
             </property>
             <property name="default">
              <bool>true</bool>
