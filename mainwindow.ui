@@ -262,7 +262,7 @@
         </property>
         <property name="icon">
          <iconset resource="RC.qrc">
-          <normaloff>:/Icons/Polygon.png</normaloff>:/Icons/Polygon.png</iconset>
+          <normaloff>:/Icons/StructureSet.png</normaloff>:/Icons/StructureSet.png</iconset>
         </property>
        </item>
        <item>
@@ -506,7 +506,7 @@
    </property>
    <property name="icon">
     <iconset resource="RC.qrc">
-     <normaloff>:/Icons/Polygon.png</normaloff>:/Icons/Polygon.png</iconset>
+     <normaloff>:/Icons/StructureSet.png</normaloff>:/Icons/StructureSet.png</iconset>
    </property>
    <property name="text">
     <string>Structures</string>
