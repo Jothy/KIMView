@@ -46,6 +46,7 @@ SOFTWARE.
 #include <QMainWindow>
 #include <QMap>
 #include <QString>
+#include <vector>
 
 // Tracking function headers
 #include <bevwidget.h>
@@ -69,6 +70,7 @@ class MainWindow : public QMainWindow {
   std::vector<vtkSmartPointer<vtkPolyData>> POIList;
   vtkSmartPointer<vtkActorCollection> MeshActors;
   vtkSmartPointer<vtkActorCollection> BeamActors;
+
   // No. of ROIs,RGB- maximum 50 ROIs supported for now
   double ROIColors[50][3];
   QList<QString> ROINames;
@@ -102,23 +104,41 @@ class MainWindow : public QMainWindow {
 
  private slots:
   void on_actionDose_triggered();
+
   void on_actionCT_triggered();
+
   void on_actionStructures_triggered();
+
   void on_actionGo_To_Isocentre_triggered();
+
   void on_actionBEV_triggered();
+
   void on_action3DView_triggered();
+
   void on_actionClose_Patient_triggered();
+
   void on_actionReset_Zoom_triggered();
+
   void on_actionShowBeams_triggered();
+
   void on_actionShowDose_triggered();
+
   void on_actionShowContours_triggered();
+
   void on_actionZoom_In_All_triggered();
+
   void on_actionZoom_Out_All_triggered();
+
   void on_actionInformation_triggered();
+
   void on_actionPlan_Information_triggered();
+
   void on_actionCalc_DVH_triggered();
+
   void on_actionAdjust_Range_triggered();
+
   void on_actionReset_WL_WW_triggered();
+
   void on_actionRender_Bones_triggered();
 
   void on_actionHello_UDP_triggered();
