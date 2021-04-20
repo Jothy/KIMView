@@ -40,5 +40,6 @@
         <file>Icons/Legend.png</file>
         <file>Icons/About.png</file>
         <file>Icons/Plan.png</file>
+        <file>Icons/Isocentre.png</file>
     </qresource>
 </RCC>

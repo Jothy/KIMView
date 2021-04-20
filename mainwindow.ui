@@ -177,6 +177,7 @@
    <addaction name="actionZoom_In_All"/>
    <addaction name="actionZoom_Out_All"/>
    <addaction name="actionReset_Zoom"/>
+   <addaction name="actionGo_To_Isocentre"/>
    <addaction name="actionCalc_DVH"/>
    <addaction name="actionBEV"/>
    <addaction name="actionShowBeams"/>
@@ -529,7 +530,7 @@
    </property>
    <property name="icon">
     <iconset resource="RC.qrc">
-     <normaloff>:/Icons/Axes3D.png</normaloff>:/Icons/Axes3D.png</iconset>
+     <normaloff>:/Icons/Isocentre.png</normaloff>:/Icons/Isocentre.png</iconset>
    </property>
    <property name="text">
     <string>Go To Isocentre</string>

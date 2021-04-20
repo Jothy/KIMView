@@ -1198,6 +1198,9 @@ void MainWindow::on_actionPlan_triggered() {
 
     delete arcCreator;
   }
+
+  // Move planes to isocentre
+  this->ui->actionGo_To_Isocentre->trigger();
 }
 
 double MainWindow::CalcSSD(double *Iso, double GantryAngle,
