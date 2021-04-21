@@ -179,6 +179,7 @@
    <addaction name="actionZoom_Out_All"/>
    <addaction name="actionReset_Zoom"/>
    <addaction name="actionGo_To_Isocentre"/>
+   <addaction name="actionArcs"/>
    <addaction name="actionCalc_DVH"/>
    <addaction name="actionBEV"/>
    <addaction name="actionShowBeams"/>
