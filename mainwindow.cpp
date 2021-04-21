@@ -578,7 +578,7 @@ void MainWindow::on_actionBEV_triggered() {
     int SelectedBeam = 0;
     SelectedBeam = this->ui->tableWidget->currentRow();
     double gantryAngle =
-        this->ui->tableWidget->item(SelectedBeam, 2)->text().toDouble();
+        this->ui->tableWidget->item(SelectedBeam, 5)->text().toDouble();
     // qDebug()<<gantryAngle<<":Selected Beam Angle";
 
     // Display the data
