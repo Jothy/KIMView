@@ -161,6 +161,8 @@ MainWindow::MainWindow(QWidget *parent)
   // By default plan information dock widget is hidden
   this->ui->dockWidget_2->setVisible(false);
   this->ui->mdiAreaView->tileSubWindows();
+
+  // this->arc1 = vtkSmartPointer<vtkAssembly>::New();
 }
 
 MainWindow::~MainWindow() { delete ui; }
@@ -224,7 +226,7 @@ void MainWindow::on_actionCT_triggered() {
     //        curIOP=QString::fromStdString(val2);
 
     QString supportedIOP =
-        "HFS "; // DICOM seems to be hvaving a space after as "HFS "
+        "HFS ";  // DICOM seems to be hvaving a space after as "HFS "
     // QString supportedIOP="1\\0.0\\0.0\\0.0\\1\\0.0 ";//DICOM seems to be
     // hvaving a space at the end "
     // qDebug()<<curIOP<<"**********"<<supportedIOP;
@@ -276,9 +278,9 @@ void MainWindow::on_actionCT_triggered() {
       this->SagittalViewer->SetImageData(this->CTImage);
       this->SagittalViewer->SetSliceOrientation(1);
       this->SagittalViewer->SetUpView();
-      this->ui->mdiAreaView->addSubWindow(this->SagittalViewer,
-                                          Qt::WindowMaximizeButtonHint |
-                                              Qt::WindowTitleHint);
+      this->ui->mdiAreaView->addSubWindow(
+          this->SagittalViewer,
+          Qt::WindowMaximizeButtonHint | Qt::WindowTitleHint);
       // add to make borderless window Qt::FramelessWindowHint
       this->SagittalViewer->setWindowTitle("Sagittal");
       this->SagittalViewer->show();
@@ -288,9 +290,9 @@ void MainWindow::on_actionCT_triggered() {
       this->CoronalViewer->SetImageData(this->CTImage);
       this->CoronalViewer->SetSliceOrientation(2);
       this->CoronalViewer->SetUpView();
-      this->ui->mdiAreaView->addSubWindow(this->CoronalViewer,
-                                          Qt::WindowMaximizeButtonHint |
-                                              Qt::WindowTitleHint);
+      this->ui->mdiAreaView->addSubWindow(
+          this->CoronalViewer,
+          Qt::WindowMaximizeButtonHint | Qt::WindowTitleHint);
       this->CoronalViewer->setWindowTitle("Coronal");
       this->CoronalViewer->show();
 
@@ -299,9 +301,9 @@ void MainWindow::on_actionCT_triggered() {
       this->AxialViewer->SetImageData(this->CTImage);
       this->AxialViewer->SetSliceOrientation(0);
       this->AxialViewer->SetUpView();
-      this->ui->mdiAreaView->addSubWindow(this->AxialViewer,
-                                          Qt::WindowMaximizeButtonHint |
-                                              Qt::WindowTitleHint);
+      this->ui->mdiAreaView->addSubWindow(
+          this->AxialViewer,
+          Qt::WindowMaximizeButtonHint | Qt::WindowTitleHint);
       this->AxialViewer->setWindowTitle("Axial");
       this->AxialViewer->show();
 
@@ -365,7 +367,7 @@ void MainWindow::on_actionStructures_triggered() {
     RTStructReaderDialog *meshReaderDlg = new RTStructReaderDialog(this);
     meshReaderDlg->exec();
 
-    if (meshReaderDlg->ROINames.size() > 0) // Check any ROI exist or not
+    if (meshReaderDlg->ROINames.size() > 0)  // Check any ROI exist or not
     {
       QList<int> selectedStructsList = meshReaderDlg->selectedItems;
       // qDebug()<<selectedStructsList[0]<<"ROI";
@@ -377,11 +379,11 @@ void MainWindow::on_actionStructures_triggered() {
       RTStructReader->getROIMeshes(
           this->CTImage, this->CTImage->GetSpacing()[2], this->TargetReduction,
           meshReaderDlg->selectedItems,
-          this); // Reads ROI name as well as structs
+          this);  // Reads ROI name as well as structs
       QCoreApplication::processEvents();
       this->MeshList = RTStructReader->meshes;
       this->MeshActors = RTStructReader->ROIActors;
-      this->ROIVisibleFlag = 1; // structs imported
+      this->ROIVisibleFlag = 1;  // structs imported
 
       for (int i = 0; i < meshReaderDlg->selectedItems.size(); i++) {
         this->ROIColors[i][0] = RTStructReader->ROIColors[i][0];
@@ -462,7 +464,7 @@ void MainWindow::on_actionDose_triggered() {
       vtkSmartPointer<vtkGDCMImageReader> DoseReader =
           vtkSmartPointer<vtkGDCMImageReader>::New();
       DoseReader->SetFileName(DoseFile.toLatin1());
-      DoseReader->FileLowerLeftOn(); // otherwise flips the image
+      DoseReader->FileLowerLeftOn();  // otherwise flips the image
       DoseReader->SetDataScalarTypeToDouble();
       DoseReader->Update();
       this->RTDose->DeepCopy(DoseReader->GetOutput());
@@ -487,6 +489,10 @@ void MainWindow::on_actionDose_triggered() {
     this->CoronalViewer->UpdateView();
 
     this->ui->statusBar->showMessage("Dose imported sucessfully");
+
+    //    int *dims;
+    //    this->RTDose->GetDimensions(dims);
+    //    qDebug() << dims[0] << dims[1] << dims[2] << " Dims:";
 
     double *DoseOrg = this->RTDose->GetOrigin();
     // qDebug()<<DoseOrg[0]<<DoseOrg[1]<<DoseOrg[2]<<"Dose Origin";
@@ -789,14 +795,14 @@ void MainWindow::on_actionMove_ROI_triggered() {
 
   float rx = 90.0;
   float ry = 0.0;
-  float rz = 0.0; // 0 deg gantry
+  float rz = 0.0;  // 0 deg gantry
   float tx = 0.0;
   float ty = 0.0;
   float tz = 0.0;
   float cx = 0.0;
   float cy = 0.0;
   float cz = 0.0;
-  float sid = 1000.0; // 150 cm
+  float sid = 1000.0;  // 150 cm
   float sx = 2.0;
   float sy = 2.0;
   int dx = 501;
@@ -875,16 +881,16 @@ void MainWindow::on_actionMove_ROI_triggered() {
   filter->SetTransform(transform);
 
   InputImageType::SizeType size;
-  size[0] = dx; // number of pixels along X of the 2D DRR image
-  size[1] = dy; // number of pixels along Y of the 2D DRR image
-  size[2] = 1;  // only one slice
+  size[0] = dx;  // number of pixels along X of the 2D DRR image
+  size[1] = dy;  // number of pixels along Y of the 2D DRR image
+  size[2] = 1;   // only one slice
 
   filter->SetSize(size);
 
   InputImageType::SpacingType spacing;
-  spacing[0] = sx;  // pixel spacing along X of the 2D DRR image [mm]
-  spacing[1] = sy;  // pixel spacing along Y of the 2D DRR image [mm]
-  spacing[2] = 2.0; // slice thickness of the 2D DRR image [mm]
+  spacing[0] = sx;   // pixel spacing along X of the 2D DRR image [mm]
+  spacing[1] = sy;   // pixel spacing along Y of the 2D DRR image [mm]
+  spacing[2] = 2.0;  // slice thickness of the 2D DRR image [mm]
   filter->SetOutputSpacing(spacing);
 
   double origin[Dimension];
@@ -913,9 +919,9 @@ void MainWindow::on_actionMove_ROI_triggered() {
   // Create a greyscale lookup table
   vtkSmartPointer<vtkLookupTable> table =
       vtkSmartPointer<vtkLookupTable>::New();
-  table->SetRange(0, 370);             // image intensity range
-  table->SetValueRange(0, 1.0);        // from black to white
-  table->SetSaturationRange(0.0, 0.0); // no color saturation
+  table->SetRange(0, 370);              // image intensity range
+  table->SetValueRange(0, 1.0);         // from black to white
+  table->SetSaturationRange(0.0, 0.0);  // no color saturation
   table->SetRampToLinear();
   table->Build();
 
@@ -978,27 +984,30 @@ void MainWindow::on_actionStart_triggered() {
   this->listener->SagittalViewer = this->SagittalViewer;
   this->listener->CoronalViewer = this->CoronalViewer;
   this->listener->BEVViewer = this->BEVViewer;
+
   this->listener->StartListening();
+  this->ListeningState = true;
 
   // QApplication::processEvents();
 }
 
 void MainWindow::on_actionStop_triggered() {
   this->ui->statusBar->clearMessage();
-  if (this->listener->connectionState) {
+  if (this->ListeningState == true) {
     this->listener->StopListening();
+    delete this->listener;
+    this->ListeningState = false;
   }
-  delete this->listener;
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
   QMessageBox::StandardButton resBtn = QMessageBox::question(
       this, "KIMView", tr("Are you sure you want to close?\n"),
-      QMessageBox::No | QMessageBox::Yes, QMessageBox::Yes);
-  if (resBtn != QMessageBox::Yes) {
+      QMessageBox::No | QMessageBox::Yes);
+  if (resBtn == QMessageBox::No) {
     event->ignore();
   } else {
-    if (this->listener->connectionState) {
+    if (this->ListeningState == true) {
       this->listener->StopListening();
       delete this->listener;
     }
@@ -1163,9 +1172,9 @@ void MainWindow::on_actionPlan_triggered() {
   }
 
   // Update isocentre values in Mainwindow class
-  this->Isocentre[0] = myPlanReader->planDetailStruct[0].icX * 10; // cm to mm
-  this->Isocentre[1] = myPlanReader->planDetailStruct[0].icY * 10; // cm to mm
-  this->Isocentre[2] = myPlanReader->planDetailStruct[0].icZ * 10; // cm to mm
+  this->Isocentre[0] = myPlanReader->planDetailStruct[0].icX * 10;  // cm to mm
+  this->Isocentre[1] = myPlanReader->planDetailStruct[0].icY * 10;  // cm to mm
+  this->Isocentre[2] = myPlanReader->planDetailStruct[0].icZ * 10;  // cm to mm
 
   delete myPlanReader;
 
@@ -1184,11 +1193,11 @@ void MainWindow::on_actionPlan_triggered() {
 
       double radius = 250.0 + (25 * i);
 
-      vtkSmartPointer<vtkAssembly> arc = arcCreator->createArc(
-          radius, gantryStart, gantryStop, dir, this->Isocentre);
+      //      arc1 = arcCreator->createArc(radius, gantryStart, gantryStop, dir,
+      //                                   this->Isocentre);
 
-      this->BEVViewer->ModelRenderer->AddActor(arc);
-      this->AxialViewer->ViewRenderer->AddActor(arc);
+      //      this->BEVViewer->ModelRenderer->AddActor(arc1);
+      //      this->AxialViewer->ViewRenderer->AddActor(arc1);
     }
 
     this->AxialViewer->ViewRenderer->ResetCamera();

@@ -28,6 +28,7 @@ SOFTWARE.
 #define vtkRenderingCore_AUTOINIT \
   3(vtkInteractionStyle, vtkRenderingFreeType, vtkRenderingOpenGL2)
 
+#include <vtkAssembly.h>
 #include <vtkBoxWidget2.h>
 #include <vtkImageData.h>
 #include <vtkInteractorStyleTrackballCamera.h>
@@ -71,6 +72,8 @@ class MainWindow : public QMainWindow {
   vtkSmartPointer<vtkActorCollection> MeshActors;
   vtkSmartPointer<vtkActorCollection> BeamActors;
 
+  vtkSmartPointer<vtkAssembly> arc1;
+
   // No. of ROIs,RGB- maximum 50 ROIs supported for now
   double ROIColors[50][3];
   QList<QString> ROINames;
@@ -101,6 +104,9 @@ class MainWindow : public QMainWindow {
   UDPListener *listener;
 
   QMap<QString, QString> PatientInfo;
+
+  // UDPListener not listening by default
+  bool ListeningState = false;
 
  private slots:
   void on_actionDose_triggered();
@@ -167,7 +173,6 @@ class MainWindow : public QMainWindow {
 
  private:
   Ui::MainWindow *ui;
-  vtkSmartPointer<vtkRenderer> renderer;
 
  protected:
   void closeEvent(QCloseEvent *event);
