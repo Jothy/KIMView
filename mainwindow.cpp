@@ -346,6 +346,7 @@ void MainWindow::on_actionCT_triggered() {
       this->ui->actionAdjust_Range->setEnabled(true);
       this->ui->actionWL_WW->setEnabled(true);
       this->ui->actionPlan->setEnabled(true);
+      this->ui->actionArcs->setEnabled(true);
 
     } else {
       QMessageBox messageBox;
@@ -1178,6 +1179,9 @@ void MainWindow::on_actionPlan_triggered() {
 
   delete myPlanReader;
 
+  // Clear any existing arcs
+  this->arcList.clear();
+
   // Add arcs if it's VMAT
   QString DeliveryType = this->ui->tableWidget->item(0, 3)->text();
   // qDebug() << DeliveryType << " :Type";
@@ -1193,11 +1197,13 @@ void MainWindow::on_actionPlan_triggered() {
 
       double radius = 250.0 + (25 * i);
 
-      //      arc1 = arcCreator->createArc(radius, gantryStart, gantryStop, dir,
-      //                                   this->Isocentre);
+      vtkSmartPointer<vtkAssembly> arc = vtkSmartPointer<vtkAssembly>::New();
+      arc = arcCreator->createArc(radius, gantryStart, gantryStop, dir,
+                                  this->Isocentre);
+      this->arcList.push_back(arc);
 
-      //      this->BEVViewer->ModelRenderer->AddActor(arc1);
-      //      this->AxialViewer->ViewRenderer->AddActor(arc1);
+      this->BEVViewer->ModelRenderer->AddActor(this->arcList[i]);
+      this->AxialViewer->ViewRenderer->AddActor(this->arcList[i]);
     }
 
     this->AxialViewer->ViewRenderer->ResetCamera();
@@ -1262,4 +1268,15 @@ double MainWindow::CalcSSD(double *Iso, double GantryAngle,
   //                           + std::pow((SrcPos[1] - Intersection[1]), 2));
   //    //qDebug()<<"SSD:"<<SSD;
   return SSD;
+}
+
+void MainWindow::on_actionArcs_triggered() {
+  // qDebug() << this->arcList.size();
+  if (this->arcList.size() > 0) {
+    for (int i = 0; i < this->arcList.size(); i++) {
+      this->arcList[i]->SetVisibility(false);
+    }
+    this->AxialViewer->ViewRenderer->GetRenderWindow()->Render();
+    this->BEVViewer->ModelRenderer->GetRenderWindow()->Render();
+  }
 }

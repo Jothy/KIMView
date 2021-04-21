@@ -84,6 +84,7 @@
     <addaction name="action3DView"/>
     <addaction name="separator"/>
     <addaction name="actionShowBeams"/>
+    <addaction name="actionArcs"/>
     <addaction name="actionShowDose"/>
     <addaction name="actionShowContours"/>
     <addaction name="separator"/>
@@ -800,6 +801,18 @@
    </property>
    <property name="text">
     <string>About</string>
+   </property>
+  </action>
+  <action name="actionArcs">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="RC.qrc">
+     <normaloff>:/Icons/Arcs.png</normaloff>:/Icons/Arcs.png</iconset>
+   </property>
+   <property name="text">
+    <string>Arcs</string>
    </property>
   </action>
  </widget>

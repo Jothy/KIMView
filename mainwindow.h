@@ -71,8 +71,7 @@ class MainWindow : public QMainWindow {
   std::vector<vtkSmartPointer<vtkPolyData>> POIList;
   vtkSmartPointer<vtkActorCollection> MeshActors;
   vtkSmartPointer<vtkActorCollection> BeamActors;
-
-  vtkSmartPointer<vtkAssembly> arc1;
+  std::vector<vtkSmartPointer<vtkAssembly>> arcList;
 
   // No. of ROIs,RGB- maximum 50 ROIs supported for now
   double ROIColors[50][3];
@@ -107,6 +106,8 @@ class MainWindow : public QMainWindow {
 
   // UDPListener not listening by default
   bool ListeningState = false;
+
+  bool arcVisibility = true;
 
  private slots:
   void on_actionDose_triggered();
@@ -170,6 +171,8 @@ class MainWindow : public QMainWindow {
   void on_actionAbout_triggered();
 
   void on_actionPlan_triggered();
+
+  void on_actionArcs_triggered();
 
  private:
   Ui::MainWindow *ui;

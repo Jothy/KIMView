@@ -42,5 +42,6 @@
         <file>Icons/Plan.png</file>
         <file>Icons/Isocentre.png</file>
         <file>Icons/StructureSet.png</file>
+        <file>Icons/Arcs.png</file>
     </qresource>
 </RCC>
