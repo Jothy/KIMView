@@ -82,7 +82,7 @@ void CreateObjects::createAnnotation(int location, double RGB[3],
   this->annotation->SetText(
       location,
       text1.toLatin1()
-          .data());  // toLatin1().data() is Qt equivalent of const char
+          .data()); // toLatin1().data() is Qt equivalent of const char
   this->annotation->GetTextProperty()->SetColor(RGB);
   this->annotation->GetTextProperty()->SetFontFamilyToTimes();
 }
@@ -108,9 +108,8 @@ vtkSmartPointer<vtkPolyData> CreateObjects::createSphere(double radius,
   return stripper->GetOutput();
 }
 
-vtkSmartPointer<vtkPolyData> CreateObjects::createCube(double x, double y,
-                                                       double z,
-                                                       double center[]) {
+vtkSmartPointer<vtkPolyData>
+CreateObjects::createCube(double x, double y, double z, double center[]) {
   vtkSmartPointer<vtkCubeSource> cube = vtkSmartPointer<vtkCubeSource>::New();
   cube->SetXLength(x);
   cube->SetYLength(y);
@@ -127,9 +126,8 @@ vtkSmartPointer<vtkPolyData> CreateObjects::createCube(double x, double y,
   return stripper->GetOutput();
 }
 
-vtkSmartPointer<vtkPolyData> CreateObjects::createCylinder(double radius,
-                                                           double height,
-                                                           double center[]) {
+vtkSmartPointer<vtkPolyData>
+CreateObjects::createCylinder(double radius, double height, double center[]) {
   vtkSmartPointer<vtkCylinderSource> cylinder =
       vtkSmartPointer<vtkCylinderSource>::New();
   cylinder->SetCenter(center);
@@ -263,9 +261,9 @@ vtkSmartPointer<vtkActor> CreateObjects::createLeaf(double length,
   return leafActor;
 }
 
-vtkSmartPointer<vtkAssembly> CreateObjects::createVarian120MLC(
-    double isocenter[3], double gantryAngle, double collAngle,
-    vtkTransform *userTr) {
+vtkSmartPointer<vtkAssembly>
+CreateObjects::createVarian120MLC(double isocenter[3], double gantryAngle,
+                                  double collAngle, vtkTransform *userTr) {
   vtkSmartPointer<vtkAssembly> mlc = vtkSmartPointer<vtkAssembly>::New();
   int i;
   // First 10 thick leaves(1cm)
@@ -491,11 +489,9 @@ vtkSmartPointer<vtkAssembly> CreateObjects::createGraticule() {
   return graticule;
 }
 
-vtkSmartPointer<vtkAssembly> CreateObjects::createArc(double radius,
-                                                      double gantryStart,
-                                                      double gantryStop,
-                                                      QString dir,
-                                                      double Iso[3]) {
+vtkSmartPointer<vtkAssembly>
+CreateObjects::createArc(double radius, double gantryStart, double gantryStop,
+                         QString dir, double Iso[3]) {
   double arcLength = 0.0;
   if (dir == "CW") {
     arcLength = gantryStart - gantryStop;
@@ -577,7 +573,7 @@ vtkSmartPointer<vtkAssembly> CreateObjects::createArc(double radius,
 
   vtkSmartPointer<vtkLineSource> arcStop =
       vtkSmartPointer<vtkLineSource>::New();
-  arcStop->SetPoint2(0, 0, 0);
+  arcStop->SetPoint1(0, 0, 0);
   arcStop->SetPoint2(xCord1, yCord1, 0);
 
   // Visualize

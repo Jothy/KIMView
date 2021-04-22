@@ -641,6 +641,10 @@
    <property name="checked">
     <bool>true</bool>
    </property>
+   <property name="icon">
+    <iconset resource="RC.qrc">
+     <normaloff>:/Icons/Patient.png</normaloff>:/Icons/Patient.png</iconset>
+   </property>
    <property name="text">
     <string>Information</string>
    </property>
@@ -651,6 +655,10 @@
    </property>
    <property name="checked">
     <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="RC.qrc">
+     <normaloff>:/Icons/Plan.png</normaloff>:/Icons/Plan.png</iconset>
    </property>
    <property name="text">
     <string>Plan Information</string>
