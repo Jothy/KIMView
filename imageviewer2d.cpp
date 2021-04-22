@@ -114,6 +114,10 @@ ImageViewer2D::ImageViewer2D(QWidget *parent, QActionGroup *contextMenus)
     : QWidget(parent), ui(new Ui::ImageViewer2D) {
   ui->setupUi(this);
 
+  // Automoatically resolves contour/beams coincidence with image (being on the
+  // same plane)
+  vtkMapper::SetResolveCoincidentTopologyToPolygonOffset();
+
   // Add context menu
   this->ui->widget->addAction(this->ui->actionMeasureDistance);
   this->ui->widget->addAction(this->ui->actionMeasureAngle);
@@ -277,10 +281,6 @@ ImageViewer2D::ImageViewer2D(QWidget *parent, QActionGroup *contextMenus)
   this->ScalarBarVisibility = 0;
 
   setAcceptDrops(true);
-
-  // Automoatically resolves contour/beams coincidence with image (being on the
-  // same plane)
-  vtkMapper::SetResolveCoincidentTopologyToPolygonOffset();
 }
 
 ImageViewer2D::~ImageViewer2D() { delete ui; }
@@ -528,6 +528,8 @@ void ImageViewer2D::SliceImageAndDose(double SliceLoc) {
 
   // Toggle interpolation
   this->DoseSlice->InterpolateOn();
+  // Dose is always above image
+  this->DoseSlice->SetPosition(0, 0, -1);
 
   if (this->RTDose->GetScalarRange()[1] > 1.0) {
     this->DoseScalarBar->SetLookupTable(this->DoseLUT);
@@ -915,11 +917,13 @@ void ImageViewer2D::on_actionReset_WL_WW_triggered() {
   this->WindowLow = -400;
   this->WindowUp = 600;
   this->ViewRenderer->RemoveActor(this->ImageSlice);
+  this->ViewRenderer->RemoveActor(this->DoseSlice);
   this->AdjustImageWLWW();
   this->ViewRenderer->AddActor(this->ImageSlice);
-  if (this->DoseVisibility == 1) {
-    this->ViewRenderer->AddActor(this->DoseSlice);
-  }
+  this->ViewRenderer->AddActor(this->DoseSlice);
+  //  if (this->DoseVisibility == 1) {
+  //    this->ViewRenderer->AddActor(this->DoseSlice);
+  //  }
   this->ViewRenderer->GetRenderWindow()->Render();
 }
 
