@@ -172,7 +172,7 @@ class MainWindow : public QMainWindow {
 
   void on_actionPlan_triggered();
 
-  void on_actionArcs_triggered();
+  void on_actionArcsView_triggered();
 
  private:
   Ui::MainWindow *ui;

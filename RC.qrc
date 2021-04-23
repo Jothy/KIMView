@@ -43,5 +43,8 @@
         <file>Icons/Isocentre.png</file>
         <file>Icons/StructureSet.png</file>
         <file>Icons/Arcs.png</file>
+        <file>Icons/Save-Figure.png</file>
+        <file>Icons/Page-read.png</file>
+        <file>../PTVOptimizer/Icons2/dl_fourviews.png</file>
     </qresource>
 </RCC>

@@ -99,6 +99,10 @@
          <property name="text">
           <string>Read</string>
          </property>
+         <property name="icon">
+          <iconset resource="RC.qrc">
+           <normaloff>:/Icons/Page-read.png</normaloff>:/Icons/Page-read.png</iconset>
+         </property>
         </widget>
        </item>
        <item>
@@ -127,6 +131,8 @@
   <tabstop>lineEdit</tabstop>
   <tabstop>listWidgetStructs</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="RC.qrc"/>
+ </resources>
  <connections/>
 </ui>

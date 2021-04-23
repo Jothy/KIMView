@@ -351,7 +351,7 @@ void MainWindow::on_actionCT_triggered() {
       this->ui->actionAdjust_Range->setEnabled(true);
       this->ui->actionWL_WW->setEnabled(true);
       this->ui->actionPlan->setEnabled(true);
-      this->ui->actionArcs->setEnabled(true);
+      this->ui->actionArcsView->setEnabled(true);
 
     } else {
       QMessageBox messageBox;
@@ -1323,10 +1323,10 @@ double MainWindow::CalcSSD(double *Iso, double GantryAngle,
   return SSD;
 }
 
-void MainWindow::on_actionArcs_triggered() {
+void MainWindow::on_actionArcsView_triggered() {
   // qDebug() << this->arcList.size();
   if (this->arcList.size() > 0) {
-    if (this->ui->actionArcs->isChecked()) {
+    if (this->ui->actionArcsView->isChecked()) {
       this->arcVisibility = 1;
       for (int i = 0; i < this->arcList.size(); i++) {
         this->arcList[i]->SetVisibility(true);

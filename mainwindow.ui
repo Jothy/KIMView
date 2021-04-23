@@ -84,7 +84,7 @@
     <addaction name="action3DView"/>
     <addaction name="separator"/>
     <addaction name="actionShowBeams"/>
-    <addaction name="actionArcs"/>
+    <addaction name="actionArcsView"/>
     <addaction name="actionShowDose"/>
     <addaction name="actionShowContours"/>
     <addaction name="separator"/>
@@ -179,7 +179,7 @@
    <addaction name="actionZoom_Out_All"/>
    <addaction name="actionReset_Zoom"/>
    <addaction name="actionGo_To_Isocentre"/>
-   <addaction name="actionArcs"/>
+   <addaction name="actionArcsView"/>
    <addaction name="actionCalc_DVH"/>
    <addaction name="actionBEV"/>
    <addaction name="actionShowBeams"/>
@@ -812,7 +812,7 @@
     <string>About</string>
    </property>
   </action>
-  <action name="actionArcs">
+  <action name="actionArcsView">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -827,7 +827,7 @@
      <normaloff>:/Icons/Arcs.png</normaloff>:/Icons/Arcs.png</iconset>
    </property>
    <property name="text">
-    <string>Arcs</string>
+    <string>View arcs</string>
    </property>
   </action>
  </widget>

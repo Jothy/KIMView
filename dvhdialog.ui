@@ -2085,7 +2085,7 @@
           </property>
           <property name="icon">
            <iconset resource="RC.qrc">
-            <normaloff>:/Icons/Camera.png</normaloff>:/Icons/Camera.png</iconset>
+            <normaloff>:/Icons/Save-Figure.png</normaloff>:/Icons/Save-Figure.png</iconset>
           </property>
           <property name="default">
            <bool>true</bool>
@@ -2142,8 +2142,8 @@
   </layout>
   <action name="actionSave_Figure">
    <property name="icon">
-    <iconset>
-     <normaloff>:/Icons/Icons/picture_save.png</normaloff>:/Icons/Icons/picture_save.png</iconset>
+    <iconset resource="RC.qrc">
+     <normaloff>:/Icons/Save-Figure.png</normaloff>:/Icons/Save-Figure.png</iconset>
    </property>
    <property name="text">
     <string>Save Figure</string>
@@ -2157,8 +2157,8 @@
   </action>
   <action name="actionReset_View">
    <property name="icon">
-    <iconset>
-     <normaloff>:/Icons/Icons/arrow_in.png</normaloff>:/Icons/Icons/arrow_in.png</iconset>
+    <iconset resource="RC.qrc">
+     <normaloff>:/Icons/Reset.png</normaloff>:/Icons/Reset.png</iconset>
    </property>
    <property name="text">
     <string>Reset View</string>
@@ -2172,8 +2172,8 @@
   </action>
   <action name="actionCalculate_DVH">
    <property name="icon">
-    <iconset>
-     <normaloff>:/Icons/Icons/chart_curve.png</normaloff>:/Icons/Icons/chart_curve.png</iconset>
+    <iconset resource="RC.qrc">
+     <normaloff>:/Icons/Charts.png</normaloff>:/Icons/Charts.png</iconset>
    </property>
    <property name="text">
     <string>Calculate DVH</string>
