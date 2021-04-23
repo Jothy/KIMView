@@ -88,6 +88,10 @@ DoseProfileDialog::~DoseProfileDialog() {
 void DoseProfileDialog::plotProfile() {
   QChart *chart = new QChart();
   chart->legend()->show();
+
+  // Enable anti-aliasing
+  this->ui->ChartView->setRenderHint(QPainter::Antialiasing, true);
+
   chart->addSeries(this->DoseData);
   this->ui->ChartView->setChart(chart);
 
