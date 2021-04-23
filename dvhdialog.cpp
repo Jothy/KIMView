@@ -82,13 +82,13 @@ DVHDialog::DVHDialog(QWidget *parent) : QDialog(parent), ui(new Ui::DVHDialog) {
   this->setWindowFlags(flags);
 
   this->ui->dvhTable->setAlternatingRowColors(true);
-  this->ui->dvhTable->setColumnWidth(0, 45);  // Shrink select column width
+  this->ui->dvhTable->setColumnWidth(0, 45); // Shrink select column width
 
-  this->maxDose = 70;               // Set to 70 Gy
-  this->bins = 100;                 // Default value for No. of bins
-  this->resampleDoseFlag = 0;       // Resample dose off by default
-  this->interpolationTypeFlag = 0;  // Linear by default
-  this->dvhTypeFlag = 0;            // Cumulative by default
+  this->maxDose = 70;              // Set to 70 Gy
+  this->bins = 100;                // Default value for No. of bins
+  this->resampleDoseFlag = 0;      // Resample dose off by default
+  this->interpolationTypeFlag = 0; // Linear by default
+  this->dvhTypeFlag = 0;           // Cumulative by default
 
   this->xMeanRan = 0.0;
   this->yMeanRan = 0.0;
@@ -108,7 +108,7 @@ DVHDialog::DVHDialog(QWidget *parent) : QDialog(parent), ui(new Ui::DVHDialog) {
   this->alphaByBeta = 10.0;
   this->alphaStd = 0.045;
   this->clonogenDensity = 1.0E7;
-  this->selectedStructureNum = 0;  // Default is 1st structure
+  this->selectedStructureNum = 0; // Default is 1st structure
 
   // Add context menu
   this->ui->ChartView->addAction(this->ui->actionCalculate_DVH);
@@ -131,7 +131,7 @@ DVHDialog::~DVHDialog() {
 }
 
 void DVHDialog::setStructureNames(QList<QString> structNames) {
-  const int itemNos = structNames.count();  // No. of items in QList
+  const int itemNos = structNames.count(); // No. of items in QList
   this->ui->dvhTable->setRowCount(itemNos);
   for (int n = 0; n < itemNos; n++) {
     this->ui->dvhTable->verticalHeaderItem(n)->setText(structNames[n]);
@@ -152,7 +152,7 @@ void DVHDialog::setROIColors(double ROIColors[][3]) {
 }
 
 void DVHDialog::getSelectedItems() {
-  this->sitems.clear();  // clean up at start
+  this->sitems.clear(); // clean up at start
   int rows = this->ui->dvhTable->rowCount();
   for (int x = 0; x < rows; x++) {
     int state = this->ui->dvhTable->item(x, 0)->checkState();
@@ -208,14 +208,12 @@ void DVHDialog::on_pushButton_clicked() {
       pd->setLabelText(this->structNames[x]);
 
       // qDebug()<<timer->currentTime();
-      DVHCalc *myDVHCalc =
-          new DVHCalc;  // Instantiate inside the loop,
-                        // otherwise it will create memory leaks
+      DVHCalc *myDVHCalc = new DVHCalc; // Instantiate inside the loop,
+                                        // otherwise it will create memory leaks
       int i = this->sitems[x];
       std::vector<double> results;
 
-      if (this->ROIType[i] !=
-          "N/A")  // Calculate only if structure really exist
+      if (this->ROIType[i] != "N/A") // Calculate only if structure really exist
       {
         QLineSeries *CurROIDVH = new QLineSeries();
         // Normal DVH calculation
@@ -226,15 +224,15 @@ void DVHDialog::on_pushButton_clicked() {
         myDVHCalc->indicesZ.clear();
 
         this->ui->dvhTable->item(i, 1)->setText(
-            QString::number(results[0], 'f', 2));  // volume
+            QString::number(results[0], 'f', 2)); // volume
         this->ui->dvhTable->item(i, 2)->setText(
-            QString::number(results[1], 'f', 2));  // max dose
+            QString::number(results[1], 'f', 2)); // max dose
         this->ui->dvhTable->item(i, 3)->setText(
-            QString::number(results[2], 'f', 2));  // mean dose
+            QString::number(results[2], 'f', 2)); // mean dose
         this->ui->dvhTable->item(i, 4)->setText(
-            QString::number(results[3], 'f', 2));  // min dose
+            QString::number(results[3], 'f', 2)); // min dose
         this->ui->dvhTable->item(i, 5)->setText(
-            QString::number(results[4], 'f', 2));  // std
+            QString::number(results[4], 'f', 2)); // std
 
         this->ui->dvhTable->item(i, 1)->setTextAlignment(Qt::AlignCenter);
         this->ui->dvhTable->item(i, 2)->setTextAlignment(Qt::AlignCenter);
@@ -242,13 +240,13 @@ void DVHDialog::on_pushButton_clicked() {
         this->ui->dvhTable->item(i, 4)->setTextAlignment(Qt::AlignCenter);
         this->ui->dvhTable->item(i, 5)->setTextAlignment(Qt::AlignCenter);
 
-        if (dvhTypeFlag == 1)  // Differential
+        if (dvhTypeFlag == 1) // Differential
         {
           myDVHCalc->histogramData2(0.02, myDVHCalc->doseValues, results[5], 1);
 
         }
 
-        else if (dvhTypeFlag == 0)  // Cumulative
+        else if (dvhTypeFlag == 0) // Cumulative
         {
           // 10cGy bin width
           myDVHCalc->histogramData2(0.10, myDVHCalc->doseValues, results[5], 0);
@@ -257,7 +255,7 @@ void DVHDialog::on_pushButton_clicked() {
         }
 
         // Fill in the table values
-        if (dvhTypeFlag == 1)  // Differential
+        if (dvhTypeFlag == 1) // Differential
         {
           int numPoints = myDVHCalc->volBins.size();
           for (int i = 0; i < numPoints; ++i) {
@@ -266,13 +264,14 @@ void DVHDialog::on_pushButton_clicked() {
 
         }
 
-        else if (dvhTypeFlag == 0)  // Cumulative
+        else if (dvhTypeFlag == 0) // Cumulative
         {
           CurROIDVH->append(0.0, 100.0);
           int numPoints = myDVHCalc->cumVolume.size();
           for (int i = 1; i < numPoints; ++i) {
             CurROIDVH->append(myDVHCalc->doseBins[i], myDVHCalc->cumVolume[i]);
-            qDebug() << myDVHCalc->doseBins[i] << "" << myDVHCalc->cumVolume[i];
+            // qDebug() << myDVHCalc->doseBins[i] << "" <<
+            // myDVHCalc->cumVolume[i];
           }
         }
 
@@ -294,13 +293,13 @@ void DVHDialog::on_pushButton_clicked() {
       DVHChart->createDefaultAxes();
       DVHChart->axisX()->setTitleText("Dose (Gy)");
       DVHChart->axisY()->setMin(0);
-      if (this->dvhTypeFlag == 0)  // If cumulative
+      if (this->dvhTypeFlag == 0) // If cumulative
       {
         DVHChart->axisY()->setMax(100);
         DVHChart->axisY()->setTitleText("Volume (%)");
       }
 
-      else if (this->dvhTypeFlag == 1)  // If differential
+      else if (this->dvhTypeFlag == 1) // If differential
       {
         DVHChart->axisY()->setTitleText("No. of bins");
       }

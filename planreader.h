@@ -34,7 +34,7 @@ THE SOFTWARE.
 #include <vector>
 
 class PlanReader {
- public:
+public:
   PlanReader();
   ~PlanReader();
   void readRTPlan();
@@ -50,35 +50,35 @@ class PlanReader {
     unsigned int beamNum;
     double beamAngle;
     double beamStopAngle =
-        -1;  // By default, if this is not set corectly the plan is not VMAT
-    double collAngle;
-    double couchAngle;
-    double fieldX1;
-    double fieldX2;
-    double fieldY1;
-    double fieldY2;
-    double icX;  // Isocenter x
-    double icY;  // Isocenter y
-    double icZ;  // Isocenter z
-    double mu;
-    double beamDose;
+        -1; // By default, if this is not set corectly the plan is not VMAT
+    double collAngle = 0.0;
+    double couchAngle = 0.0;
+    double fieldX1 = 0.0;
+    double fieldX2 = 0.0;
+    double fieldY1 = 0.0;
+    double fieldY2 = 0.0;
+    double icX = 0.0; // Isocenter x
+    double icY = 0.0; // Isocenter y
+    double icZ = 0.0; // Isocenter z
+    double mu = 0.0;
+    double beamDose = 0.0;
     QString arcDirection;
   };
 
   struct mlcDetail {
-    int leafPairs;
-    double cmsw;  // Cumulative meter set weight
+    int leafPairs = 0;
+    double cmsw = 0.0; // Cumulative meter set weight
     QString beamName;
     QString arcDirection;
-    int beamNo;
-    double beamAngle;
-    double collAngle;
-    double couchAngle;
-    double fieldX1;
-    double fieldX2;
-    double fieldY1;
-    double fieldY2;
-    int numCtrlPts;  // No. of control points
+    int beamNo = 0;
+    double beamAngle = 0.0;
+    double collAngle = 0.0;
+    double couchAngle = 0.0;
+    double fieldX1 = 0.0;
+    double fieldX2 = 0.0;
+    double fieldY1 = 0.0;
+    double fieldY2 = 0.0;
+    int numCtrlPts = 0; // No. of control points
     std::vector<std::vector<double>> mlcX1Pos;
     std::vector<std::vector<double>> mlcX2Pos;
   };
@@ -86,9 +86,9 @@ class PlanReader {
   std::vector<planDetail> planDetailStruct;
   std::vector<mlcDetail> mlcDetailStruct;
   std::vector<std::vector<double>>
-      muWeights;  // muWeight[3][5] corresponds to 3rd beam 5th segment
-  unsigned int numOfBeams;
-  double targetDose;
+      muWeights; // muWeight[3][5] corresponds to 3rd beam 5th segment
+  unsigned int numOfBeams = 0;
+  double targetDose = 0.0;
 };
 
-#endif  // PLANREADER_H
+#endif // PLANREADER_H
