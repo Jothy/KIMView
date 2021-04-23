@@ -114,6 +114,7 @@ DVHDialog::DVHDialog(QWidget *parent) : QDialog(parent), ui(new Ui::DVHDialog) {
   this->ui->ChartView->addAction(this->ui->actionCalculate_DVH);
   this->ui->ChartView->addAction(this->ui->actionReset_View);
   this->ui->ChartView->addAction(this->ui->actionSave_Figure);
+  this->ui->ChartView->setRenderHint(QPainter::Antialiasing, true);
 }
 
 DVHDialog::~DVHDialog() {
@@ -207,8 +208,9 @@ void DVHDialog::on_pushButton_clicked() {
       pd->setLabelText(this->structNames[x]);
 
       // qDebug()<<timer->currentTime();
-      DVHCalc *myDVHCalc = new DVHCalc;  // Instantiate inside the loop,
-                                         // otherwise it will create memory leaks
+      DVHCalc *myDVHCalc =
+          new DVHCalc;  // Instantiate inside the loop,
+                        // otherwise it will create memory leaks
       int i = this->sitems[x];
       std::vector<double> results;
 
