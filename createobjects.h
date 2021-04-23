@@ -73,6 +73,11 @@ class CreateObjects {
   vtkSmartPointer<vtkAssembly> createArc(double radius, double gantryStart,
                                          double gantryStop, QString dir,
                                          double Iso[3]);
+  vtkSmartPointer<vtkActor> createBeam(double x1, double x2, double y1,
+                                       double y2, double upperEnd,
+                                       double lowerEnd, double gantryAngle,
+                                       double collAngle, double couchAngle,
+                                       double isocenter[3]);
 };
 
 #endif  // CREATEOBJECTS_H

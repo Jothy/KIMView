@@ -82,7 +82,7 @@ void CreateObjects::createAnnotation(int location, double RGB[3],
   this->annotation->SetText(
       location,
       text1.toLatin1()
-          .data()); // toLatin1().data() is Qt equivalent of const char
+          .data());  // toLatin1().data() is Qt equivalent of const char
   this->annotation->GetTextProperty()->SetColor(RGB);
   this->annotation->GetTextProperty()->SetFontFamilyToTimes();
 }
@@ -108,8 +108,9 @@ vtkSmartPointer<vtkPolyData> CreateObjects::createSphere(double radius,
   return stripper->GetOutput();
 }
 
-vtkSmartPointer<vtkPolyData>
-CreateObjects::createCube(double x, double y, double z, double center[]) {
+vtkSmartPointer<vtkPolyData> CreateObjects::createCube(double x, double y,
+                                                       double z,
+                                                       double center[]) {
   vtkSmartPointer<vtkCubeSource> cube = vtkSmartPointer<vtkCubeSource>::New();
   cube->SetXLength(x);
   cube->SetYLength(y);
@@ -126,8 +127,9 @@ CreateObjects::createCube(double x, double y, double z, double center[]) {
   return stripper->GetOutput();
 }
 
-vtkSmartPointer<vtkPolyData>
-CreateObjects::createCylinder(double radius, double height, double center[]) {
+vtkSmartPointer<vtkPolyData> CreateObjects::createCylinder(double radius,
+                                                           double height,
+                                                           double center[]) {
   vtkSmartPointer<vtkCylinderSource> cylinder =
       vtkSmartPointer<vtkCylinderSource>::New();
   cylinder->SetCenter(center);
@@ -261,9 +263,9 @@ vtkSmartPointer<vtkActor> CreateObjects::createLeaf(double length,
   return leafActor;
 }
 
-vtkSmartPointer<vtkAssembly>
-CreateObjects::createVarian120MLC(double isocenter[3], double gantryAngle,
-                                  double collAngle, vtkTransform *userTr) {
+vtkSmartPointer<vtkAssembly> CreateObjects::createVarian120MLC(
+    double isocenter[3], double gantryAngle, double collAngle,
+    vtkTransform *userTr) {
   vtkSmartPointer<vtkAssembly> mlc = vtkSmartPointer<vtkAssembly>::New();
   int i;
   // First 10 thick leaves(1cm)
@@ -489,9 +491,11 @@ vtkSmartPointer<vtkAssembly> CreateObjects::createGraticule() {
   return graticule;
 }
 
-vtkSmartPointer<vtkAssembly>
-CreateObjects::createArc(double radius, double gantryStart, double gantryStop,
-                         QString dir, double Iso[3]) {
+vtkSmartPointer<vtkAssembly> CreateObjects::createArc(double radius,
+                                                      double gantryStart,
+                                                      double gantryStop,
+                                                      QString dir,
+                                                      double Iso[3]) {
   double arcLength = 0.0;
   if (dir == "CW") {
     arcLength = gantryStart - gantryStop;
@@ -593,4 +597,124 @@ CreateObjects::createArc(double radius, double gantryStart, double gantryStop,
   arcAssembly->AddPart(arcStopActor);
 
   return arcAssembly;
+}
+
+vtkSmartPointer<vtkActor> CreateObjects::createBeam(
+    double x1, double x2, double y1, double y2, double UpperEnd,
+    double LowerEnd, double gantryAngle, double collAngle, double couchAngle,
+    double isocenter[3]) {
+  // No need to apply couch angle, it doesn't rotate the actual beam
+  double LowerEnd_MaxFactor = LowerEnd / 1000;
+  double UpperEnd_MinFactor = UpperEnd / 1000;
+  double LowerEnd_x1 = x1 * LowerEnd_MaxFactor;
+  double UpperEnd_x1 = x1 * UpperEnd_MinFactor;
+  double LowerEnd_y1 = y1 * LowerEnd_MaxFactor;
+  double UpperEnd_y1 = y1 * UpperEnd_MinFactor;
+  double LowerEnd_InPhantom = -(LowerEnd - 1000);
+  double UpperEnd_InPhantom = (1000 - UpperEnd);
+  double x_Half_Low1 = LowerEnd_x1 / 1;
+  double y_Half_Low1 = LowerEnd_y1 / 1;
+  double x_Half_Up1 = UpperEnd_x1 / 1;
+  double y_Half_Up1 = UpperEnd_y1 / 1;
+
+  double LowerEnd_x2 = x2 * LowerEnd_MaxFactor;
+  double UpperEnd_x2 = x2 * UpperEnd_MinFactor;
+  double LowerEnd_y2 = y2 * LowerEnd_MaxFactor;
+  double UpperEnd_y2 = y2 * UpperEnd_MinFactor;
+  double x_Half_Low2 = LowerEnd_x2 / 1;
+  double y_Half_Low2 = LowerEnd_y2 / 1;
+  double x_Half_Up2 = UpperEnd_x2 / 1;
+  double y_Half_Up2 = UpperEnd_y2 / 1;
+
+  vtkSmartPointer<vtkPoints> pts = vtkSmartPointer<vtkPoints>::New();
+  pts->SetNumberOfPoints(8);
+  pts->InsertPoint(0, x_Half_Up1, LowerEnd_InPhantom, y_Half_Up1);
+  pts->InsertPoint(1, x_Half_Up2, LowerEnd_InPhantom, y_Half_Up1);
+  pts->InsertPoint(2, x_Half_Up2, LowerEnd_InPhantom, y_Half_Up2);
+  pts->InsertPoint(3, x_Half_Up1, LowerEnd_InPhantom, y_Half_Up2);
+  pts->InsertPoint(4, x_Half_Low1, UpperEnd_InPhantom, y_Half_Low2);
+  pts->InsertPoint(5, x_Half_Low2, UpperEnd_InPhantom, y_Half_Low2);
+  pts->InsertPoint(6, x_Half_Low2, UpperEnd_InPhantom, y_Half_Low1);
+  pts->InsertPoint(7, x_Half_Low1, UpperEnd_InPhantom, y_Half_Low1);
+
+  vtkSmartPointer<vtkHexahedron> aBeam = vtkSmartPointer<vtkHexahedron>::New();
+  aBeam->GetPointIds()->SetId(0, 0);
+  aBeam->GetPointIds()->SetId(1, 1);
+  aBeam->GetPointIds()->SetId(2, 2);
+  aBeam->GetPointIds()->SetId(3, 3);
+  aBeam->GetPointIds()->SetId(4, 7);
+  aBeam->GetPointIds()->SetId(5, 6);
+  aBeam->GetPointIds()->SetId(6, 5);
+  aBeam->GetPointIds()->SetId(7, 4);
+
+  vtkSmartPointer<vtkUnstructuredGrid> aBeamGrid =
+      vtkSmartPointer<vtkUnstructuredGrid>::New();
+  aBeamGrid->Allocate(1, 1);
+  aBeamGrid->InsertNextCell(aBeam->GetCellType(), aBeam->GetPointIds());
+  aBeamGrid->SetPoints(pts);
+
+  vtkSmartPointer<vtkDataSetSurfaceFilter> surface =
+      vtkSmartPointer<vtkDataSetSurfaceFilter>::New();
+  surface->SetInputData(aBeamGrid);
+  surface->Update();
+
+  // Define a clipping plane
+  vtkSmartPointer<vtkPlane> clipPlane = vtkSmartPointer<vtkPlane>::New();
+  clipPlane->SetNormal(0, 1.0, 0.0);
+  clipPlane->SetOrigin(0.0, (LowerEnd - 1000 - 2),
+                       0.0);  // clip last 2mm from isocenter
+
+  // Clip the source with the plane
+  vtkSmartPointer<vtkClipPolyData> clipper =
+      vtkSmartPointer<vtkClipPolyData>::New();
+  clipper->SetInputConnection(surface->GetOutputPort());
+  clipper->SetClipFunction(clipPlane);
+  clipper->InsideOutOn();
+
+  // First translate the beam to isocenter
+  vtkSmartPointer<vtkTransform> transform1 =
+      vtkSmartPointer<vtkTransform>::New();
+  transform1->Translate(isocenter[0], isocenter[1], isocenter[2]);
+  transform1->Update();
+
+  vtkSmartPointer<vtkTransformPolyDataFilter> transformer1 =
+      vtkSmartPointer<vtkTransformPolyDataFilter>::New();
+  transformer1->SetInputConnection(clipper->GetOutputPort());
+  transformer1->SetTransform(transform1);
+  transformer1->Update();
+
+  // Apply collimator, gantry and couch rotations about the isocenter
+  vtkSmartPointer<vtkTransformPolyDataFilter> transformer2 =
+      vtkSmartPointer<vtkTransformPolyDataFilter>::New();
+  transformer2->SetInputConnection(transformer1->GetOutputPort());
+  vtkSmartPointer<vtkTransform> transform2 =
+      vtkSmartPointer<vtkTransform>::New();
+  transform2->PostMultiply();
+  transform2->Translate(-isocenter[0], -isocenter[1], -isocenter[2]);
+  transform2->RotateY(collAngle);
+  transform2->RotateZ(gantryAngle);
+  transform2->RotateY(couchAngle);
+  transform2->Translate(isocenter[0], isocenter[1], isocenter[2]);
+  transform2->Update();
+
+  transformer2->SetTransform(transform2);
+  transformer2->Update();
+
+  vtkSmartPointer<vtkDataSetMapper> BeamMapper =
+      vtkSmartPointer<vtkDataSetMapper>::New();
+  BeamMapper->SetInputData(transformer2->GetOutput());
+  BeamMapper->ReleaseDataFlagOn();
+
+  vtkSmartPointer<vtkActor> BeamActor = vtkSmartPointer<vtkActor>::New();
+  BeamActor->SetMapper(BeamMapper);
+  // aBeamActor->SetOrigin(isocenter);
+  // aBeamActor->SetPosition(isocenter);
+  BeamActor->GetProperty()->SetColor(1, 1, 0);
+  BeamActor->GetProperty()->SetOpacity(0.95);
+  BeamActor->GetProperty()->SetAmbient(1.0);
+  BeamActor->GetProperty()->EdgeVisibilityOn();
+  BeamActor->GetProperty()->SetEdgeColor(1, 1, 1);
+  BeamActor->GetProperty()->SetLineWidth(1.0);
+  BeamActor->GetProperty()->SetRepresentationToWireframe();
+  return BeamActor;
 }
