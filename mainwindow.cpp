@@ -1226,6 +1226,7 @@ void MainWindow::on_actionPlan_triggered() {
       this->BEVViewer->ModelRenderer->AddActor(this->arcList[i]);
       this->AxialViewer->ViewRenderer->AddActor(this->arcList[i]);
     }
+    delete arcCreator;
   }
 
   // Add beams
@@ -1258,11 +1259,8 @@ void MainWindow::on_actionPlan_triggered() {
   this->BEVViewer->ModelRenderer->GetRenderWindow()->Render();
   this->AxialViewer->ViewRenderer->GetRenderWindow()->Render();
 
-  //    delete arcCreator;
-  //}
-
   // Move planes to isocentre
-  // this->ui->actionGo_To_Isocentre->trigger();
+  this->ui->actionGo_To_Isocentre->trigger();
 }
 
 double MainWindow::CalcSSD(double *Iso, double GantryAngle,

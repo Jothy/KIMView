@@ -82,7 +82,7 @@ void CreateObjects::createAnnotation(int location, double RGB[3],
   this->annotation->SetText(
       location,
       text1.toLatin1()
-          .data());  // toLatin1().data() is Qt equivalent of const char
+          .data()); // toLatin1().data() is Qt equivalent of const char
   this->annotation->GetTextProperty()->SetColor(RGB);
   this->annotation->GetTextProperty()->SetFontFamilyToTimes();
 }
@@ -108,9 +108,8 @@ vtkSmartPointer<vtkPolyData> CreateObjects::createSphere(double radius,
   return stripper->GetOutput();
 }
 
-vtkSmartPointer<vtkPolyData> CreateObjects::createCube(double x, double y,
-                                                       double z,
-                                                       double center[]) {
+vtkSmartPointer<vtkPolyData>
+CreateObjects::createCube(double x, double y, double z, double center[]) {
   vtkSmartPointer<vtkCubeSource> cube = vtkSmartPointer<vtkCubeSource>::New();
   cube->SetXLength(x);
   cube->SetYLength(y);
@@ -127,9 +126,8 @@ vtkSmartPointer<vtkPolyData> CreateObjects::createCube(double x, double y,
   return stripper->GetOutput();
 }
 
-vtkSmartPointer<vtkPolyData> CreateObjects::createCylinder(double radius,
-                                                           double height,
-                                                           double center[]) {
+vtkSmartPointer<vtkPolyData>
+CreateObjects::createCylinder(double radius, double height, double center[]) {
   vtkSmartPointer<vtkCylinderSource> cylinder =
       vtkSmartPointer<vtkCylinderSource>::New();
   cylinder->SetCenter(center);
@@ -263,9 +261,9 @@ vtkSmartPointer<vtkActor> CreateObjects::createLeaf(double length,
   return leafActor;
 }
 
-vtkSmartPointer<vtkAssembly> CreateObjects::createVarian120MLC(
-    double isocenter[3], double gantryAngle, double collAngle,
-    vtkTransform *userTr) {
+vtkSmartPointer<vtkAssembly>
+CreateObjects::createVarian120MLC(double isocenter[3], double gantryAngle,
+                                  double collAngle, vtkTransform *userTr) {
   vtkSmartPointer<vtkAssembly> mlc = vtkSmartPointer<vtkAssembly>::New();
   int i;
   // First 10 thick leaves(1cm)
@@ -491,15 +489,13 @@ vtkSmartPointer<vtkAssembly> CreateObjects::createGraticule() {
   return graticule;
 }
 
-vtkSmartPointer<vtkAssembly> CreateObjects::createArc(double radius,
-                                                      double gantryStart,
-                                                      double gantryStop,
-                                                      QString dir,
-                                                      double Iso[3]) {
+vtkSmartPointer<vtkAssembly>
+CreateObjects::createArc(double radius, double gantryStart, double gantryStop,
+                         QString dir, double Iso[3]) {
   double arcLength = 0.0;
   if (dir == "CW") {
     arcLength = gantryStart - gantryStop;
-  } else if (dir == "CCW") {
+  } else if (dir == "CC") {
     arcLength = gantryStop - gantryStart;
   }
 
@@ -512,11 +508,11 @@ vtkSmartPointer<vtkAssembly> CreateObjects::createArc(double radius,
     arcLengthDegrees = arcLengthDegrees - 360.0;
   }
 
-  else if (dir == "CCW" && arcLengthDegrees <= 360.0) {
+  else if (dir == "CC" && arcLengthDegrees <= 360.0) {
     arcLengthDegrees = arcLengthDegrees;
   }
 
-  else if (dir == "CCW" && arcLengthDegrees > 360.0) {
+  else if (dir == "CC" && arcLengthDegrees > 360.0) {
     arcLengthDegrees = arcLengthDegrees - 360.0;
   }
 
@@ -599,10 +595,11 @@ vtkSmartPointer<vtkAssembly> CreateObjects::createArc(double radius,
   return arcAssembly;
 }
 
-vtkSmartPointer<vtkActor> CreateObjects::createBeam(
-    double x1, double x2, double y1, double y2, double UpperEnd,
-    double LowerEnd, double gantryAngle, double collAngle, double couchAngle,
-    double isocenter[3]) {
+vtkSmartPointer<vtkActor>
+CreateObjects::createBeam(double x1, double x2, double y1, double y2,
+                          double UpperEnd, double LowerEnd, double gantryAngle,
+                          double collAngle, double couchAngle,
+                          double isocenter[3]) {
   // No need to apply couch angle, it doesn't rotate the actual beam
   double LowerEnd_MaxFactor = LowerEnd / 1000;
   double UpperEnd_MinFactor = UpperEnd / 1000;
@@ -662,7 +659,7 @@ vtkSmartPointer<vtkActor> CreateObjects::createBeam(
   vtkSmartPointer<vtkPlane> clipPlane = vtkSmartPointer<vtkPlane>::New();
   clipPlane->SetNormal(0, 1.0, 0.0);
   clipPlane->SetOrigin(0.0, (LowerEnd - 1000 - 2),
-                       0.0);  // clip last 2mm from isocenter
+                       0.0); // clip last 2mm from isocenter
 
   // Clip the source with the plane
   vtkSmartPointer<vtkClipPolyData> clipper =
