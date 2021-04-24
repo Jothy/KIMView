@@ -1228,30 +1228,31 @@ void MainWindow::on_actionPlan_triggered() {
     }
   }
 
-  //    // Add beams
-  //    CreateObjects *beamCreator = new CreateObjects;
+  // Add beams
+  CreateObjects *beamCreator = new CreateObjects;
 
-  //    for (int i = 0; i < this->ui->tableWidget->rowCount(); i++) {
-  //      double gantryStart = this->ui->tableWidget->item(i,
-  //      5)->text().toDouble(); double coll = this->ui->tableWidget->item(i,
-  //      8)->text().toDouble(); double x1 = this->ui->tableWidget->item(i,
-  //      10)->text().toDouble() *
-  //                  10;  // cm to mm
-  //      double x2 = this->ui->tableWidget->item(i, 11)->text().toDouble() *
-  //                  10;  // cm to mm
-  //      double y1 = this->ui->tableWidget->item(i, 12)->text().toDouble() *
-  //                  10;  // cm to mm
-  //      double y2 = this->ui->tableWidget->item(i, 13)->text().toDouble() *
-  //                  10;  // cm to mm
+  for (int i = 0; i < this->ui->tableWidget->rowCount(); i++) {
+    double gantryStart = this->ui->tableWidget->item(i, 5)->text().toDouble();
+    double coll = this->ui->tableWidget->item(i, 8)->text().toDouble();
+    double x1 = this->ui->tableWidget->item(i,
+                                            10)
+                    ->text()
+                    .toDouble() *
+                10; // cm to mm
+    double x2 =
+        this->ui->tableWidget->item(i, 11)->text().toDouble() * 10; // cm to mm
+    double y1 =
+        this->ui->tableWidget->item(i, 12)->text().toDouble() * 10; // cm to mm
+    double y2 =
+        this->ui->tableWidget->item(i, 13)->text().toDouble() * 10; // cm to mm
 
-  //      vtkSmartPointer<vtkActor> beam = vtkSmartPointer<vtkActor>::New();
-  //      beam = beamCreator->createBeam(x1, x2, y1, y2, 700, 1300,
-  //      gantryStart,
-  //                                     coll, 0.0, this->Isocentre);
-  //      this->BEVViewer->ModelRenderer->AddActor(beam);
-  //    }
+    vtkSmartPointer<vtkActor> beam = vtkSmartPointer<vtkActor>::New();
+    beam = beamCreator->createBeam(x1, x2, y1, y2, 700, 1300, gantryStart, coll,
+                                   0.0, this->Isocentre);
+    this->BEVViewer->ModelRenderer->AddActor(beam);
+  }
 
-  //    delete beamCreator;
+  delete beamCreator;
 
   this->AxialViewer->ViewRenderer->ResetCamera();
   this->BEVViewer->ModelRenderer->GetRenderWindow()->Render();
