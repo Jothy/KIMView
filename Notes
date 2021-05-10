@@ -8,3 +8,6 @@ double IEC[3]={10.0,20.0,30.0};
 double *LPS=Util->IEC2LPS(IEC);
 qDebug()<<LPS[0] <<LPS[1]<< LPS[2];
 
+//gti merge tool
+git mergetool --tool-help
+
