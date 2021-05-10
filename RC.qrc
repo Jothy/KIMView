@@ -45,6 +45,6 @@
         <file>Icons/Arcs.png</file>
         <file>Icons/Save-Figure.png</file>
         <file>Icons/Page-read.png</file>
-        <file>../PTVOptimizer/Icons2/dl_fourviews.png</file>
+        <file>Icons/KIMView.ico</file>
     </qresource>
 </RCC>
