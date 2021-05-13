@@ -1347,14 +1347,6 @@ void ImageViewer2D::AdjustDoseRange(double min, double max) {
   this->ViewRenderer->RemoveViewProp(this->DoseSlice);
 
   // Slice dose
-  int *extent = new int[6];
-  double *spacing = new double[3];
-  double *origin = new double[3];
-  double *center = new double[3];
-  this->ImageData->GetExtent(extent);
-  this->ImageData->GetSpacing(spacing);
-  this->ImageData->GetOrigin(origin);
-  this->ImageData->GetCenter(center);
 
   // Matrices for axial, coronal, sagittal view orientations
   double *AxialElements = new double[16];
@@ -1490,10 +1482,6 @@ void ImageViewer2D::AdjustDoseRange(double min, double max) {
     this->DoseScalarBar->SetLookupTable(this->DoseLUT);
   }
 
-  delete[] extent;
-  delete[] spacing;
-  delete[] origin;
-  delete[] center;
 
   delete[] AxialElements;
   delete[] SagittalElements;
