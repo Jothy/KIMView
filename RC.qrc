@@ -46,5 +46,6 @@
         <file>Icons/Save-Figure.png</file>
         <file>Icons/Page-read.png</file>
         <file>Icons/KIMView.ico</file>
+        <file>Icons/KIMView.tif</file>
     </qresource>
 </RCC>
