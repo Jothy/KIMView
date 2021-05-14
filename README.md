@@ -1,7 +1,6 @@
 # Template to work on. Documentation work is in progress...
-![Alert](https://github.com/Jothy/KIMView/blob/master/Icons/UnderConstruction.png)
 
-![alt text](https://github.com/Jothy/KIMView/blob/master/Icons/KIMView.png)
+![KIMView](https://github.com/Jothy/KIMView/blob/master/Icons/KIMView.png)
 
 # KIMView: An open-source real-time tumour motion, dose, and anatomy visualisation tool for radiotherapy
 
