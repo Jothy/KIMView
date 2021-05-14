@@ -1,5 +1,5 @@
 # Template to work on. Documentation work is in progress...
-[Alert](https://github.com/Jothy/KIMView/blob/master/Icons/UnderConstruction.png)
+![Alert](https://github.com/Jothy/KIMView/blob/master/Icons/UnderConstruction.png)
 
 ![alt text](https://github.com/Jothy/KIMView/blob/master/Icons/KIMView.png)
 
