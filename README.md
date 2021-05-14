@@ -81,7 +81,7 @@ See also the list of [contributors](https://github.com/your/project/contributors
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/Jothy/KIMView/blob/master/LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/Jothy/KIMView/blob/bbe98d173ba6c38958d506e7451bf99b1e25b5a4/LICENSE.md) file for details
 
 Thsi project uses Deleaker for deugging leaks.
 
