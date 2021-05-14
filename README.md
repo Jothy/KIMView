@@ -5,7 +5,7 @@ Thsi project uses Deleaker for deugging leaks.
 
 https://www.deleaker.com/
 
-# Project Title
+# KIMView: An open-source real-time tumour motion, dose, and anatomy visualisation tool for radiotherapy
 
 One Paragraph of project description goes here
 
