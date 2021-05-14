@@ -6,8 +6,8 @@ Thsi project uses Deleaker for deugging leaks.
 https://www.deleaker.com/
 
 # KIMView: An open-source real-time tumour motion, dose, and anatomy visualisation tool for radiotherapy
+Image-guided radiotherapy (IGRT) typically focuses on measuring geometric errors in patient’s anatomy, especially tumor position and methods to account for it. Geometric accuracy is an indirect measure of treatment quality. The metric of most interest in radiotherapy that correlates directly with clinical outcomes is dose to tumour and critical organs. The goal of this project is to develop an open-source real-time tumour motion, dose, and anatomy visualisation tool for radiotherapy so the treatment team can see the dose being delivered to the dynamic patient.
 
-One Paragraph of project description goes here
 
 ## Getting Started
 
