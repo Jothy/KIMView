@@ -43,10 +43,10 @@ SOFTWARE.
 #include <QActionGroup>
 #include <QCloseEvent>
 #include <QDockWidget>
+#include <QFileSystemWatcher>
 #include <QList>
 #include <QMainWindow>
 #include <QMap>
-#include <QFileSystemWatcher>
 #include <QString>
 #include <vector>
 
@@ -179,11 +179,10 @@ class MainWindow : public QMainWindow {
 
   void on_actionUpdate_Dose_triggered();
 
+ public slots:
+  void updateDose(const QString &str);
 
-public slots:
-  void updateDose(QString &path);
-
-private:
+ private:
   Ui::MainWindow *ui;
 
  protected:
