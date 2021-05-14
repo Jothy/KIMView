@@ -46,6 +46,7 @@ SOFTWARE.
 #include <QList>
 #include <QMainWindow>
 #include <QMap>
+#include <QFileSystemWatcher>
 #include <QString>
 #include <vector>
 
@@ -100,7 +101,9 @@ class MainWindow : public QMainWindow {
   ImageViewer2D *CoronalViewer;
   BEVWidget *BEVViewer;
   double CalcSSD(double Iso[3], double GantryAngle, vtkDataSet *BodyMesh);
+
   UDPListener *listener;
+  QFileSystemWatcher fileWatcher;
 
   QMap<QString, QString> PatientInfo;
 
@@ -174,7 +177,13 @@ class MainWindow : public QMainWindow {
 
   void on_actionArcsView_triggered();
 
- private:
+  void on_actionUpdate_Dose_triggered();
+
+
+public slots:
+  void updateDose(QString &path);
+
+private:
   Ui::MainWindow *ui;
 
  protected:

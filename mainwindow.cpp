@@ -65,6 +65,7 @@ SOFTWARE.
 #include <vtkTransformPolyDataFilter.h>
 #include <vtkXMLImageDataWriter.h>
 
+#include <QFileSystemWatcher>
 #include <QCloseEvent>
 #include <QDebug>
 #include <QDir>
@@ -166,6 +167,14 @@ MainWindow::MainWindow(QWidget *parent)
   // By default plan information dock widget is hidden
   this->ui->dockWidget_2->setVisible(false);
   this->ui->mdiAreaView->tileSubWindows();
+
+  //Setup file watcher
+  this->fileWatcher.addPath("D:\\Projects\\build-KIMView-Desktop_Qt_5_15_1_MSVC2019_64bit-Release\\Doses");
+
+  connect(&this->fileWatcher, SIGNAL(directoryChanged(QString)), this,
+                     SLOT(updateDose(QString &path)));
+
+
 
   // this->arc1 = vtkSmartPointer<vtkAssembly>::New();
 }
@@ -1316,6 +1325,38 @@ double MainWindow::CalcSSD(double *Iso, double GantryAngle,
   return SSD;
 }
 
+void MainWindow::updateDose(QString &path)
+{
+    qDebug()<<"Dose updated"<<"****"<<path;
+
+//    //Get current dose thresholds
+//    double minDose=this->AxialViewer->DoseRange[0];
+//    double maxDose=this->AxialViewer->DoseRange[1];
+
+//    // Read adn update dose
+//    vtkSmartPointer<vtkGDCMImageReader> DoseReader =
+//        vtkSmartPointer<vtkGDCMImageReader>::New();
+//    DoseReader->SetFileName("D:\\Projects\\build-KIMView-Desktop_Qt_5_15_1_MSVC2019_64bit-Release\\Doses\\RD.dcm");
+//    DoseReader->FileLowerLeftOn(); // otherwise flips the image
+//    DoseReader->SetDataScalarTypeToDouble();
+//    DoseReader->Update();
+//    this->RTDose->DeepCopy(DoseReader->GetOutput());
+//    //qDebug()<<this->RTDose->GetScalarRange()[0]<< ""<<this->RTDose->GetScalarRange()[1]<<"Dynamic dose";
+
+//    this->AxialViewer->SetRTDose(this->RTDose);
+//    this->SagittalViewer->SetRTDose(this->RTDose);
+//    this->CoronalViewer->SetRTDose(this->RTDose);
+//    this->BEVViewer->RTDose = this->RTDose;
+
+//    this->AxialViewer->ViewRenderer->RemoveActor(this->AxialViewer->DoseSlice);
+//    this->AxialViewer->AdjustDoseRange(minDose,maxDose);
+//    this->SagittalViewer->ViewRenderer->RemoveActor(this->SagittalViewer->DoseSlice);
+//    this->SagittalViewer->AdjustDoseRange(minDose,maxDose);
+//    this->CoronalViewer->ViewRenderer->RemoveActor(this->CoronalViewer->DoseSlice);
+//    this->CoronalViewer->AdjustDoseRange(minDose,maxDose);
+
+}
+
 void MainWindow::on_actionArcsView_triggered() {
   // qDebug() << this->arcList.size();
   if (this->arcList.size() > 0) {
@@ -1337,3 +1378,30 @@ void MainWindow::on_actionArcsView_triggered() {
     this->BEVViewer->ModelRenderer->GetRenderWindow()->Render();
   }
 }
+
+void MainWindow::on_actionUpdate_Dose_triggered()
+{
+    //Get current dose thresholds
+    double minDose=this->AxialViewer->DoseRange[0];
+    double maxDose=this->AxialViewer->DoseRange[1];
+
+    // qDebug()<<doseFile;
+    vtkSmartPointer<vtkGDCMImageReader> DoseReader =
+        vtkSmartPointer<vtkGDCMImageReader>::New();
+    DoseReader->SetFileName("D:\\Projects\\build-KIMView-Desktop_Qt_5_15_1_MSVC2019_64bit-Release\\Doses\\RD.dcm");
+    DoseReader->FileLowerLeftOn(); // otherwise flips the image
+    DoseReader->SetDataScalarTypeToDouble();
+    DoseReader->Update();
+    this->RTDose->DeepCopy(DoseReader->GetOutput());
+    //qDebug()<<this->RTDose->GetScalarRange()[0]<< ""<<this->RTDose->GetScalarRange()[1]<<"Dynamic dose";
+
+    this->AxialViewer->SetRTDose(this->RTDose);
+    this->SagittalViewer->SetRTDose(this->RTDose);
+    this->CoronalViewer->SetRTDose(this->RTDose);
+    this->BEVViewer->RTDose = this->RTDose;
+
+    this->AxialViewer->ViewRenderer->RemoveActor(this->AxialViewer->DoseSlice);
+    this->AxialViewer->AdjustDoseRange(minDose,maxDose);
+
+}
+

@@ -100,6 +100,7 @@ class ImageViewer2D : public QWidget {
   void AdjustDoseRange(double min, double max);
   void AdjustImageWLWW();
 
+
   double SliceStep;
   int SliceOrientation;                     // Axial by default
   double WindowUp = 600, WindowLow = -400;  // corresponds to WW=1000 & WL=100
