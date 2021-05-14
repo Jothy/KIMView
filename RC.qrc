@@ -1,5 +1,4 @@
 <RCC>
-    <qresource prefix="/Icons"/>
     <qresource prefix="/">
         <file>Icons/Beam.png</file>
         <file>Icons/Bones.png</file>
@@ -48,5 +47,6 @@
         <file>Icons/KIMView.ico</file>
         <file>Icons/KIMView.tif</file>
         <file>Icons/KIMView.png</file>
+        <file>Icons/UnderConstruction.png</file>
     </qresource>
 </RCC>
