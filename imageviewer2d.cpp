@@ -1482,7 +1482,6 @@ void ImageViewer2D::AdjustDoseRange(double min, double max) {
     this->DoseScalarBar->SetLookupTable(this->DoseLUT);
   }
 
-
   delete[] AxialElements;
   delete[] SagittalElements;
   delete[] CoronalElements;

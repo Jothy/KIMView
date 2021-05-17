@@ -48,5 +48,6 @@
         <file>Icons/KIMView.tif</file>
         <file>Icons/KIMView.png</file>
         <file>Icons/UnderConstruction.png</file>
+        <file>Icons/POI.png</file>
     </qresource>
 </RCC>

@@ -46,7 +46,7 @@
      <x>0</x>
      <y>0</y>
      <width>1155</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -288,11 +288,11 @@
        </item>
        <item>
         <property name="text">
-         <string/>
+         <string>POIs</string>
         </property>
         <property name="icon">
-         <iconset>
-          <normaloff>:/RC/Icons1/bullet_blue.png</normaloff>:/RC/Icons1/bullet_blue.png</iconset>
+         <iconset resource="RC.qrc">
+          <normaloff>:/Icons/POI.png</normaloff>:/Icons/POI.png</iconset>
         </property>
        </item>
       </widget>
