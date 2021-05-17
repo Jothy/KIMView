@@ -9,7 +9,7 @@
 Image-guided radiotherapy (IGRT) typically focuses on measuring geometric errors in patient’s anatomy, especially tumor position and methods to account for it. Geometric accuracy is an indirect measure of treatment quality. The metric of most interest in radiotherapy that correlates directly with clinical outcomes is dose to tumour and critical organs [[1]](https://pubmed.ncbi.nlm.nih.gov/20171515/). The goal of this project is to develop an open-source real-time tumour motion, dose, and anatomy visualisation tool for radiotherapy so the treatment team can see the dose being delivered to the dynamic patient.
 
 ## Related publications
-1. [J.Selvaraj,Modelling the effect of geometric uncertainties, clonogen distribution and IMRT interpaly effect on Tumour Control Probability, 2013, PhD Thesis, University of Liverpool, UK](https://livrepository.liverpool.ac.uk/17533)
+1. [J.Selvaraj,Modelling the effect of geometric uncertainties, clonogen distribution and IMRT interpaly effect on Tumour Control Probability, 2013, PhD Thesis, University of Liverpool, UK](https://tinyurl.com/JSelvarajPhDThesis)
 
 
 ## Getting Started
@@ -84,7 +84,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-* **Jothy Selvaraj** - *Email: Jothybasu@gmail.com* - [Initial work](https://livrepository.liverpool.ac.uk/17533/)
+* **Jothy Selvaraj** - *Email: Jothybasu@gmail.com* - [Initial work](https://tinyurl.com/JSelvarajPhDThesis)
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
