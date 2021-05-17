@@ -1088,8 +1088,8 @@ void ImageViewer2D::DisplayPOIs(double SliceLoc, int Orientation) {
       vtkSmartPointer<vtkActor> POIActor = vtkSmartPointer<vtkActor>::New();
       POIActor =
           this->CutROI(this->POIList[i], SliceLoc, 1.0, 1.0, 0.0, Orientation);
-      POIActor->GetProperty()->SetLineWidth(5.0);
-      POIActor->GetProperty()->SetEdgeColor(1, 0, 0);
+      POIActor->GetProperty()->SetLineWidth(10.0);
+      POIActor->GetProperty()->SetEdgeColor(1, 1, 1);
       this->POIActors->AddItem(POIActor);
       this->ViewRenderer->AddActor(this->POIActors->GetLastItem());
     }
@@ -1477,6 +1477,9 @@ void ImageViewer2D::AdjustDoseRange(double min, double max) {
 
   // Toggle interpolation
   this->DoseSlice->InterpolateOn();
+  // Dose is always above image
+  this->DoseSlice->SetPosition(0, 0, -1);
+
 
   if (this->RTDose->GetScalarRange()[1] > 1.0) {
     this->DoseScalarBar->SetLookupTable(this->DoseLUT);
