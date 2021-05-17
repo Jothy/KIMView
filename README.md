@@ -17,12 +17,15 @@ Image-guided radiotherapy (IGRT) typically focuses on measuring geometric errors
 
 
 ### Prerequisites
+KIMView depends on the following toolkits:
+1. [QT 5.XX](https://www.qt.io/offline-installers) or later but not QT 6.X
+2. [VTK 7.X](https://vtk.org/download/)
+3. [GDCM 2.8.X](https://sourceforge.net/projects/gdcm/files/gdcm%202.x/)
+4. [ITK 4.XX](https://itk.org/download/)
+5. [CMake](https://cmake.org/download/)
+6. [Visual Studio Community Edition](https://visualstudio.microsoft.com/vs/community/)
 
-What things you need to install the software and how to install them
-
-```
-Give examples
-```
+Either you can download the tookits and build VTK, GDCM & ITK yourself or else you can use the libs and DLLs provided.The sequence of build is VTK->GDCM->ITK. You need to use CMake to configure the build process adn genereate make fiels then build build with Visual Studio. The current version of KIMView is only compatible with the versions of libraries mentioned above.
 
 ### Installing
 
