@@ -63,8 +63,8 @@ SOFTWARE.
 #include <vtkSmartPointer.h>
 #include <vtkTransform.h>
 #include <vtkTransformPolyDataFilter.h>
-#include <vtkXMLImageDataWriter.h>
 #include <vtkTriangleFilter.h>
+#include <vtkXMLImageDataWriter.h>
 
 #include <QCloseEvent>
 #include <QDebug>
@@ -324,6 +324,9 @@ void MainWindow::on_actionCT_triggered() {
 
       this->ui->mdiAreaView->tileSubWindows();
       this->ui->statusBar->showMessage("CT imported sucessfully");
+
+      // In somecases CT are centered, this fixes the problem
+      this->ui->actionReset_Zoom->trigger();
 
       QTreeWidgetItem *wItem = new QTreeWidgetItem((QTreeWidget *)nullptr,
                                                    QStringList(QString("CT")));
@@ -1208,37 +1211,39 @@ void MainWindow::on_actionPlan_triggered() {
   this->Isocentre[1] = myPlanReader->planDetailStruct[0].icY * 10;  // cm to mm
   this->Isocentre[2] = myPlanReader->planDetailStruct[0].icZ * 10;  // cm to mm
 
-  //Add isocentre POI
-  //Create a sphere source and  add it to the mesh list
-  vtkSmartPointer<vtkSphereSource>SphereSrc=
-          vtkSmartPointer<vtkSphereSource>::New();
-  SphereSrc->SetRadius(1.0);//1mm so that it just appears on one single slice
+  // Add isocentre POI
+  // Create a sphere source and  add it to the mesh list
+  vtkSmartPointer<vtkSphereSource> SphereSrc =
+      vtkSmartPointer<vtkSphereSource>::New();
+  SphereSrc->SetRadius(1.0);  // 1mm so that it just appears on one single slice
   SphereSrc->SetThetaResolution(100.0);
   SphereSrc->SetPhiResolution(100.0);
   SphereSrc->SetCenter(this->Isocentre);
   SphereSrc->Update();
 
-  vtkSmartPointer<vtkTriangleFilter>Triangler=
-          vtkSmartPointer<vtkTriangleFilter>::New();
+  vtkSmartPointer<vtkTriangleFilter> Triangler =
+      vtkSmartPointer<vtkTriangleFilter>::New();
   Triangler->SetInputConnection(SphereSrc->GetOutputPort());
   Triangler->Update();
 
   this->POIList.push_back(Triangler->GetOutput());
 
-  QTreeWidgetItem *IsoItem = new QTreeWidgetItem((QTreeWidget*)nullptr, QStringList(QString("Isocentre")));
-  IsoItem->setCheckState(0,Qt::Checked);
+  QTreeWidgetItem *IsoItem = new QTreeWidgetItem(
+      (QTreeWidget *)nullptr, QStringList(QString("Isocentre")));
+  IsoItem->setCheckState(0, Qt::Checked);
   QIcon IsoIcon;
-  IsoIcon.addFile(QString::fromUtf8(":/RC/Icons/POI.png"),QSize(10,10),QIcon::Normal,QIcon::Off);
-  IsoItem->setIcon(0,IsoIcon);
-  IsoItem->setBackgroundColor(0,QColor(255,255,0));
+  IsoIcon.addFile(QString::fromUtf8(":/RC/Icons/POI.png"), QSize(10, 10),
+                  QIcon::Normal, QIcon::Off);
+  IsoItem->setIcon(0, IsoIcon);
+  IsoItem->setBackgroundColor(0, QColor(255, 255, 0));
   this->ui->treeWidget->topLevelItem(4)->addChild(IsoItem);
 
-  this->AxialViewer->POIVisibility=true;
-  this->AxialViewer->POIList=this->POIList;
-  this->SagittalViewer->POIVisibility=true;
-  this->SagittalViewer->POIList=this->POIList;
-  this->CoronalViewer->POIVisibility=true;
-  this->CoronalViewer->POIList=this->POIList;
+  this->AxialViewer->POIVisibility = true;
+  this->AxialViewer->POIList = this->POIList;
+  this->SagittalViewer->POIVisibility = true;
+  this->SagittalViewer->POIList = this->POIList;
+  this->CoronalViewer->POIVisibility = true;
+  this->CoronalViewer->POIList = this->POIList;
 
   delete myPlanReader;
 
