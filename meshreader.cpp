@@ -464,10 +464,12 @@ void meshReader::getROIMeshes(vtkImageData *imgData, float zSpacing,
               vtkSmartPointer<vtkWindowedSincPolyDataFilter>::New();
           smoother->SetInputConnection(decimate->GetOutputPort());
           smoother->SetNumberOfIterations(15);  // original 15
-          smoother->BoundarySmoothingOn();
+          smoother->BoundarySmoothingOff();
           smoother->FeatureEdgeSmoothingOff();
-          smoother->SetFeatureAngle(120);
-          smoother->SetPassBand(0.001);  // originally 0.001
+          smoother->SetFeatureAngle(45);
+          smoother->SetEdgeAngle(15);
+          smoother->SetPassBand(
+              0.001);  // lesser the value, higher the smoothing
           smoother->Update();
 
           // For better appearance
@@ -481,8 +483,8 @@ void meshReader::getROIMeshes(vtkImageData *imgData, float zSpacing,
               vtkSmartPointer<vtkPolyDataMapper>::New();
           mapper->SetInputConnection(pdNormals->GetOutputPort());
           mapper->ScalarVisibilityOff();
-          mapper->ReleaseDataFlagOff();
-          mapper->ImmediateModeRenderingOn();
+          mapper->ReleaseDataFlagOn();
+          // mapper->ImmediateModeRenderingOn();
           mapper->Update();
 
           vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
