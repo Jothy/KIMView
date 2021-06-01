@@ -25,7 +25,7 @@ KIMView depends on the following toolkits:
 5. [CMake](https://cmake.org/download/)
 6. [Visual Studio Community Edition](https://visualstudio.microsoft.com/vs/community/)
 
-Either you can download the tookits and build VTK, GDCM & ITK yourself or else you can use the libs and DLLs provided.The sequence of build is VTK->GDCM->ITK. You need to use CMake to configure the build process adn genereate make fiels then build build with Visual Studio. The current version of KIMView is only compatible with the versions of libraries mentioned above.
+Either you can download the tookits and build VTK, GDCM & ITK yourself or else you can use the libs and DLLs provided.The sequence of build is VTK->GDCM->ITK. You need to use CMake to configure the build process and genereate make files then build build with Visual Studio. The current version of KIMView is only compatible with the versions of libraries mentioned above.
 
 ### Installing
 
