@@ -213,7 +213,7 @@ void DVHDialog::on_pushButton_clicked() {
       int i = this->sitems[x];
       std::vector<double> results;
 
-      qDebug()<<this->ROIType[i]<<":ROI type";
+      //qDebug()<<this->ROIType[i]<<":ROI type";
 
       if (this->ROIType[i] != "N/A") // Calculate only if structure really exist
       {
@@ -321,135 +321,7 @@ void DVHDialog::on_pushButton_clicked() {
   }
 }
 
-//    }
 
-//    else if(this->resampleDoseFlag==1)
-//    {
-//        if(this->ui->radioButtonLinear->isChecked())
-//        {
-//            this->interpolationTypeFlag=0;
-//        }
-//        else if(this->ui->radioButtonCubic->isChecked())
-//        {
-//            this->interpolationTypeFlag=1;
-//        }
-//        else if(this->ui->radioButtonNeighbor->isChecked())
-//        {
-//            this->interpolationTypeFlag=2;
-//        }
-
-//        DVHCalc* resampler=new DVHCalc;
-//        double xSpacing=this->ui->xSpcSpinBox->value();
-//        double ySpacing=this->ui->ySpcSpinBox->value();
-//        double zSpacing=this->ui->zSpcSpinBox->value();
-//        QMessageBox* msgBox=new QMessageBox(this);
-//        msgBox->setText("Resampling dose grid");
-//        msgBox->setIcon(QMessageBox::Information);
-//        msgBox->show();
-//        QCoreApplication::processEvents();
-
-//        if(this->doseMatrix->GetSpacing()[0]!=1.0)
-//        {
-//           resampler->resampleImage(this->doseMatrix,xSpacing,ySpacing,zSpacing,this->interpolationTypeFlag);
-//           this->doseMatrix=resampler->resampledImage;
-//        }
-
-//        msgBox->close();
-//        delete msgBox;
-//        QCoreApplication::processEvents();
-
-//        //this->bins=this->ui->binSpinBox->value();
-//        this->getSelectedItems();
-//        // Set up the view
-//        this->chart->GetAxis(vtkAxis::BOTTOM)->SetMaximum(this->maxDose+1);//Extra
-//        1Gy for visual clarity
-//        // this->chart->SetShowLegend(true);
-//        this->chart->ClearPlots();
-
-//        //Calculate DVH for each selected item
-//        for (int x=0;x<this->sitems.size();x++)
-//        {
-//            // qDebug()<<timer->currentTime();
-//            DVHCalc *myDVHCalc= new DVHCalc;//Instantiate inside the loop,
-//            otherwise it will create memory leaks int i=this->sitems[x];
-//            std::vector<double>results;
-//            results=myDVHCalc->calcStructDVH(this->meshes[i],this->doseMatrix);
-//            myDVHCalc->indicesX.clear();
-//            myDVHCalc->indicesY.clear();
-//            myDVHCalc->indicesZ.clear();
-
-//            this->ui->dvhTable->item(i,1)->setText(QString::number(results[0]));//volume
-//            this->ui->dvhTable->item(i,2)->setText(QString::number(results[1]));//max
-//            dose
-//            this->ui->dvhTable->item(i,3)->setText(QString::number(results[2]));//mean
-//            dose
-//            this->ui->dvhTable->item(i,4)->setText(QString::number(results[3]));//min
-//            dose
-//            this->ui->dvhTable->item(i,5)->setText(QString::number(results[4]));//std
-
-//            if(dvhTypeFlag==1)//Differential
-//            {
-//                myDVHCalc->histogramData2(0.01,myDVHCalc->doseValues,results[5],1);
-//            }
-//            else if(dvhTypeFlag==0)//Cumulative
-//            {
-//                myDVHCalc->histogramData2(0.01,myDVHCalc->doseValues,results[5],0);
-//                myDVHCalc->diffToCumulative(myDVHCalc->doseBins,myDVHCalc->volBins);
-//                myDVHCalc->doseValues.clear();
-//            }
-
-//            vtkSmartPointer<vtkTable >table=
-//                    vtkSmartPointer<vtkTable>::New();
-//            vtkSmartPointer<vtkFloatArray> arrX =
-//                    vtkSmartPointer<vtkFloatArray>::New();
-//            arrX->SetName("X Axis");
-//            table->AddColumn(arrX);
-//            vtkSmartPointer<vtkFloatArray> arrY =
-//                    vtkSmartPointer<vtkFloatArray>::New();
-//            arrY->SetName(this->structNames[i].toLatin1());
-//            table->AddColumn(arrY);
-//            // Fill in the table with some example values
-//            if(dvhTypeFlag==1)//Differential
-//            {
-//                int numPoints =myDVHCalc->doseBins.size();
-//                table->SetNumberOfRows(numPoints);
-//                for (int i = 0; i < numPoints; ++i)
-//                {
-//                    table->SetValue(i, 0, myDVHCalc->doseBins[i]);
-//                    table->SetValue(i, 1, myDVHCalc->volBins[i]);
-//                }
-//                // qDebug()<<"Diff calculated";
-//            }
-
-//            else if(dvhTypeFlag==0)//Cumulative
-//            {
-//                int numPoints = myDVHCalc->cumVolume.size();
-//                table->SetNumberOfRows(numPoints);
-//                table->SetValue(0,1,100);
-//                table->SetValue(0,0,0);
-//                for (int i = 1; i < numPoints; ++i)
-//                {
-//                    table->SetValue(i, 0, myDVHCalc->doseBins[i]);
-//                    table->SetValue(i, 1, myDVHCalc->cumVolume[i]);
-
-//                }
-//                //             qDebug()<<"Cum calculated";
-//            }
-
-//            myDVHCalc->doseBins.clear();
-//            myDVHCalc->cumVolume.clear();
-
-//            vtkPlot *line = this->chart->AddPlot(vtkChart::LINE);
-//            line->SetInputData(table, 0, 1);
-//            line->SetColor(this->ROIColors[i][0],this->ROIColors[i][1],this->ROIColors[i][2],255);
-//            line->SetWidth(2.0);
-
-//            delete myDVHCalc;
-//            //qDebug()<<timer->currentTime();
-
-//        }
-//        delete resampler;
-//    }
 
 void DVHDialog::on_ResetViewButton_clicked() {}
 
