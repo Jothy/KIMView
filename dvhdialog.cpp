@@ -213,6 +213,8 @@ void DVHDialog::on_pushButton_clicked() {
       int i = this->sitems[x];
       std::vector<double> results;
 
+      qDebug()<<this->ROIType[i]<<":ROI type";
+
       if (this->ROIType[i] != "N/A") // Calculate only if structure really exist
       {
         QLineSeries *CurROIDVH = new QLineSeries();
