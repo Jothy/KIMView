@@ -122,10 +122,10 @@ LIBS+= -LD:\Libs\ITK\Install\lib  -lITKBiasCorrection-4.13   -lITKBioCell-4.13  
 ##Needed to link ITK libs. This is advanced windows api
 LIBS += advapi32.lib
 
-INCLUDEPATH+= D:\Libs\GDCM\Install\include\gdcm-2.8
+INCLUDEPATH+= D:\LibsNew\GDCM\Install\include\gdcm-3.0
 
-LIBS+= -LD:\Libs\GDCM\Install\lib -lgdcmcharls -lgdcmCommon -lgdcmDICT -lgdcmDSED -lgdcmexpat -lgdcmgetopt -lgdcmIOD -lgdcmjpeg8 -lgdcmjpeg12 -lgdcmjpeg16 -lgdcmMEXD -lgdcmMSFF -lgdcmopenjp2\
--lgdcmzlib -lvtkgdcm -lsocketxx
+LIBS+= -LD:\LibsNew\GDCM\Install\lib -lgdcmcharls -lgdcmCommon -lgdcmDICT -lgdcmDSED -lgdcmexpat -lgdcmgetopt -lgdcmIOD -lgdcmjpeg8 -lgdcmjpeg12 -lgdcmjpeg16 -lgdcmMEXD -lgdcmMSFF -lgdcmopenjp2\
+-lgdcmzlib -lsocketxx
 
 
 DISTFILES += \
