@@ -51,6 +51,7 @@ SOFTWARE.
 #include <vtkConeSource.h>
 #include <vtkDICOMImageReader.h>
 #include <vtkFileOutputWindow.h>
+#include <vtkImageShiftScale.h>
 #include <vtkInteractorStyleTrackballCamera.h>
 #include <vtkOutlineFilter.h>
 #include <vtkPolyData.h>
@@ -491,14 +492,35 @@ void MainWindow::on_actionDose_triggered() {
       reader->SetFileName(DoseFile.toStdString());
       reader->Update();
 
+      // Multiply the raw values of the image data with dose grid scaling
+      // factor;
+      using DictionaryType = itk::MetaDataDictionary;
+      typedef itk::MetaDataObject<std::string> MetaDataStringType;
+      const DictionaryType &dictionary = gdcmIO->GetMetaDataDictionary();
+
+      std::string doseGridScaling = "3004|000e";
+      auto doseGridScalingFactor = dictionary.Find(doseGridScaling);
+      MetaDataStringType::ConstPointer doseGridScalingVal =
+          dynamic_cast<const MetaDataStringType *>(
+              doseGridScalingFactor->second.GetPointer());
+      std::string doseGridScalingStr;
+      doseGridScalingStr = doseGridScalingVal->GetMetaDataObjectValue();
+      // qDebug() << std::stod(doseGridScalingStr) << "Dose grid scaling ";
+
       typedef itk::ImageToVTKImageFilter<InputImageType> ConnectorType;
       ConnectorType::Pointer Converter = ConnectorType::New();
       Converter->SetInput(reader->GetOutput());
       Converter->Update();
-      // qDebug()<<"Conversion done!";
 
-      this->RTDose->DeepCopy(Converter->GetOutput());
+      vtkSmartPointer<vtkImageShiftScale> scaler =
+          vtkSmartPointer<vtkImageShiftScale>::New();
+      scaler->SetInputData(Converter->GetOutput());
+      scaler->SetScale(std::stod(doseGridScalingStr));
+      // Important to get accurate dose values
+      scaler->SetOutputScalarTypeToDouble();
+      scaler->Update();
 
+      this->RTDose->DeepCopy(scaler->GetOutput());
       // qDebug()<<this->RTDose->GetScalarRange()[0]<<":Min"<<this->RTDose->GetScalarRange()[1]<<":Max";
     } else {
       QMessageBox messageBox;
@@ -1451,4 +1473,53 @@ void MainWindow::on_actionArcsView_triggered() {
   }
 }
 
-void MainWindow::on_actionUpdate_Dose_triggered() {}
+void MainWindow::on_actionUpdate_Dose_triggered() {
+  QString DoseFile = QFileDialog::getOpenFileName(this, "Open RT Dose");
+
+  if (DoseFile != nullptr) {
+    // qDebug()<<doseFile;
+    const unsigned int InputDimension = 3;
+    typedef double PixelType;
+    typedef itk::Image<PixelType, InputDimension> InputImageType;
+    typedef itk::ImageSeriesReader<InputImageType> ReaderType;
+    typedef itk::GDCMImageIO ImageIOType;
+    ImageIOType::Pointer gdcmIO = ImageIOType::New();
+    ReaderType::Pointer reader = ReaderType::New();
+
+    reader->SetImageIO(gdcmIO);
+    reader->SetFileName(DoseFile.toStdString());
+    reader->Update();
+
+    // qDebug()<<"Reading done!";
+    using DictionaryType = itk::MetaDataDictionary;
+    typedef itk::MetaDataObject<std::string> MetaDataStringType;
+    const DictionaryType &dictionary = gdcmIO->GetMetaDataDictionary();
+
+    std::string doseGridScaling = "3004|000e";
+    auto doseGridScalingFactor = dictionary.Find(doseGridScaling);
+    MetaDataStringType::ConstPointer doseGridScalingVal =
+        dynamic_cast<const MetaDataStringType *>(
+            doseGridScalingFactor->second.GetPointer());
+    std::string doseGridScalingStr;
+    doseGridScalingStr = doseGridScalingVal->GetMetaDataObjectValue();
+    // qDebug() << std::stod(doseGridScalingStr) << "Dose grid scaling ";
+
+    typedef itk::ImageToVTKImageFilter<InputImageType> ConnectorType;
+    ConnectorType::Pointer Converter = ConnectorType::New();
+    Converter->SetInput(reader->GetOutput());
+    Converter->Update();
+
+    vtkSmartPointer<vtkImageShiftScale> scaler =
+        vtkSmartPointer<vtkImageShiftScale>::New();
+    scaler->SetInputData(Converter->GetOutput());
+    scaler->SetScale(std::stod(doseGridScalingStr));
+    // Important to get accurate dose values
+    scaler->SetOutputScalarTypeToDouble();
+    scaler->Update();
+
+    this->RTDose->DeepCopy(scaler->GetOutput());
+
+    qDebug() << this->RTDose->GetScalarRange()[0]
+             << this->RTDose->GetScalarRange()[1];
+  }
+}
