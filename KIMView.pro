@@ -131,8 +131,7 @@ LIBS+= -LD:\Libs\GDCM\Install\lib -lgdcmcharls -lgdcmCommon -lgdcmDICT -lgdcmDSE
 DISTFILES += \
     Human.vtp \
     LicenseTemplate \
-    Notes \
-    Shifts.txt
+    Notes
 
 RESOURCES += \
     RC.qrc
