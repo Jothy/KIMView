@@ -125,7 +125,7 @@ LIBS += advapi32.lib
 INCLUDEPATH+= D:\Libs\GDCM\Install\include\gdcm-2.8
 
 LIBS+= -LD:\Libs\GDCM\Install\lib -lgdcmcharls -lgdcmCommon -lgdcmDICT -lgdcmDSED -lgdcmexpat -lgdcmgetopt -lgdcmIOD -lgdcmjpeg8 -lgdcmjpeg12 -lgdcmjpeg16 -lgdcmMEXD -lgdcmMSFF -lgdcmopenjp2\
--lgdcmzlib -lvtkgdcm -lsocketxx
+-lgdcmzlib -lsocketxx
 
 
 DISTFILES += \
