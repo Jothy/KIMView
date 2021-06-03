@@ -74,72 +74,76 @@ DVHCalc::~DVHCalc() {
 std::vector<double> DVHCalc::calcStructDVH(vtkPolyData* structure,
                                            vtkImageData* doseGrid) {
   double bounds[6];
-  structure->GetBounds(bounds);
-  double doseBounds[6];
-  doseGrid->GetBounds(doseBounds);
-  int doseDims[3];
-  doseGrid->GetDimensions(doseDims);
-  double doseSpc[3];
-  doseGrid->GetSpacing(doseSpc);
-  // qDebug()<<bounds[0]<<bounds[1]<<bounds[2]<<bounds[3]<<bounds[4]<<bounds[5]<<"Bounds";
+  // structure->GetBounds(bounds);
+  //  double doseBounds[6];
+  //  doseGrid->GetBounds(doseBounds);
+  //  int doseDims[3];
+  //  doseGrid->GetDimensions(doseDims);
+  //  double doseSpc[3];
+  //  doseGrid->GetSpacing(doseSpc);
+  //  qDebug() << bounds[0] << bounds[1] << bounds[2] << bounds[3] << bounds[4]
+  //           << bounds[5] << "Bounds";
   // qDebug()<<doseBounds[0]<<doseBounds[1]<<doseBounds[2]<<doseBounds[3]<<doseBounds[4]<<doseBounds[5]<<"DoseBounds";
-  this->getStructBoundsInMatrixCoords(doseBounds, bounds, doseSpc[0],
-                                      doseSpc[1], doseSpc[2], doseDims[0],
-                                      doseDims[1], doseDims[2]);
+  //  this->getStructBoundsInMatrixCoords(doseBounds, bounds, doseSpc[0],
+  //                                      doseSpc[1], doseSpc[2], doseDims[0],
+  //                                      doseDims[1], doseDims[2]);
 
-  vtkSmartPointer<vtkPolyDataToImageStencil> sts2 =
-      vtkSmartPointer<vtkPolyDataToImageStencil>::New();
-  sts2->SetTolerance(0);  // very important
-  sts2->SetInformationInput(doseGrid);
-  sts2->SetOutputSpacing(doseGrid->GetSpacing());
-  sts2->SetOutputOrigin(doseGrid->GetOrigin());
-  sts2->SetInputData(structure);
-  sts2->Update();
+  //  vtkSmartPointer<vtkPolyDataToImageStencil> sts2 =
+  //      vtkSmartPointer<vtkPolyDataToImageStencil>::New();
+  //  sts2->SetTolerance(0);  // very important
+  //  sts2->SetInformationInput(doseGrid);
+  //  sts2->SetOutputSpacing(doseGrid->GetSpacing());
+  //  sts2->SetOutputOrigin(doseGrid->GetOrigin());
+  //  sts2->SetInputData(structure);
+  //  sts2->Update();
 
-  vtkSmartPointer<vtkImageStencil> stencil2 =
-      vtkSmartPointer<vtkImageStencil>::New();
-  stencil2->SetStencilData(sts2->GetOutput());
-  stencil2->SetInputData(doseGrid);
-  stencil2->ReverseStencilOff();
-  stencil2->SetBackgroundValue(0);
-  stencil2->Update();
+  //  vtkSmartPointer<vtkImageStencil> stencil2 =
+  //      vtkSmartPointer<vtkImageStencil>::New();
+  //  stencil2->SetStencilData(sts2->GetOutput());
+  //  stencil2->SetInputData(doseGrid);
+  //  stencil2->ReverseStencilOff();
+  //  stencil2->SetBackgroundValue(0);
+  //  stencil2->Update();
 
-  vtkSmartPointer<vtkImageAccumulate> ia2 =
-      vtkSmartPointer<vtkImageAccumulate>::New();
-  ia2->SetInputConnection(stencil2->GetOutputPort());
-  ia2->IgnoreZeroOn();
-  ia2->Update();
-  long vc2 = ia2->GetVoxelCount();
-  double maxDose = ia2->GetMax()[0];  // 1st component's value
-  double minDose = ia2->GetMin()[0];
-  double meanDose = ia2->GetMean()[0];
-  double std = ia2->GetStandardDeviation()[0];
-  // qDebug()<<maxDose<<minDose<<"Max&Min";
-  // qDebug()<<vc2<<"voxel count";
+  //  vtkSmartPointer<vtkImageAccumulate> ia2 =
+  //      vtkSmartPointer<vtkImageAccumulate>::New();
+  //  ia2->SetInputConnection(stencil2->GetOutputPort());
+  //  ia2->IgnoreZeroOn();
+  //  ia2->Update();
 
-  int stencilDims[6];
-  double stencilSpacing[3];
-  stencil2->GetOutput()->GetDimensions(stencilDims);
-  stencil2->GetOutput()->GetSpacing(stencilSpacing);
-  double voxelVol =
-      (stencilSpacing[0] * stencilSpacing[1] * stencilSpacing[2]) /
-      1000;  // in cc
+  //  long vc2 = ia2->GetVoxelCount();
+  //  double maxDose = ia2->GetMax()[0];  // 1st component's value
+  //  double minDose = ia2->GetMin()[0];
+  //  double meanDose = ia2->GetMean()[0];
+  //  double std = ia2->GetStandardDeviation()[0];
+  //  // qDebug()<<maxDose<<minDose<<"Max&Min";
+  //  // qDebug()<<vc2<<"voxel count";
+
+  //  int stencilDims[6];
+  //  double stencilSpacing[3];
+  //  stencil2->GetOutput()->GetDimensions(stencilDims);
+  //  stencil2->GetOutput()->GetSpacing(stencilSpacing);
+  //  double voxelVol =
+  //      (stencilSpacing[0] * stencilSpacing[1] * stencilSpacing[2]) /
+  //      1000;  // in cc
   // qDebug()<<stencilSpacing[0]<<stencilSpacing[1]<<stencilSpacing[2]<<"stencil
   // spc";
   // qDebug()<<stencil2->GetOutput()->GetDimensions()[0]<<stencil2->GetOutput()->GetDimensions()[1]
   //<<stencil2->GetOutput()->GetDimensions()[2];
   // qDebug()<<vc2<<"voxel count";
-  double vol = (vc2 * voxelVol);  // in cc
+
+  // double vol = (vc2 * voxelVol);  // in cc
   std::vector<double> result;
-  result.push_back(vol);       // 0
-  result.push_back(maxDose);   // 1
-  result.push_back(meanDose);  // 2
-  result.push_back(minDose);   // 3
-  result.push_back(std);       // 4
-  result.push_back(voxelVol);  // 5
-  // qDebug()<<vol<<"Volume from DVH";
-  this->getIndicesOfOnes(stencil2->GetOutput());
-  this->getDoseValues(this->indicesX, this->indicesY, this->indicesZ, doseGrid);
+  //  result.push_back(vol);       // 0
+  //  result.push_back(maxDose);   // 1
+  //  result.push_back(meanDose);  // 2
+  //  result.push_back(minDose);   // 3
+  //  result.push_back(std);       // 4
+  //  result.push_back(voxelVol);  // 5
+  //  // qDebug()<<vol<<"Volume from DVH";
+  //  this->getIndicesOfOnes(stencil2->GetOutput());
+  //  this->getDoseValues(this->indicesX, this->indicesY, this->indicesZ,
+  //  doseGrid);
   return result;
 }
 

@@ -51,7 +51,6 @@ SOFTWARE.
 #include <vtkConeSource.h>
 #include <vtkDICOMImageReader.h>
 #include <vtkFileOutputWindow.h>
-#include <vtkGDCMImageReader.h>
 #include <vtkInteractorStyleTrackballCamera.h>
 #include <vtkOutlineFilter.h>
 #include <vtkPolyData.h>
@@ -207,7 +206,6 @@ void MainWindow::on_actionCT_triggered() {
 
     const ReaderType::FileNamesContainer &filenames =
         inputNames->GetInputFileNames();
-
     reader->SetImageIO(gdcmIO);
     reader->SetFileNames(filenames);
     reader->Update();
@@ -478,15 +476,29 @@ void MainWindow::on_actionStructures_triggered() {
 void MainWindow::on_actionDose_triggered() {
   if (this->CTImage->GetDimensions()[0] > 0) {
     QString DoseFile = QFileDialog::getOpenFileName(this, "Open RT Dose");
+
     if (DoseFile != nullptr) {
       // qDebug()<<doseFile;
-      vtkSmartPointer<vtkGDCMImageReader> DoseReader =
-          vtkSmartPointer<vtkGDCMImageReader>::New();
-      DoseReader->SetFileName(DoseFile.toLatin1());
-      DoseReader->FileLowerLeftOn();  // otherwise flips the image
-      DoseReader->SetDataScalarTypeToDouble();
-      DoseReader->Update();
-      this->RTDose->DeepCopy(DoseReader->GetOutput());
+      const unsigned int InputDimension = 3;
+      typedef double PixelType;
+      typedef itk::Image<PixelType, InputDimension> InputImageType;
+      typedef itk::ImageSeriesReader<InputImageType> ReaderType;
+      typedef itk::GDCMImageIO ImageIOType;
+      ImageIOType::Pointer gdcmIO = ImageIOType::New();
+      ReaderType::Pointer reader = ReaderType::New();
+
+      reader->SetImageIO(gdcmIO);
+      reader->SetFileName(DoseFile.toStdString());
+      reader->Update();
+
+      typedef itk::ImageToVTKImageFilter<InputImageType> ConnectorType;
+      ConnectorType::Pointer Converter = ConnectorType::New();
+      Converter->SetInput(reader->GetOutput());
+      Converter->Update();
+      // qDebug()<<"Conversion done!";
+
+      this->RTDose->DeepCopy(Converter->GetOutput());
+
       // qDebug()<<this->RTDose->GetScalarRange()[0]<<":Min"<<this->RTDose->GetScalarRange()[1]<<":Max";
     } else {
       QMessageBox messageBox;
@@ -509,15 +521,6 @@ void MainWindow::on_actionDose_triggered() {
 
     this->ui->statusBar->showMessage("Dose imported sucessfully");
 
-    //    int *dims;
-    //    this->RTDose->GetDimensions(dims);
-    //    qDebug() << dims[0] << dims[1] << dims[2] << " Dims:";
-
-    double *DoseOrg = this->RTDose->GetOrigin();
-    // qDebug()<<DoseOrg[0]<<DoseOrg[1]<<DoseOrg[2]<<"Dose Origin";
-
-    double *ImgOrg = this->CTImage->GetOrigin();
-    // qDebug()<<ImgOrg[0]<<ImgOrg[1]<<ImgOrg[2]<<"Image Origin";
   } else {
     QMessageBox messageBox;
     messageBox.critical(this, "Error",
@@ -990,13 +993,44 @@ void MainWindow::on_actionAdd_Arc_triggered() {
 }
 
 void MainWindow::on_actionSend_UDP_triggered() {
-  //    this->listener->TrackingTarget->DeepCopy(this->MeshList[0]);
-  //    this->listener->AxialViewer=this->AxialViewer;
-  //    this->listener->SagittalViewer=this->SagittalViewer;
-  //    this->listener->CoronalViewer=this->CoronalViewer;
-  //    this->listener->BEVViewer=this->BEVViewer;
-  //    this->listener->StartListening();
-  //    QApplication::processEvents();
+  const unsigned int InputDimension = 3;
+  typedef double PixelType;
+  typedef itk::Image<PixelType, InputDimension> InputImageType;
+  typedef itk::ImageSeriesReader<InputImageType> ReaderType;
+  typedef itk::GDCMImageIO ImageIOType;
+  ImageIOType::Pointer gdcmIO = ImageIOType::New();
+  ReaderType::Pointer reader = ReaderType::New();
+
+  QString DoseFile = QFileDialog::getOpenFileName(this, "Open RT Dose");
+
+  // Start reading DICOM CT data with Phase info
+  /********************************************************************************/
+
+  reader->SetImageIO(gdcmIO);
+  reader->SetFileName(DoseFile.toStdString());
+  reader->Update();
+
+  typedef itk::ImageToVTKImageFilter<InputImageType> ConnectorType;
+  ConnectorType::Pointer Converter = ConnectorType::New();
+  Converter->SetInput(reader->GetOutput());
+  Converter->Update();
+  // qDebug()<<"Conversion done!";
+
+  this->RTDose->DeepCopy(Converter->GetOutput());
+
+  this->AxialViewer->SetRTDose(this->RTDose);
+  this->SagittalViewer->SetRTDose(this->RTDose);
+  this->CoronalViewer->SetRTDose(this->RTDose);
+  this->BEVViewer->RTDose = this->RTDose;
+
+  this->AxialViewer->DoseVisibility = true;
+  this->AxialViewer->UpdateView();
+  this->SagittalViewer->DoseVisibility = true;
+  this->SagittalViewer->UpdateView();
+  this->CoronalViewer->DoseVisibility = true;
+  this->CoronalViewer->UpdateView();
+
+  this->ui->statusBar->showMessage("Dose imported sucessfully");
 }
 
 void MainWindow::on_actionAbout_QT_triggered() { QMessageBox::aboutQt(this); }
@@ -1371,7 +1405,7 @@ void MainWindow::updateDose(const QString &path) {
   //    double minDose=this->AxialViewer->DoseRange[0];
   //    double maxDose=this->AxialViewer->DoseRange[1];
 
-  //    // Read adn update dose
+  //    // Read and update dose
   //    vtkSmartPointer<vtkGDCMImageReader> DoseReader =
   //        vtkSmartPointer<vtkGDCMImageReader>::New();
   //    DoseReader->SetFileName("D:\\Projects\\build-KIMView-Desktop_Qt_5_15_1_MSVC2019_64bit-Release\\Doses\\RD.dcm");
@@ -1417,29 +1451,4 @@ void MainWindow::on_actionArcsView_triggered() {
   }
 }
 
-void MainWindow::on_actionUpdate_Dose_triggered() {
-  // Get current dose thresholds
-  double minDose = this->AxialViewer->DoseRange[0];
-  double maxDose = this->AxialViewer->DoseRange[1];
-
-  // qDebug()<<doseFile;
-  vtkSmartPointer<vtkGDCMImageReader> DoseReader =
-      vtkSmartPointer<vtkGDCMImageReader>::New();
-  DoseReader->SetFileName(
-      "D:\\Projects\\build-KIMView-Desktop_Qt_5_15_1_MSVC2019_64bit-"
-      "Release\\Doses\\RD.dcm");
-  DoseReader->FileLowerLeftOn();  // otherwise flips the image
-  DoseReader->SetDataScalarTypeToDouble();
-  DoseReader->Update();
-  this->RTDose->DeepCopy(DoseReader->GetOutput());
-  // qDebug()<<this->RTDose->GetScalarRange()[0]<<
-  // ""<<this->RTDose->GetScalarRange()[1]<<"Dynamic dose";
-
-  this->AxialViewer->SetRTDose(this->RTDose);
-  this->SagittalViewer->SetRTDose(this->RTDose);
-  this->CoronalViewer->SetRTDose(this->RTDose);
-  this->BEVViewer->RTDose = this->RTDose;
-
-  this->AxialViewer->ViewRenderer->RemoveActor(this->AxialViewer->DoseSlice);
-  this->AxialViewer->AdjustDoseRange(minDose, maxDose);
-}
+void MainWindow::on_actionUpdate_Dose_triggered() {}
