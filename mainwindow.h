@@ -90,7 +90,7 @@ class MainWindow : public QMainWindow {
   double DoseGridSpacing = 3.0;  // 3mm default
 
   // Higher the fraction, lesser vertices
-  double TargetReduction = 0.20;
+  double TargetReduction = 0.05;
   bool ROIVisibleFlag = 1;  // Visible by default
   int DefaultTargetIdx = 0;
 

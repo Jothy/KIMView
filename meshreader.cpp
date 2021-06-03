@@ -234,13 +234,16 @@ void meshReader::getROIMeshes(vtkImageData *imgData, float zSpacing,
                 contourSeq))  // checks whether contours are available for this
                               // structure
         {
-          // qDebug()<<"No contours available";//If not available inserts an
+           //qDebug()<<"No contours available";//If not available inserts an
           // empty mesh
           vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
           vtkSmartPointer<vtkPolyDataMapper> mapper =
               vtkSmartPointer<vtkPolyDataMapper>::New();
           this->ROIActors->AddItem(actor);
           this->meshes.push_back(mapper->GetInput());
+
+          //chaneg the appended ROIType to N/A if no contours exist
+          this->ROITypes.removeLast();
           this->ROITypes.append("N/A");
 
         }
