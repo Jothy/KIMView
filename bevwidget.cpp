@@ -64,9 +64,6 @@ BEVWidget::BEVWidget(QWidget *parent, QActionGroup *contextMenus)
   //    this->ModelRenderer2->SetLayer(1);
   //    this->ui->BEVWindow->GetRenderWindow()->SetNumberOfLayers(2);
 
-  // Enable anti-aliasing
-  this->ModelRenderer->GetRenderWindow()
-      ->LineSmoothingOff();  // Off to avoid color issues with MPR ROIs
 
   this->ImageStyleImg = vtkSmartPointer<vtkInteractorStyleImage>::New();
   this->Interactor3D = vtkSmartPointer<vtkRenderWindowInteractor>::New();
