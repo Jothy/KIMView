@@ -810,20 +810,10 @@ void MainWindow::on_actionReset_WL_WW_triggered() {
 void MainWindow::on_actionRender_Bones_triggered() {}
 
 void MainWindow::on_actionHello_UDP_triggered() {
-  //  if (this->ui->actionHello_UDP->isChecked() == true) {
-  //    this->listener->TrackingTarget->DeepCopy(this->MeshList[0]);
-  //    this->listener->AxialViewer = this->AxialViewer;
-  //    this->listener->SagittalViewer = this->SagittalViewer;
-  //    this->listener->CoronalViewer = this->CoronalViewer;
-  //    this->listener->BEVViewer = this->BEVViewer;
-  //    this->listener->StartListening();
-  //    this->ui->statusBar->showMessage("Listening to UPD sender...");
-  //  }
-
-  //  else {
-  //    this->listener->StopListening();
-  //    this->ui->statusBar->clearMessage();
-  //    QApplication::processEvents();
+  qDebug() << this->ROITypes.size();
+  for (int i = 0; i < this->ROITypes.size(); i++) {
+    qDebug() << i << " " << this->ROITypes[i];
+  }
 }
 
 void MainWindow::on_actionMove_ROI_triggered() {
@@ -1096,7 +1086,8 @@ void MainWindow::on_actionStop_triggered() {
 void MainWindow::closeEvent(QCloseEvent *event) {
   QMessageBox::StandardButton resBtn = QMessageBox::question(
       this, "KIMView", tr("Are you sure you want to close?\n"),
-      QMessageBox::No | QMessageBox::Yes);
+      QMessageBox::No | QMessageBox::Yes,
+      QMessageBox::No);  // Set default focus to NO
   if (resBtn == QMessageBox::No) {
     event->ignore();
   } else {

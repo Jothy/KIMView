@@ -51,11 +51,11 @@
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>File</string>
+     <string>&amp;File</string>
     </property>
     <widget class="QMenu" name="menuImport">
      <property name="title">
-      <string>Import</string>
+      <string>&amp;Import</string>
      </property>
      <addaction name="actionCT"/>
      <addaction name="actionStructures"/>
@@ -67,12 +67,12 @@
    </widget>
    <widget class="QMenu" name="menuInsert">
     <property name="title">
-     <string>Insert</string>
+     <string>&amp;Insert</string>
     </property>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
-     <string>View</string>
+     <string>&amp;View</string>
     </property>
     <addaction name="actionZoom_In_All"/>
     <addaction name="actionZoom_Out_All"/>
@@ -92,14 +92,14 @@
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
-     <string>Tools</string>
+     <string>&amp;Tools</string>
     </property>
     <addaction name="actionCalc_DVH"/>
     <addaction name="actionWL_WW"/>
    </widget>
    <widget class="QMenu" name="menuDose">
     <property name="title">
-     <string>Dose</string>
+     <string>&amp;Dose</string>
     </property>
     <addaction name="actionAdjust_Range"/>
    </widget>
@@ -117,32 +117,32 @@
    </widget>
    <widget class="QMenu" name="menuStructures">
     <property name="title">
-     <string>Structures</string>
+     <string>&amp;Structures</string>
     </property>
    </widget>
    <widget class="QMenu" name="menuWindows">
     <property name="title">
-     <string>Windows</string>
+     <string>&amp;Windows</string>
     </property>
     <addaction name="actionInformation"/>
     <addaction name="actionPlan_Information"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
-     <string>About</string>
+     <string>&amp;About</string>
     </property>
     <addaction name="actionAbout_QT"/>
     <addaction name="actionAbout"/>
    </widget>
    <widget class="QMenu" name="menuSettings">
     <property name="title">
-     <string>Settings</string>
+     <string>&amp;Settings</string>
     </property>
     <addaction name="actionIP_COnfiguration"/>
    </widget>
    <widget class="QMenu" name="menuTracking">
     <property name="title">
-     <string>Tracking</string>
+     <string>&amp;Tracking</string>
     </property>
     <addaction name="actionStart"/>
     <addaction name="actionStop"/>
@@ -446,7 +446,7 @@
      <normaloff>:/Icons/Zoom-In.png</normaloff>:/Icons/Zoom-In.png</iconset>
    </property>
    <property name="text">
-    <string>Zoom In All</string>
+    <string>Zoom &amp;In All</string>
    </property>
    <property name="shortcut">
     <string>Ctrl++</string>
@@ -461,7 +461,7 @@
      <normaloff>:/Icons/Zoom-Out.png</normaloff>:/Icons/Zoom-Out.png</iconset>
    </property>
    <property name="text">
-    <string>Zoom Out All</string>
+    <string>Zoom &amp;Out All</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+-</string>
@@ -476,7 +476,7 @@
      <normaloff>:/Icons/Zoom-Reset.png</normaloff>:/Icons/Zoom-Reset.png</iconset>
    </property>
    <property name="text">
-    <string>Reset Zoom</string>
+    <string>&amp;Reset Zoom</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+0</string>
@@ -500,7 +500,7 @@
      <normaloff>:/Icons/CT.png</normaloff>:/Icons/CT.png</iconset>
    </property>
    <property name="text">
-    <string>CT</string>
+    <string>&amp;CT</string>
    </property>
   </action>
   <action name="actionStructures">
@@ -512,7 +512,7 @@
      <normaloff>:/Icons/StructureSet.png</normaloff>:/Icons/StructureSet.png</iconset>
    </property>
    <property name="text">
-    <string>Structures</string>
+    <string>&amp;Structures</string>
    </property>
   </action>
   <action name="actionPlan">
@@ -524,7 +524,7 @@
      <normaloff>:/Icons/Plan.png</normaloff>:/Icons/Plan.png</iconset>
    </property>
    <property name="text">
-    <string>Plan</string>
+    <string>&amp;Plan</string>
    </property>
   </action>
   <action name="actionGo_To_Isocentre">
@@ -536,7 +536,7 @@
      <normaloff>:/Icons/Isocentre.png</normaloff>:/Icons/Isocentre.png</iconset>
    </property>
    <property name="text">
-    <string>Go To Isocentre</string>
+    <string>&amp;Go To Isocentre</string>
    </property>
   </action>
   <action name="actionDose">
@@ -548,7 +548,7 @@
      <normaloff>:/Icons/Dose.png</normaloff>:/Icons/Dose.png</iconset>
    </property>
    <property name="text">
-    <string>Dose</string>
+    <string>&amp;Dose</string>
    </property>
   </action>
   <action name="actionBEV">
@@ -563,7 +563,7 @@
      <normaloff>:/Icons/BEV.PNG</normaloff>:/Icons/BEV.PNG</iconset>
    </property>
    <property name="text">
-    <string>BEV</string>
+    <string>&amp;BEV</string>
    </property>
    <property name="toolTip">
     <string>Show BEV for selected beam</string>
@@ -578,7 +578,7 @@
      <normaloff>:/Icons/Rotate3D.png</normaloff>:/Icons/Rotate3D.png</iconset>
    </property>
    <property name="text">
-    <string>3DView</string>
+    <string>&amp;3DView</string>
    </property>
   </action>
   <action name="actionClose_Patient">
@@ -587,7 +587,7 @@
      <normaloff>:/RC/Icons1/delete.png</normaloff>:/RC/Icons1/delete.png</iconset>
    </property>
    <property name="text">
-    <string>Close Patient</string>
+    <string>&amp;Close Patient</string>
    </property>
   </action>
   <action name="actionShowBeams">
@@ -599,7 +599,7 @@
      <normaloff>:/Icons/Beam.png</normaloff>:/Icons/Beam.png</iconset>
    </property>
    <property name="text">
-    <string>Beams</string>
+    <string>&amp;Beams</string>
    </property>
    <property name="toolTip">
     <string>Toggle Beams</string>
@@ -614,7 +614,7 @@
      <normaloff>:/Icons/Dose.png</normaloff>:/Icons/Dose.png</iconset>
    </property>
    <property name="text">
-    <string>Dose</string>
+    <string>&amp;Dose</string>
    </property>
    <property name="toolTip">
     <string>Toggle Dose</string>
@@ -629,7 +629,7 @@
      <normaloff>:/Icons/Polygon.png</normaloff>:/Icons/Polygon.png</iconset>
    </property>
    <property name="text">
-    <string>Contours</string>
+    <string>&amp;Contours</string>
    </property>
    <property name="toolTip">
     <string>Toggle Contours</string>
@@ -647,7 +647,7 @@
      <normaloff>:/Icons/Patient.png</normaloff>:/Icons/Patient.png</iconset>
    </property>
    <property name="text">
-    <string>Information</string>
+    <string>&amp;Information</string>
    </property>
   </action>
   <action name="actionPlan_Information">
@@ -662,7 +662,7 @@
      <normaloff>:/Icons/Plan.png</normaloff>:/Icons/Plan.png</iconset>
    </property>
    <property name="text">
-    <string>Plan Information</string>
+    <string>&amp;Plan Information</string>
    </property>
   </action>
   <action name="actionCalc_DVH">
@@ -674,7 +674,7 @@
      <normaloff>:/Icons/Charts.png</normaloff>:/Icons/Charts.png</iconset>
    </property>
    <property name="text">
-    <string>Calc DVH</string>
+    <string>&amp;Calc DVH</string>
    </property>
   </action>
   <action name="actionAdjust_Range">
@@ -686,7 +686,7 @@
      <normaloff>:/Icons/Color.png</normaloff>:/Icons/Color.png</iconset>
    </property>
    <property name="text">
-    <string>Adjust Range</string>
+    <string>&amp;Adjust Range</string>
    </property>
    <property name="toolTip">
     <string>Adjust dose range</string>
@@ -701,7 +701,7 @@
      <normaloff>:/Icons/Contrast.png</normaloff>:/Icons/Contrast.png</iconset>
    </property>
    <property name="text">
-    <string>Reset WL/WW</string>
+    <string>Reset &amp;WL/WW</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+C</string>
@@ -750,7 +750,7 @@
      <normaloff>:/Icons/Qt.png</normaloff>:/Icons/Qt.png</iconset>
    </property>
    <property name="text">
-    <string>About QT</string>
+    <string>About  &amp;QT</string>
    </property>
   </action>
   <action name="actionIP_COnfiguration">
@@ -759,7 +759,7 @@
      <normaloff>:/Icons/Phone.png</normaloff>:/Icons/Phone.png</iconset>
    </property>
    <property name="text">
-    <string>IP Configuration</string>
+    <string>&amp;IP Configuration</string>
    </property>
   </action>
   <action name="actionStart">
@@ -771,7 +771,7 @@
      <normaloff>:/Icons/Start.png</normaloff>:/Icons/Start.png</iconset>
    </property>
    <property name="text">
-    <string>Start</string>
+    <string>&amp;Start</string>
    </property>
    <property name="toolTip">
     <string>Start tracking</string>
@@ -786,7 +786,7 @@
      <normaloff>:/Icons/Stop.png</normaloff>:/Icons/Stop.png</iconset>
    </property>
    <property name="text">
-    <string>Stop</string>
+    <string>&amp;Stop</string>
    </property>
    <property name="toolTip">
     <string>Stop tracking</string>
@@ -801,7 +801,7 @@
      <normaloff>:/Icons/Contrast.png</normaloff>:/Icons/Contrast.png</iconset>
    </property>
    <property name="text">
-    <string>WL/WW</string>
+    <string>&amp;WL/WW</string>
    </property>
   </action>
   <action name="actionAbout">
@@ -810,7 +810,7 @@
      <normaloff>:/Icons/About.png</normaloff>:/Icons/About.png</iconset>
    </property>
    <property name="text">
-    <string>About</string>
+    <string>About &amp;KIMView</string>
    </property>
   </action>
   <action name="actionArcsView">
@@ -828,7 +828,7 @@
      <normaloff>:/Icons/Arcs.png</normaloff>:/Icons/Arcs.png</iconset>
    </property>
    <property name="text">
-    <string>View arcs</string>
+    <string>View &amp;arcs</string>
    </property>
   </action>
   <action name="actionUpdate_Dose">
