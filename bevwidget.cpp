@@ -64,6 +64,10 @@ BEVWidget::BEVWidget(QWidget *parent, QActionGroup *contextMenus)
   //    this->ModelRenderer2->SetLayer(1);
   //    this->ui->BEVWindow->GetRenderWindow()->SetNumberOfLayers(2);
 
+  // Enable anti-aliasing
+  this->ModelRenderer->GetRenderWindow()
+      ->LineSmoothingOff();  // Off to avoid color issues with MPR ROIs
+
   this->ImageStyleImg = vtkSmartPointer<vtkInteractorStyleImage>::New();
   this->Interactor3D = vtkSmartPointer<vtkRenderWindowInteractor>::New();
   this->InteractorTrackball =
@@ -194,25 +198,32 @@ void BEVWidget::DisplayBEV() {
 }
 
 void BEVWidget::DisplayMeshes() {
-  // qDebug()<<"No. of meshes found:"<<this->MeshActors->GetNumberOfItems();
-  this->MeshActors->InitTraversal();
-  for (vtkIdType i = 0; i < this->MeshActors->GetNumberOfItems(); i++) {
-    double R = this->ROIColors[i][0] / 255.0;
-    double G = this->ROIColors[i][1] / 255.0;
-    double B = this->ROIColors[i][2] / 255.0;
+    // qDebug()<<"No. of meshes found:"<<this->MeshActors->GetNumberOfItems();
+    this->MeshActors->InitTraversal();
+    for (vtkIdType i = 0; i < this->MeshActors->GetNumberOfItems(); i++) {
+        if(this->ROITypes[i]=="EXTERNAL"){
+            vtkActor *CurActor = this->MeshActors->GetNextItem();
+            CurActor->GetProperty()->SetColor(0.8,0.8,0.8);
+            CurActor->GetProperty()->SetOpacity(0.75);
+            this->ModelRenderer->AddViewProp(CurActor);
+        }
+        else{
+            double R = this->ROIColors[i][0] / 255.0;
+            double G = this->ROIColors[i][1] / 255.0;
+            double B = this->ROIColors[i][2] / 255.0;
+            vtkActor *CurActor = this->MeshActors->GetNextItem();
+            CurActor->GetProperty()->SetColor(R, G, B);
+            this->ModelRenderer->AddViewProp(CurActor);
 
-    vtkActor *CurActor = this->MeshActors->GetNextItem();
-    CurActor->GetProperty()->SetColor(R, G, B);
-    // CurActor->GetProperty()->SetOpacity(0.9);
-    this->ModelRenderer->AddViewProp(CurActor);
-    // qDebug()<<R<<G<<B<<"BEV RGB";
-  }
+        }
 
-  this->ModelRenderer->GetActiveCamera()->SetViewUp(0, -1, 0);
-  this->ModelRenderer->GetActiveCamera()->SetFocalPoint(0.0, 0.0, 0.0);
-  this->ModelRenderer->GetActiveCamera()->SetPosition(0.0, 0.0, -1.0);
-  this->ModelRenderer->GetRenderWindow()->Render();
-  this->ModelRenderer->GetRenderWindow()->GetInteractor()->Start();
+    }
+
+    this->ModelRenderer->GetActiveCamera()->SetViewUp(0, -1, 0);
+    this->ModelRenderer->GetActiveCamera()->SetFocalPoint(0.0, 0.0, 0.0);
+    this->ModelRenderer->GetActiveCamera()->SetPosition(0.0, 0.0, -1.0);
+    this->ModelRenderer->GetRenderWindow()->Render();
+    this->ModelRenderer->GetRenderWindow()->GetInteractor()->Start();
 }
 
 void BEVWidget::DisplayBeams() {

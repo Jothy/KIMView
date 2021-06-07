@@ -650,6 +650,7 @@ void MainWindow::on_action3DView_triggered() {
   this->BEVViewer->MeshActors = this->MeshActors;
   this->BEVViewer->BeamActors = this->BeamActors;
   this->BEVViewer->ROIColors = this->ROIColors;
+  this->BEVViewer->ROITypes=this->ROITypes;
   this->BEVViewer->DisplayMeshes();
   this->BEVViewer->DisplayBeams();
 
@@ -813,6 +814,12 @@ void MainWindow::on_actionHello_UDP_triggered() {
   qDebug() << this->ROITypes.size();
   for (int i = 0; i < this->ROITypes.size(); i++) {
     qDebug() << i << " " << this->ROITypes[i];
+    if(this->ROITypes[i]=="EXTERNAL")
+    {
+        qDebug()<<"Body found at:"<<i;
+        vtkActorCollection *actors=this->BEVViewer->ModelRenderer->GetActors();
+        qDebug()<<actors->GetNumberOfItems();
+    }
   }
 }
 

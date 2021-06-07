@@ -67,6 +67,7 @@ class BEVWidget : public QWidget {
   vtkSmartPointer<vtkAxesActor> Axes;
   vtkSmartPointer<vtkActor> IsodoseSurface;
   vtkSmartPointer<vtkImageData> RTDose;
+  QList<QString> ROITypes;
 
   double *Isocentre;
   double GantryAngle;
