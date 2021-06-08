@@ -650,7 +650,7 @@ void MainWindow::on_action3DView_triggered() {
   this->BEVViewer->MeshActors = this->MeshActors;
   this->BEVViewer->BeamActors = this->BeamActors;
   this->BEVViewer->ROIColors = this->ROIColors;
-  this->BEVViewer->ROITypes=this->ROITypes;
+  this->BEVViewer->ROITypes = this->ROITypes;
   this->BEVViewer->DisplayMeshes();
   this->BEVViewer->DisplayBeams();
 
@@ -810,18 +810,7 @@ void MainWindow::on_actionReset_WL_WW_triggered() {
 
 void MainWindow::on_actionRender_Bones_triggered() {}
 
-void MainWindow::on_actionHello_UDP_triggered() {
-  qDebug() << this->ROITypes.size();
-  for (int i = 0; i < this->ROITypes.size(); i++) {
-    qDebug() << i << " " << this->ROITypes[i];
-    if(this->ROITypes[i]=="EXTERNAL")
-    {
-        qDebug()<<"Body found at:"<<i;
-        vtkActorCollection *actors=this->BEVViewer->ModelRenderer->GetActors();
-        qDebug()<<actors->GetNumberOfItems();
-    }
-  }
-}
+void MainWindow::on_actionHello_UDP_triggered() {}
 
 void MainWindow::on_actionMove_ROI_triggered() {
   // DRR begins
@@ -1121,247 +1110,260 @@ void MainWindow::on_actionAbout_triggered() {
 }
 
 void MainWindow::on_actionPlan_triggered() {
-  PlanReader *myPlanReader = new PlanReader();
-  myPlanReader->readRTPlan();
-  // qDebug() << "Frs: " << myPlanReader->fractionsPlanned;
-  // qDebug() << "No. of beams: " << myPlanReader->numOfBeams;
-  // qDebug() << "Plan name: " << myPlanReader->planDetailStruct[0].beamType;
-  // qDebug() << myPlanReader->planDetailStruct[0].beamAngle;
-  // qDebug() << myPlanReader->planDetailStruct[0].beamStopAngle;
+  try {
+    PlanReader *myPlanReader = new PlanReader();
+    myPlanReader->readRTPlan();
+    // qDebug() << "Frs: " << myPlanReader->fractionsPlanned;
+    // qDebug() << "No. of beams: " << myPlanReader->numOfBeams;
+    // qDebug() << "Plan name: " << myPlanReader->planDetailStruct[0].beamType;
+    // qDebug() << myPlanReader->planDetailStruct[0].beamAngle;
+    // qDebug() << myPlanReader->planDetailStruct[0].beamStopAngle;
 
-  this->ui->tableWidget->setRowCount(0);
+    this->ui->tableWidget->setRowCount(0);
 
-  this->ui->treeWidget->topLevelItem(2)->setText(
-      0, QString(myPlanReader->planLabel));
+    this->ui->treeWidget->topLevelItem(2)->setText(
+        0, QString(myPlanReader->planLabel));
 
-  this->ui->tableWidget->setRowCount(myPlanReader->numOfBeams);
+    this->ui->tableWidget->setRowCount(myPlanReader->numOfBeams);
 
-  for (int i = 0; i < myPlanReader->numOfBeams; i++) {
-    // Add a treeWidegtItem for each beam
-    QTreeWidgetItem *wItem = new QTreeWidgetItem(
-        (QTreeWidget *)nullptr,
-        QStringList(QString(myPlanReader->planDetailStruct[i].beamName)));
-    wItem->setCheckState(0, Qt::Checked);
-    QIcon icon;
-    icon.addFile(QString::fromUtf8(":/Icons/Beam.png"), QSize(12, 12),
-                 QIcon::Normal, QIcon::Off);
-    wItem->setIcon(0, icon);
-    this->ui->treeWidget->topLevelItem(2)->addChild(wItem);
-    this->ui->treeWidget->expandAll();
+    for (int i = 0; i < myPlanReader->numOfBeams; i++) {
+      // Add a treeWidegtItem for each beam
+      QTreeWidgetItem *wItem = new QTreeWidgetItem(
+          (QTreeWidget *)nullptr,
+          QStringList(QString(myPlanReader->planDetailStruct[i].beamName)));
+      wItem->setCheckState(0, Qt::Checked);
+      QIcon icon;
+      icon.addFile(QString::fromUtf8(":/Icons/Beam.png"), QSize(12, 12),
+                   QIcon::Normal, QIcon::Off);
+      wItem->setIcon(0, icon);
+      this->ui->treeWidget->topLevelItem(2)->addChild(wItem);
+      this->ui->treeWidget->expandAll();
 
-    QTableWidgetItem *item1 = new QTableWidgetItem;
-    item1->setText(QString::number(myPlanReader->planDetailStruct[i].beamNum));
-    item1->setTextAlignment(Qt::AlignCenter);
-    this->ui->tableWidget->setItem(i, 0, item1);
+      QTableWidgetItem *item1 = new QTableWidgetItem;
+      item1->setText(
+          QString::number(myPlanReader->planDetailStruct[i].beamNum));
+      item1->setTextAlignment(Qt::AlignCenter);
+      this->ui->tableWidget->setItem(i, 0, item1);
 
-    QTableWidgetItem *item2 = new QTableWidgetItem;
-    item2->setText(myPlanReader->planDetailStruct[i].beamName.toLatin1());
-    item2->setTextAlignment(Qt::AlignCenter);
-    this->ui->tableWidget->setItem(i, 1, item2);
+      QTableWidgetItem *item2 = new QTableWidgetItem;
+      item2->setText(myPlanReader->planDetailStruct[i].beamName.toLatin1());
+      item2->setTextAlignment(Qt::AlignCenter);
+      this->ui->tableWidget->setItem(i, 1, item2);
 
-    QTableWidgetItem *item3 = new QTableWidgetItem;
-    item3->setText(tr(myPlanReader->planDetailStruct[i].mcName.toLatin1()));
-    item3->setTextAlignment(Qt::AlignCenter);
-    this->ui->tableWidget->setItem(i, 2, item3);
+      QTableWidgetItem *item3 = new QTableWidgetItem;
+      item3->setText(tr(myPlanReader->planDetailStruct[i].mcName.toLatin1()));
+      item3->setTextAlignment(Qt::AlignCenter);
+      this->ui->tableWidget->setItem(i, 2, item3);
 
-    QTableWidgetItem *item4 = new QTableWidgetItem;
-    item4->setText(tr(myPlanReader->planDetailStruct[i].beamType.toLatin1()));
-    item4->setTextAlignment(Qt::AlignCenter);
-    this->ui->tableWidget->setItem(i, 3, item4);
+      QTableWidgetItem *item4 = new QTableWidgetItem;
+      item4->setText(tr(myPlanReader->planDetailStruct[i].beamType.toLatin1()));
+      item4->setTextAlignment(Qt::AlignCenter);
+      this->ui->tableWidget->setItem(i, 3, item4);
 
-    QTableWidgetItem *item5 = new QTableWidgetItem;
-    item5->setText(
-        QString::number(myPlanReader->planDetailStruct[i].beamEnergy));
-    item5->setTextAlignment(Qt::AlignCenter);
-    this->ui->tableWidget->setItem(i, 4, item5);
+      QTableWidgetItem *item5 = new QTableWidgetItem;
+      item5->setText(
+          QString::number(myPlanReader->planDetailStruct[i].beamEnergy));
+      item5->setTextAlignment(Qt::AlignCenter);
+      this->ui->tableWidget->setItem(i, 4, item5);
 
-    QTableWidgetItem *item6 = new QTableWidgetItem;
-    item6->setText(
-        QString::number(myPlanReader->planDetailStruct[i].beamAngle, 'f', 1));
-    item6->setTextAlignment(Qt::AlignCenter);
-    this->ui->tableWidget->setItem(i, 5, item6);
+      QTableWidgetItem *item6 = new QTableWidgetItem;
+      item6->setText(
+          QString::number(myPlanReader->planDetailStruct[i].beamAngle, 'f', 1));
+      item6->setTextAlignment(Qt::AlignCenter);
+      this->ui->tableWidget->setItem(i, 5, item6);
 
-    QTableWidgetItem *item7 = new QTableWidgetItem;
-    item7->setText(QString::number(
-        myPlanReader->planDetailStruct[i].beamStopAngle, 'f', 1));
-    item7->setTextAlignment(Qt::AlignCenter);
-    this->ui->tableWidget->setItem(i, 6, item7);
+      QTableWidgetItem *item7 = new QTableWidgetItem;
+      item7->setText(QString::number(
+          myPlanReader->planDetailStruct[i].beamStopAngle, 'f', 1));
+      item7->setTextAlignment(Qt::AlignCenter);
+      this->ui->tableWidget->setItem(i, 6, item7);
 
-    QTableWidgetItem *item8 = new QTableWidgetItem;
-    item8->setText(
-        tr(myPlanReader->planDetailStruct[i].arcDirection.toLatin1()));
-    item8->setTextAlignment(Qt::AlignCenter);
-    this->ui->tableWidget->setItem(i, 7, item8);
+      QTableWidgetItem *item8 = new QTableWidgetItem;
+      item8->setText(
+          tr(myPlanReader->planDetailStruct[i].arcDirection.toLatin1()));
+      item8->setTextAlignment(Qt::AlignCenter);
+      this->ui->tableWidget->setItem(i, 7, item8);
 
-    QTableWidgetItem *item9 = new QTableWidgetItem;
-    item9->setText(
-        QString::number(myPlanReader->planDetailStruct[i].collAngle, 'f', 1));
-    item9->setTextAlignment(Qt::AlignCenter);
-    this->ui->tableWidget->setItem(i, 8, item9);
+      QTableWidgetItem *item9 = new QTableWidgetItem;
+      item9->setText(
+          QString::number(myPlanReader->planDetailStruct[i].collAngle, 'f', 1));
+      item9->setTextAlignment(Qt::AlignCenter);
+      this->ui->tableWidget->setItem(i, 8, item9);
 
-    QTableWidgetItem *item10 = new QTableWidgetItem;
-    item10->setText(
-        QString::number(myPlanReader->planDetailStruct[i].couchAngle, 'f', 1));
-    item10->setTextAlignment(Qt::AlignCenter);
-    this->ui->tableWidget->setItem(i, 9, item10);
+      QTableWidgetItem *item10 = new QTableWidgetItem;
+      item10->setText(QString::number(
+          myPlanReader->planDetailStruct[i].couchAngle, 'f', 1));
+      item10->setTextAlignment(Qt::AlignCenter);
+      this->ui->tableWidget->setItem(i, 9, item10);
 
-    QTableWidgetItem *item11 = new QTableWidgetItem;
-    item11->setText(
-        QString::number(myPlanReader->planDetailStruct[i].fieldX1, 'f', 1));
-    item11->setTextAlignment(Qt::AlignCenter);
-    this->ui->tableWidget->setItem(i, 10, item11);
+      QTableWidgetItem *item11 = new QTableWidgetItem;
+      item11->setText(
+          QString::number(myPlanReader->planDetailStruct[i].fieldX1, 'f', 1));
+      item11->setTextAlignment(Qt::AlignCenter);
+      this->ui->tableWidget->setItem(i, 10, item11);
 
-    QTableWidgetItem *item12 = new QTableWidgetItem;
-    item12->setText(
-        QString::number(myPlanReader->planDetailStruct[i].fieldX2, 'f', 1));
-    item12->setTextAlignment(Qt::AlignCenter);
-    this->ui->tableWidget->setItem(i, 11, item12);
+      QTableWidgetItem *item12 = new QTableWidgetItem;
+      item12->setText(
+          QString::number(myPlanReader->planDetailStruct[i].fieldX2, 'f', 1));
+      item12->setTextAlignment(Qt::AlignCenter);
+      this->ui->tableWidget->setItem(i, 11, item12);
 
-    QTableWidgetItem *item13 = new QTableWidgetItem;
-    item13->setText(
-        QString::number(myPlanReader->planDetailStruct[i].fieldY1, 'f', 1));
-    item13->setTextAlignment(Qt::AlignCenter);
-    this->ui->tableWidget->setItem(i, 12, item13);
+      QTableWidgetItem *item13 = new QTableWidgetItem;
+      item13->setText(
+          QString::number(myPlanReader->planDetailStruct[i].fieldY1, 'f', 1));
+      item13->setTextAlignment(Qt::AlignCenter);
+      this->ui->tableWidget->setItem(i, 12, item13);
 
-    QTableWidgetItem *item14 = new QTableWidgetItem;
-    item14->setText(
-        QString::number(myPlanReader->planDetailStruct[i].fieldY2, 'f', 1));
-    item14->setTextAlignment(Qt::AlignCenter);
-    this->ui->tableWidget->setItem(i, 13, item14);
+      QTableWidgetItem *item14 = new QTableWidgetItem;
+      item14->setText(
+          QString::number(myPlanReader->planDetailStruct[i].fieldY2, 'f', 1));
+      item14->setTextAlignment(Qt::AlignCenter);
+      this->ui->tableWidget->setItem(i, 13, item14);
 
-    QTableWidgetItem *item15 = new QTableWidgetItem;
-    item15->setText(
-        QString::number(myPlanReader->planDetailStruct[i].icX, 'f', 1));
-    item15->setTextAlignment(Qt::AlignCenter);
-    this->ui->tableWidget->setItem(i, 14, item15);
+      QTableWidgetItem *item15 = new QTableWidgetItem;
+      item15->setText(
+          QString::number(myPlanReader->planDetailStruct[i].icX, 'f', 1));
+      item15->setTextAlignment(Qt::AlignCenter);
+      this->ui->tableWidget->setItem(i, 14, item15);
 
-    QTableWidgetItem *item16 = new QTableWidgetItem;
-    item16->setText(
-        QString::number(myPlanReader->planDetailStruct[i].icY, 'f', 1));
-    item16->setTextAlignment(Qt::AlignCenter);
-    this->ui->tableWidget->setItem(i, 15, item16);
+      QTableWidgetItem *item16 = new QTableWidgetItem;
+      item16->setText(
+          QString::number(myPlanReader->planDetailStruct[i].icY, 'f', 1));
+      item16->setTextAlignment(Qt::AlignCenter);
+      this->ui->tableWidget->setItem(i, 15, item16);
 
-    QTableWidgetItem *item17 = new QTableWidgetItem;
-    item17->setText(
-        QString::number(myPlanReader->planDetailStruct[i].icZ, 'f', 1));
-    item17->setTextAlignment(Qt::AlignCenter);
-    this->ui->tableWidget->setItem(i, 16, item17);
+      QTableWidgetItem *item17 = new QTableWidgetItem;
+      item17->setText(
+          QString::number(myPlanReader->planDetailStruct[i].icZ, 'f', 1));
+      item17->setTextAlignment(Qt::AlignCenter);
+      this->ui->tableWidget->setItem(i, 16, item17);
 
-    QTableWidgetItem *item18 = new QTableWidgetItem;
-    item18->setText(
-        QString::number(myPlanReader->planDetailStruct[i].ssd, 'f', 1));
-    item18->setTextAlignment(Qt::AlignCenter);
-    this->ui->tableWidget->setItem(i, 17, item18);
+      QTableWidgetItem *item18 = new QTableWidgetItem;
+      item18->setText(
+          QString::number(myPlanReader->planDetailStruct[i].ssd, 'f', 1));
+      item18->setTextAlignment(Qt::AlignCenter);
+      this->ui->tableWidget->setItem(i, 17, item18);
 
-    QTableWidgetItem *item19 = new QTableWidgetItem;
-    item19->setText(
-        QString::number(myPlanReader->planDetailStruct[i].mu, 'f', 1));
-    item19->setTextAlignment(Qt::AlignCenter);
-    this->ui->tableWidget->setItem(i, 18, item19);
-  }
+      QTableWidgetItem *item19 = new QTableWidgetItem;
+      item19->setText(
+          QString::number(myPlanReader->planDetailStruct[i].mu, 'f', 1));
+      item19->setTextAlignment(Qt::AlignCenter);
+      this->ui->tableWidget->setItem(i, 18, item19);
+    }
 
-  // Update isocentre values in Mainwindow class
-  this->Isocentre[0] = myPlanReader->planDetailStruct[0].icX * 10;  // cm to
-  this->Isocentre[1] = myPlanReader->planDetailStruct[0].icY * 10;  // cm to mm
-  this->Isocentre[2] = myPlanReader->planDetailStruct[0].icZ * 10;  // cm to mm
+    // Update isocentre values in Mainwindow class
+    this->Isocentre[0] = myPlanReader->planDetailStruct[0].icX * 10;  // cm to
+    this->Isocentre[1] =
+        myPlanReader->planDetailStruct[0].icY * 10;  // cm to mm
+    this->Isocentre[2] =
+        myPlanReader->planDetailStruct[0].icZ * 10;  // cm to mm
 
-  // Add isocentre POI
-  // Create a sphere source and  add it to the mesh list
-  vtkSmartPointer<vtkSphereSource> SphereSrc =
-      vtkSmartPointer<vtkSphereSource>::New();
-  SphereSrc->SetRadius(1.0);  // 1mm so that it just appears on one single slice
-  SphereSrc->SetThetaResolution(100.0);
-  SphereSrc->SetPhiResolution(100.0);
-  SphereSrc->SetCenter(this->Isocentre);
-  SphereSrc->Update();
+    // Add isocentre POI
+    // Create a sphere source and  add it to the mesh list
+    vtkSmartPointer<vtkSphereSource> SphereSrc =
+        vtkSmartPointer<vtkSphereSource>::New();
+    SphereSrc->SetRadius(
+        1.0);  // 1mm so that it just appears on one single slice
+    SphereSrc->SetThetaResolution(100.0);
+    SphereSrc->SetPhiResolution(100.0);
+    SphereSrc->SetCenter(this->Isocentre);
+    SphereSrc->Update();
 
-  vtkSmartPointer<vtkTriangleFilter> Triangler =
-      vtkSmartPointer<vtkTriangleFilter>::New();
-  Triangler->SetInputConnection(SphereSrc->GetOutputPort());
-  Triangler->Update();
+    vtkSmartPointer<vtkTriangleFilter> Triangler =
+        vtkSmartPointer<vtkTriangleFilter>::New();
+    Triangler->SetInputConnection(SphereSrc->GetOutputPort());
+    Triangler->Update();
 
-  this->POIList.push_back(Triangler->GetOutput());
+    this->POIList.push_back(Triangler->GetOutput());
 
-  QTreeWidgetItem *IsoItem = new QTreeWidgetItem(
-      (QTreeWidget *)nullptr, QStringList(QString("Isocentre")));
-  IsoItem->setCheckState(0, Qt::Checked);
-  QIcon IsoIcon;
-  IsoIcon.addFile(QString::fromUtf8(":/RC/Icons/POI.png"), QSize(10, 10),
-                  QIcon::Normal, QIcon::Off);
-  IsoItem->setIcon(0, IsoIcon);
-  IsoItem->setBackgroundColor(0, QColor(255, 255, 0));
-  this->ui->treeWidget->topLevelItem(4)->addChild(IsoItem);
+    QTreeWidgetItem *IsoItem = new QTreeWidgetItem(
+        (QTreeWidget *)nullptr, QStringList(QString("Isocentre")));
+    IsoItem->setCheckState(0, Qt::Checked);
+    QIcon IsoIcon;
+    IsoIcon.addFile(QString::fromUtf8(":/RC/Icons/POI.png"), QSize(10, 10),
+                    QIcon::Normal, QIcon::Off);
+    IsoItem->setIcon(0, IsoIcon);
+    IsoItem->setBackgroundColor(0, QColor(255, 255, 0));
+    this->ui->treeWidget->topLevelItem(4)->addChild(IsoItem);
 
-  this->AxialViewer->POIVisibility = true;
-  this->AxialViewer->POIList = this->POIList;
-  this->SagittalViewer->POIVisibility = true;
-  this->SagittalViewer->POIList = this->POIList;
-  this->CoronalViewer->POIVisibility = true;
-  this->CoronalViewer->POIList = this->POIList;
+    this->AxialViewer->POIVisibility = true;
+    this->AxialViewer->POIList = this->POIList;
+    this->SagittalViewer->POIVisibility = true;
+    this->SagittalViewer->POIList = this->POIList;
+    this->CoronalViewer->POIVisibility = true;
+    this->CoronalViewer->POIList = this->POIList;
 
-  delete myPlanReader;
+    delete myPlanReader;
 
-  // Clear any existing arcs
-  this->arcList.clear();
+    // Clear any existing arcs
+    this->arcList.clear();
 
-  // Add arcs if it's VMAT
-  QString DeliveryType = this->ui->tableWidget->item(0, 3)->text();
-  // qDebug() << DeliveryType << " :Type";
-  // DICOM seems to have a space after "DYNAMIC "
-  if (DeliveryType == "DYNAMIC ") {
-    CreateObjects *arcCreator = new CreateObjects;
+    // Add arcs if it's VMAT
+    QString DeliveryType = this->ui->tableWidget->item(0, 3)->text();
+    // qDebug() << DeliveryType << " :Type";
+    // DICOM seems to have a space after "DYNAMIC "
+    if (DeliveryType == "DYNAMIC ") {
+      CreateObjects *arcCreator = new CreateObjects;
+
+      for (int i = 0; i < this->ui->tableWidget->rowCount(); i++) {
+        double gantryStart =
+            this->ui->tableWidget->item(i, 5)->text().toDouble();
+        double gantryStop =
+            this->ui->tableWidget->item(i, 6)->text().toDouble();
+        QString dir = this->ui->tableWidget->item(i, 7)->text();
+        // qDebug() << gantryStart << gantryStop << dir;
+
+        double radius = 250.0 + (25 * i);
+
+        vtkSmartPointer<vtkAssembly> arc = vtkSmartPointer<vtkAssembly>::New();
+        arc = arcCreator->createArc(radius, gantryStart, gantryStop, dir,
+                                    this->Isocentre);
+        this->arcList.push_back(arc);
+
+        this->BEVViewer->ModelRenderer->AddActor(this->arcList[i]);
+        this->AxialViewer->ViewRenderer->AddActor(this->arcList[i]);
+      }
+      delete arcCreator;
+    }
+
+    // Add beams
+    CreateObjects *beamCreator = new CreateObjects;
 
     for (int i = 0; i < this->ui->tableWidget->rowCount(); i++) {
       double gantryStart = this->ui->tableWidget->item(i, 5)->text().toDouble();
-      double gantryStop = this->ui->tableWidget->item(i, 6)->text().toDouble();
-      QString dir = this->ui->tableWidget->item(i, 7)->text();
-      // qDebug() << gantryStart << gantryStop << dir;
+      double coll = this->ui->tableWidget->item(i, 8)->text().toDouble();
+      double x1 = this->ui->tableWidget->item(i,
+                                              10)
+                      ->text()
+                      .toDouble() *
+                  10;  // cm to mm
+      double x2 = this->ui->tableWidget->item(i, 11)->text().toDouble() *
+                  10;  // cm to mm
+      double y1 = this->ui->tableWidget->item(i, 12)->text().toDouble() *
+                  10;  // cm to mm
+      double y2 = this->ui->tableWidget->item(i, 13)->text().toDouble() *
+                  10;  // cm to mm
 
-      double radius = 250.0 + (25 * i);
-
-      vtkSmartPointer<vtkAssembly> arc = vtkSmartPointer<vtkAssembly>::New();
-      arc = arcCreator->createArc(radius, gantryStart, gantryStop, dir,
-                                  this->Isocentre);
-      this->arcList.push_back(arc);
-
-      this->BEVViewer->ModelRenderer->AddActor(this->arcList[i]);
-      this->AxialViewer->ViewRenderer->AddActor(this->arcList[i]);
+      vtkSmartPointer<vtkActor> beam = vtkSmartPointer<vtkActor>::New();
+      beam = beamCreator->createBeam(x1, x2, y1, y2, 700, 1300, gantryStart,
+                                     coll, 0.0, this->Isocentre);
+      this->BEVViewer->ModelRenderer->AddActor(beam);
     }
-    delete arcCreator;
+
+    delete beamCreator;
+
+    this->AxialViewer->ViewRenderer->ResetCamera();
+    this->BEVViewer->ModelRenderer->GetRenderWindow()->Render();
+    this->AxialViewer->ViewRenderer->GetRenderWindow()->Render();
+
+    // Move planes to isocentre
+    this->ui->actionGo_To_Isocentre->trigger();
+    throw "Error reading plan";
+  } catch (...) {
+    QMessageBox messageBox;
+    messageBox.critical(this, "Error", "Problem reading plan");
+    messageBox.setFixedSize(500, 200);
   }
-
-  // Add beams
-  CreateObjects *beamCreator = new CreateObjects;
-
-  for (int i = 0; i < this->ui->tableWidget->rowCount(); i++) {
-    double gantryStart = this->ui->tableWidget->item(i, 5)->text().toDouble();
-    double coll = this->ui->tableWidget->item(i, 8)->text().toDouble();
-    double x1 = this->ui->tableWidget->item(i,
-                                            10)
-                    ->text()
-                    .toDouble() *
-                10;  // cm to mm
-    double x2 =
-        this->ui->tableWidget->item(i, 11)->text().toDouble() * 10;  // cm to mm
-    double y1 =
-        this->ui->tableWidget->item(i, 12)->text().toDouble() * 10;  // cm to mm
-    double y2 =
-        this->ui->tableWidget->item(i, 13)->text().toDouble() * 10;  // cm to mm
-
-    vtkSmartPointer<vtkActor> beam = vtkSmartPointer<vtkActor>::New();
-    beam = beamCreator->createBeam(x1, x2, y1, y2, 700, 1300, gantryStart, coll,
-                                   0.0, this->Isocentre);
-    this->BEVViewer->ModelRenderer->AddActor(beam);
-  }
-
-  delete beamCreator;
-
-  this->AxialViewer->ViewRenderer->ResetCamera();
-  this->BEVViewer->ModelRenderer->GetRenderWindow()->Render();
-  this->AxialViewer->ViewRenderer->GetRenderWindow()->Render();
-
-  // Move planes to isocentre
-  this->ui->actionGo_To_Isocentre->trigger();
 }
 
 double MainWindow::CalcSSD(double *Iso, double GantryAngle,
