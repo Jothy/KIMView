@@ -659,7 +659,7 @@ void MainWindow::on_action3DView_triggered() {
   this->BEVViewer->ModelRenderer->GetRenderWindow()
       ->GetInteractor()
       ->SetInteractorStyle(this->InteractorTrackball);
-  this->BEVViewer->show();
+  // this->BEVViewer->show();
   this->BEVViewer->ModelRenderer->GetRenderWindow()->Render();
 }
 
