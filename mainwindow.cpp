@@ -1358,7 +1358,10 @@ void MainWindow::on_actionPlan_triggered() {
 
     // Move planes to isocentre
     this->ui->actionGo_To_Isocentre->trigger();
-    throw "Error reading plan";
+    if (myPlanReader->numOfBeams == 0) {
+      throw "Error reading plan";
+    }
+
   } catch (...) {
     QMessageBox messageBox;
     messageBox.critical(this, "Error", "Problem reading plan");
