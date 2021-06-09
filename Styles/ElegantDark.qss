@@ -199,3 +199,9 @@ QTreeWidget {
 	background-color:rgb(110,110,110);
 }
 
+QMdiSubWindow{
+selection-background-color: grey;/*for some styles it also used as title bar main gradient color...*/
+padding: 4px;/*need for resize window with mouse*/
+background-color: rgba(0,0,0,0);
+}
+

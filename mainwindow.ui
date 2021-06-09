@@ -46,7 +46,7 @@
      <x>0</x>
      <y>0</y>
      <width>1155</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -138,7 +138,19 @@
     <property name="title">
      <string>&amp;Settings</string>
     </property>
+    <widget class="QMenu" name="menuThemes">
+     <property name="title">
+      <string>Themes</string>
+     </property>
+     <addaction name="actionAqua"/>
+     <addaction name="actionDark"/>
+     <addaction name="actionElegant_Dark"/>
+     <addaction name="actionManjaro"/>
+     <addaction name="actionMaterial_Dark"/>
+     <addaction name="actionImageX"/>
+    </widget>
     <addaction name="actionIP_COnfiguration"/>
+    <addaction name="menuThemes"/>
    </widget>
    <widget class="QMenu" name="menuTracking">
     <property name="title">
@@ -837,6 +849,36 @@
   <action name="actionUpdate_Dose">
    <property name="text">
     <string>Update Dose</string>
+   </property>
+  </action>
+  <action name="actionAqua">
+   <property name="text">
+    <string>Aqua</string>
+   </property>
+  </action>
+  <action name="actionDark">
+   <property name="text">
+    <string>Dark</string>
+   </property>
+  </action>
+  <action name="actionElegant_Dark">
+   <property name="text">
+    <string>Elegant Dark</string>
+   </property>
+  </action>
+  <action name="actionManjaro">
+   <property name="text">
+    <string>Manjaro</string>
+   </property>
+  </action>
+  <action name="actionMaterial_Dark">
+   <property name="text">
+    <string>Material Dark</string>
+   </property>
+  </action>
+  <action name="actionImageX">
+   <property name="text">
+    <string>ImageX</string>
    </property>
   </action>
  </widget>

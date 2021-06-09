@@ -342,3 +342,9 @@ QSlider::sub-page:horizontal{
 QSlider::sub-page:horizontal:disabled{
   background:rgb(80,80,80);
 }
+
+QMdiSubWindow{
+selection-background-color: grey;/*for some styles it also used as title bar main gradient color...*/
+padding: 4px;/*need for resize window with mouse*/
+background-color: rgba(0,0,0,0);
+}

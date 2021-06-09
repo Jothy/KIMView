@@ -52,10 +52,11 @@
         <file>Styles/AMOLED.qss</file>
         <file>Styles/Aqua.qss</file>
         <file>Styles/ConsoleStyle.qss</file>
-        <file>Styles/darkstyle.qss</file>
         <file>Styles/ElegantDark.qss</file>
         <file>Styles/ImageX.qss</file>
         <file>Styles/ManjaroMix.qss</file>
         <file>Styles/MaterialDark.qss</file>
+        <file>Styles/Dark.qss</file>
+        <file>Human.vtp</file>
     </qresource>
 </RCC>

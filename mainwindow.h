@@ -179,7 +179,19 @@ class MainWindow : public QMainWindow {
 
   void on_actionUpdate_Dose_triggered();
 
- public slots:
+  void on_actionAqua_triggered();
+
+  void on_actionDark_triggered();
+
+  void on_actionElegant_Dark_triggered();
+
+  void on_actionManjaro_triggered();
+
+  void on_actionMaterial_Dark_triggered();
+
+  void on_actionImageX_triggered();
+
+public slots:
   void updateDose(const QString &str);
 
  private:

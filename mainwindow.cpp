@@ -1525,3 +1525,61 @@ void MainWindow::on_actionUpdate_Dose_triggered() {
              << this->RTDose->GetScalarRange()[1];
   }
 }
+
+void MainWindow::on_actionAqua_triggered()
+{
+      QFile file(":/Styles/Aqua.qss");
+      file.open(QFile::ReadOnly);
+      QString styleSheet = QLatin1String(file.readAll());
+      this->setStyleSheet(styleSheet);
+}
+
+
+void MainWindow::on_actionDark_triggered()
+{
+    QFile file(":/Styles/Dark.qss");
+    file.open(QFile::ReadOnly);
+    QString styleSheet = QLatin1String(file.readAll());
+    this->setStyleSheet(styleSheet);
+}
+
+
+void MainWindow::on_actionElegant_Dark_triggered()
+{
+    QFile file(":/Styles/ElegantDark.qss");
+    file.open(QFile::ReadOnly);
+    QString styleSheet = QLatin1String(file.readAll());
+    this->setStyleSheet(styleSheet);
+
+}
+
+
+void MainWindow::on_actionManjaro_triggered()
+{
+    QFile file(":/Styles/ManjaroMix.qss");
+    file.open(QFile::ReadOnly);
+    QString styleSheet = QLatin1String(file.readAll());
+    this->setStyleSheet(styleSheet);
+
+}
+
+
+void MainWindow::on_actionMaterial_Dark_triggered()
+{
+    QFile file(":/Styles/MaterialDark.qss");
+    file.open(QFile::ReadOnly);
+    QString styleSheet = QLatin1String(file.readAll());
+    this->setStyleSheet(styleSheet);
+
+}
+
+
+void MainWindow::on_actionImageX_triggered()
+{
+    QFile file(":/Styles/ImageX.qss");
+    file.open(QFile::ReadOnly);
+    QString styleSheet = QLatin1String(file.readAll());
+    this->setStyleSheet(styleSheet);
+
+}
+
