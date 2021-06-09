@@ -38,7 +38,7 @@ int main(int argc, char *argv[]) {
   a.setApplicationName("KIMView");
 
   //Default style
-  QFile file(":/Styles/ImageX.qss");
+  QFile file(":/Styles/ElegantDark.qss");
   file.open(QFile::ReadOnly);
   QString styleSheet = QLatin1String(file.readAll());
   a.setStyleSheet(styleSheet);
