@@ -49,5 +49,13 @@
         <file>Icons/KIMView.png</file>
         <file>Icons/UnderConstruction.png</file>
         <file>Icons/POI.png</file>
+        <file>Styles/AMOLED.qss</file>
+        <file>Styles/Aqua.qss</file>
+        <file>Styles/ConsoleStyle.qss</file>
+        <file>Styles/darkstyle.qss</file>
+        <file>Styles/ElegantDark.qss</file>
+        <file>Styles/ImageX.qss</file>
+        <file>Styles/ManjaroMix.qss</file>
+        <file>Styles/MaterialDark.qss</file>
     </qresource>
 </RCC>

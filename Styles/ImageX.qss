@@ -69,6 +69,7 @@ QDateEdit {
 }
 QDialog {
 	background-color:#f0f0f0;
+	
 }
 QDoubleSpinBox {
 	color:rgb(81,72,65);
@@ -223,8 +224,8 @@ QRadioButton {
 	padding: 1px;
 }
 QRadioButton::indicator:checked {
-	height: 10px;
-	width: 10px;
+	height: 20px;
+	width: 20px;
 	border-style:solid;
 	border-radius:5px;
 	border-width: 1px;
@@ -568,5 +569,11 @@ QTreeWidget {
 
 QTableWidget {
         background-color: rgba(255, 128, 64, 64);
+}
+
+QMdiSubWindow{
+selection-background-color: rgb(255, 200, 175);/*for some styles it also used as title bar main gradient color...*/
+padding: 4px;/*need for resize window with mouse*/
+background-color: rgba(0,0,0,0);
 }
 

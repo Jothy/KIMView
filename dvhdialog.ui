@@ -489,6 +489,15 @@
               </color>
              </brush>
             </property>
+            <property name="foreground">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>255</red>
+               <green>255</green>
+               <blue>255</blue>
+              </color>
+             </brush>
+            </property>
             <property name="checkState">
              <enum>Unchecked</enum>
             </property>
@@ -670,6 +679,15 @@
             <property name="text">
              <string/>
             </property>
+            <property name="background">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>255</red>
+               <green>255</green>
+               <blue>255</blue>
+              </color>
+             </brush>
+            </property>
            </item>
            <item row="4" column="3">
             <property name="text">
@@ -712,6 +730,15 @@
             <property name="text">
              <string/>
             </property>
+            <property name="foreground">
+             <brush brushstyle="SolidPattern">
+              <color alpha="255">
+               <red>255</red>
+               <green>255</green>
+               <blue>255</blue>
+              </color>
+             </brush>
+            </property>
            </item>
            <item row="5" column="3">
             <property name="text">
@@ -748,6 +775,15 @@
            <item row="6" column="1">
             <property name="text">
              <string/>
+            </property>
+            <property name="background">
+             <brush brushstyle="NoBrush">
+              <color alpha="255">
+               <red>255</red>
+               <green>255</green>
+               <blue>255</blue>
+              </color>
+             </brush>
             </property>
            </item>
            <item row="6" column="2">
@@ -795,6 +831,15 @@
            <item row="7" column="2">
             <property name="text">
              <string/>
+            </property>
+            <property name="foreground">
+             <brush brushstyle="NoBrush">
+              <color alpha="255">
+               <red>255</red>
+               <green>255</green>
+               <blue>0</blue>
+              </color>
+             </brush>
             </property>
            </item>
            <item row="7" column="3">
