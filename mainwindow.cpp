@@ -1293,8 +1293,6 @@ void MainWindow::on_actionPlan_triggered() {
     this->CoronalViewer->POIVisibility = true;
     this->CoronalViewer->POIList = this->POIList;
 
-    delete myPlanReader;
-
     // Clear any existing arcs
     this->arcList.clear();
 
@@ -1361,6 +1359,7 @@ void MainWindow::on_actionPlan_triggered() {
     if (myPlanReader->numOfBeams == 0) {
       throw "Error reading plan";
     }
+    delete myPlanReader;
 
   } catch (...) {
     QMessageBox messageBox;

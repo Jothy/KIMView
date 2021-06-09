@@ -131,7 +131,15 @@ LIBS+= -LD:\Libs\GDCM\Install\lib -lgdcmcharls -lgdcmCommon -lgdcmDICT -lgdcmDSE
 DISTFILES += \
     Human.vtp \
     LicenseTemplate \
-    Notes
+    Notes \
+    Styles/AMOLED.qss \
+    Styles/Aqua.qss \
+    Styles/ConsoleStyle.qss \
+    Styles/ElegantDark.qss \
+    Styles/ImageX.qss \
+    Styles/ManjaroMix.qss \
+    Styles/MaterialDark.qss \
+    Styles/darkstyle.qss
 
 RESOURCES += \
     RC.qrc

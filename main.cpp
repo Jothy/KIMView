@@ -37,5 +37,10 @@ int main(int argc, char *argv[]) {
   a.setOrganizationDomain("https://image-x.sydney.edu.au/");
   a.setApplicationName("KIMView");
 
+  QFile file("Styles/ImageX.qss");
+  file.open(QFile::ReadOnly);
+  QString styleSheet = QLatin1String(file.readAll());
+  a.setStyleSheet(styleSheet);
+
   return a.exec();
 }
