@@ -126,6 +126,9 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
 
+  this->ui->mainToolBar->setFixedHeight(100);
+  this->ui->mainToolBar->setIconSize(QSize(50, 50));
+
   // Make tabel widget read only
   this->ui->tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 

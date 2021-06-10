@@ -272,8 +272,8 @@ ImageViewer2D::ImageViewer2D(QWidget *parent, QActionGroup *contextMenus)
   this->ScalarBar->GetTitleTextProperty()->SetFontSize(3);
   this->ScalarBar->SetTitleRatio(0.1);
   this->ScalarBar->SetPosition(0.95, 0.1);
-  // this->scalarBar->SetMaximumNumberOfColors(5);
-  // this->scalarBar->SetNumberOfLabels(5);
+//  this->ScalarBar->SetMaximumNumberOfColors(6);
+//  this->ScalarBar->SetNumberOfLabels(5);
 
   this->ContourVisibility = 1;
   this->DoseVisibility = 1;
