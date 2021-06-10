@@ -489,15 +489,6 @@
               </color>
              </brush>
             </property>
-            <property name="foreground">
-             <brush brushstyle="SolidPattern">
-              <color alpha="255">
-               <red>255</red>
-               <green>255</green>
-               <blue>255</blue>
-              </color>
-             </brush>
-            </property>
             <property name="checkState">
              <enum>Unchecked</enum>
             </property>
