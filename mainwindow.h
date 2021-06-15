@@ -25,8 +25,10 @@ SOFTWARE.
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#define vtkRenderingCore_AUTOINIT \
-  3(vtkInteractionStyle, vtkRenderingFreeType, vtkRenderingOpenGL2)
+// vtkRenderingContextOpenGL2 needed for charts
+#define vtkRenderingCore_AUTOINIT                                   \
+  4(vtkInteractionStyle, vtkRenderingFreeType, vtkRenderingOpenGL2, \
+    vtkRenderingContextOpenGL2);
 
 #include <vtkAssembly.h>
 #include <vtkBoxWidget2.h>
@@ -191,7 +193,7 @@ class MainWindow : public QMainWindow {
 
   void on_actionImageX_triggered();
 
-public slots:
+ public slots:
   void updateDose(const QString &str);
 
  private:

@@ -25,13 +25,11 @@ SOFTWARE.
 #ifndef IMAGEVIEWER2D_H
 #define IMAGEVIEWER2D_H
 
-#define vtkRenderingCore_AUTOINIT \
-  3(vtkInteractionStyle, vtkRenderingFreeType, vtkRenderingOpenGL2)
-
 #include <QVTKWidget.h>
 #include <vtkActor.h>
 #include <vtkAngleWidget.h>
 #include <vtkAnnotatedCubeActor.h>
+#include <vtkAutoInit.h>
 #include <vtkAxesActor.h>
 #include <vtkBoxWidget2.h>
 #include <vtkColorSeries.h>
@@ -54,6 +52,12 @@ SOFTWARE.
 #include <vtkVolume.h>
 #include <vtkinteractorstyleimagecustom.h>
 #include <vtklinecallbackdose.h>
+
+// Initialize vtk modules
+VTK_MODULE_INIT(vtkRenderingOpenGL2);
+VTK_MODULE_INIT(vtkRenderingFreeType);
+VTK_MODULE_INIT(vtkInteractionStyle);
+VTK_MODULE_INIT(vtkRenderingContextOpenGL2);  // Needed for charts
 
 #include <QAction>
 #include <QActionGroup>
@@ -99,7 +103,6 @@ class ImageViewer2D : public QWidget {
   void MoveToLocation(double loc);
   void AdjustDoseRange(double min, double max);
   void AdjustImageWLWW();
-
 
   double SliceStep;
   int SliceOrientation;                     // Axial by default
