@@ -214,8 +214,9 @@ void MainWindow::on_actionCT_triggered() {
         this, "Open CT Folder", "D:\\DICOM Test Patients");
 
     // Start reading DICOM CT data with Phase info
-    /********************************************************************************/
 
+    /********************************************************************************/
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     InputNamesGeneratorType::Pointer inputNames =
         InputNamesGeneratorType::New();
     inputNames->SetInputDirectory(imageDirName.toLatin1().data());
@@ -381,6 +382,7 @@ void MainWindow::on_actionCT_triggered() {
       this->ui->actionWL_WW->setEnabled(true);
       this->ui->actionPlan->setEnabled(true);
       this->ui->actionArcsView->setEnabled(true);
+      QApplication::restoreOverrideCursor();
 
     } else {
       QMessageBox messageBox;
@@ -999,7 +1001,8 @@ void MainWindow::on_actionRotate_ROI_triggered() {
   vtkSmartPointer<vtkContextView> view = vtkSmartPointer<vtkContextView>::New();
   view->GetRenderWindow()->SetSize(400, 300);
   view->GetRenderWindow()->SetWindowName("ScatterPlot");
-  view->GetRenderer()->SetBackground(colors->GetColor3d("SlateGray").GetData());
+  view->GetRenderer()->SetBackground(
+      colors->GetColor3d("SlateWhite").GetData());
 
   vtkSmartPointer<vtkChartXY> chart = vtkSmartPointer<vtkChartXY>::New();
   view->GetScene()->AddItem(chart);
