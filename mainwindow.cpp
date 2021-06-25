@@ -184,7 +184,8 @@ MainWindow::MainWindow(QWidget *parent)
 
   // By default plan information dock widget is hidden
   this->ui->dockWidget_2->setVisible(false);
-  this->ui->mdiAreaView->tileSubWindows();
+  // this->ui->mdiAreaView->tileSubWindows();
+  this->BEVViewer->showMaximized();
 
   // Setup file watcher
   this->fileWatcher.addPath(
