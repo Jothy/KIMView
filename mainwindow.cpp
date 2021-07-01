@@ -1655,3 +1655,5 @@ void MainWindow::on_actionImageX_triggered() {
   QString styleSheet = QLatin1String(file.readAll());
   this->setStyleSheet(styleSheet);
 }
+
+void MainWindow::on_actionView1_triggered() {}

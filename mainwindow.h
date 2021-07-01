@@ -193,6 +193,8 @@ class MainWindow : public QMainWindow {
 
   void on_actionImageX_triggered();
 
+  void on_actionView1_triggered();
+
  public slots:
   void updateDose(const QString &str);
 
