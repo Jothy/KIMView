@@ -59,5 +59,6 @@
         <file>Styles/Dark.qss</file>
         <file>Human.vtp</file>
         <file>Icons/View1.png</file>
+        <file>Icons/Tile.png</file>
     </qresource>
 </RCC>

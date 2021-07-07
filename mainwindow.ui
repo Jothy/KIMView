@@ -163,11 +163,13 @@
     <property name="title">
      <string>Layout</string>
     </property>
+    <addaction name="actionTile_All"/>
     <addaction name="actionView1"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuInsert"/>
    <addaction name="menuView"/>
+   <addaction name="menuLayout"/>
    <addaction name="menuTools"/>
    <addaction name="menuDose"/>
    <addaction name="menuStructures"/>
@@ -176,7 +178,6 @@
    <addaction name="menuTracking"/>
    <addaction name="menuAbout"/>
    <addaction name="menuHelp"/>
-   <addaction name="menuLayout"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <property name="iconSize">
@@ -895,6 +896,15 @@
    </property>
    <property name="text">
     <string>View 1</string>
+   </property>
+  </action>
+  <action name="actionTile_All">
+   <property name="icon">
+    <iconset resource="RC.qrc">
+     <normaloff>:/Icons/Tile.png</normaloff>:/Icons/Tile.png</iconset>
+   </property>
+   <property name="text">
+    <string>Tile All</string>
    </property>
   </action>
  </widget>

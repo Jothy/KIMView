@@ -1663,3 +1663,8 @@ void MainWindow::on_actionView1_triggered() {
   this->SagittalViewer->parentWidget()->setGeometry(1280, 0, 618, 512);
   this->CoronalViewer->parentWidget()->setGeometry(1280, 512, 618, 512);
 }
+
+void MainWindow::on_actionTile_All_triggered() {
+  this->BEVViewer->parentWidget()->show();
+  this->ui->mdiAreaView->tileSubWindows();
+}
