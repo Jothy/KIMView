@@ -1656,4 +1656,10 @@ void MainWindow::on_actionImageX_triggered() {
   this->setStyleSheet(styleSheet);
 }
 
-void MainWindow::on_actionView1_triggered() {}
+void MainWindow::on_actionView1_triggered() {
+  this->BEVViewer->parentWidget()->hide();
+
+  this->AxialViewer->parentWidget()->setGeometry(0, 0, 1280, 1024);
+  this->SagittalViewer->parentWidget()->setGeometry(1280, 0, 618, 512);
+  this->CoronalViewer->parentWidget()->setGeometry(1280, 512, 618, 512);
+}

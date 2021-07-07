@@ -889,6 +889,10 @@
    </property>
   </action>
   <action name="actionView1">
+   <property name="icon">
+    <iconset resource="RC.qrc">
+     <normaloff>:/Icons/View1.png</normaloff>:/Icons/View1.png</iconset>
+   </property>
    <property name="text">
     <string>View 1</string>
    </property>
