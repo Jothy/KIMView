@@ -128,65 +128,7 @@ LIBS+= -LD:\Libs\GDCM\Install\lib -lgdcmcharls -lgdcmCommon -lgdcmDICT -lgdcmDSE
 -lgdcmzlib -lsocketxx
 
 
-DISTFILES += \
-    ../../Libs/GDCM/Install/bin/concrt140.dll \
-    ../../Libs/GDCM/Install/bin/gdcmCommon.dll \
-    ../../Libs/GDCM/Install/bin/gdcmDICT.dll \
-    ../../Libs/GDCM/Install/bin/gdcmDSED.dll \
-    ../../Libs/GDCM/Install/bin/gdcmIOD.dll \
-    ../../Libs/GDCM/Install/bin/gdcmMEXD.dll \
-    ../../Libs/GDCM/Install/bin/gdcmMSFF.dll \
-    ../../Libs/GDCM/Install/bin/gdcmcharls.dll \
-    ../../Libs/GDCM/Install/bin/gdcmexpat.dll \
-    ../../Libs/GDCM/Install/bin/gdcmgetopt.dll \
-    ../../Libs/GDCM/Install/bin/gdcmjpeg12.dll \
-    ../../Libs/GDCM/Install/bin/gdcmjpeg16.dll \
-    ../../Libs/GDCM/Install/bin/gdcmjpeg8.dll \
-    ../../Libs/GDCM/Install/bin/gdcmopenjp2.dll \
-    ../../Libs/GDCM/Install/bin/gdcmzlib.dll \
-    ../../Libs/GDCM/Install/bin/msvcp140.dll \
-    ../../Libs/GDCM/Install/bin/socketxx.dll \
-    ../../Libs/GDCM/Install/bin/vcruntime140.dll \
-    ../../Libs/GDCM/Install/bin/vtkCommonCore-7.1.dll \
-    ../../Libs/GDCM/Install/bin/vtkIOImage-7.1.dll \
-    ../../Libs/GDCM/Install/bin/vtkIOLegacy-7.1.dll \
-    ../../Libs/GDCM/Install/bin/vtkImagingCore-7.1.dll \
-    ../../Libs/GDCM/Install/bin/vtkImagingSources-7.1.dll \
-    ../../Libs/GDCM/Install/bin/vtkInteractionStyle-7.1.dll \
-    ../../Libs/GDCM/Install/bin/vtkRenderingCore-7.1.dll \
-    ../../Libs/GDCM/Install/bin/vtkRenderingFreeType-7.1.dll \
-    ../../Libs/GDCM/Install/bin/vtkgdcm.dll \
-    ../../Libs/GDCM/Install/bin/vtksys-7.1.dll \
-    ../../Libs/GDCM/Install/lib/gdcm-2.8/GDCMConfig.cmake \
-    ../../Libs/GDCM/Install/lib/gdcm-2.8/GDCMConfigVersion.cmake \
-    ../../Libs/GDCM/Install/lib/gdcm-2.8/GDCMTargets-release.cmake \
-    ../../Libs/GDCM/Install/lib/gdcm-2.8/GDCMTargets.cmake \
-    ../../Libs/GDCM/Install/lib/gdcm-2.8/UseGDCM.cmake \
-    ../../Libs/GDCM/Install/lib/gdcmCommon.lib \
-    ../../Libs/GDCM/Install/lib/gdcmDICT.lib \
-    ../../Libs/GDCM/Install/lib/gdcmDSED.lib \
-    ../../Libs/GDCM/Install/lib/gdcmIOD.lib \
-    ../../Libs/GDCM/Install/lib/gdcmMEXD.lib \
-    ../../Libs/GDCM/Install/lib/gdcmMSFF.lib \
-    ../../Libs/GDCM/Install/lib/gdcmcharls.lib \
-    ../../Libs/GDCM/Install/lib/gdcmexpat.lib \
-    ../../Libs/GDCM/Install/lib/gdcmgetopt.lib \
-    ../../Libs/GDCM/Install/lib/gdcmjpeg12.lib \
-    ../../Libs/GDCM/Install/lib/gdcmjpeg16.lib \
-    ../../Libs/GDCM/Install/lib/gdcmjpeg8.lib \
-    ../../Libs/GDCM/Install/lib/gdcmopenjp2.lib \
-    ../../Libs/GDCM/Install/lib/gdcmopenjpeg-2.1/OpenJPEGConfig.cmake \
-    ../../Libs/GDCM/Install/lib/gdcmzlib.lib \
-    ../../Libs/GDCM/Install/lib/socketxx.lib \
-    ../../Libs/GDCM/Install/lib/vtkgdcm.lib \
-    ../../Libs/GDCM/Install/share/gdcm-2.8/XML/CSAHeader.xml \
-    ../../Libs/GDCM/Install/share/gdcm-2.8/XML/Part3.xml \
-    ../../Libs/GDCM/Install/share/gdcm-2.8/XML/Part4.xml \
-    ../../Libs/GDCM/Install/share/gdcm-2.8/XML/Part6.xml \
-    ../../Libs/GDCM/Install/share/gdcm-2.8/XML/Part7a.xml \
-    ../../Libs/GDCM/Install/share/gdcm-2.8/XML/Part7b.xml \
-    ../../Libs/GDCM/Install/share/gdcm-2.8/XML/UIDs.xml \
-    ../../Libs/GDCM/Install/share/gdcm-2.8/XML/cp699.xml \
+DISTFILES += \    
     Human.vtp \
     LicenseTemplate \
     Notes \
