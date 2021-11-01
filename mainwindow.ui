@@ -46,7 +46,7 @@
      <x>0</x>
      <y>0</y>
      <width>1155</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -119,6 +119,7 @@
     <property name="title">
      <string>&amp;Structures</string>
     </property>
+    <addaction name="actionSphericity_Calc"/>
    </widget>
    <widget class="QMenu" name="menuWindows">
     <property name="title">
@@ -905,6 +906,11 @@
    </property>
    <property name="text">
     <string>Tile All</string>
+   </property>
+  </action>
+  <action name="actionSphericity_Calc">
+   <property name="text">
+    <string>Sphericity Calc</string>
    </property>
   </action>
  </widget>

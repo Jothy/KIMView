@@ -197,7 +197,9 @@ class MainWindow : public QMainWindow {
 
   void on_actionTile_All_triggered();
 
- public slots:
+  void on_actionSphericity_Calc_triggered();
+
+public slots:
   void updateDose(const QString &str);
 
  private:

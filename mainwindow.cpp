@@ -1668,3 +1668,9 @@ void MainWindow::on_actionTile_All_triggered() {
   this->BEVViewer->parentWidget()->show();
   this->ui->mdiAreaView->tileSubWindows();
 }
+
+void MainWindow::on_actionSphericity_Calc_triggered()
+{
+
+}
+
