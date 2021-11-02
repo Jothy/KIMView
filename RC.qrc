@@ -60,5 +60,6 @@
         <file>Human.vtp</file>
         <file>Icons/View1.png</file>
         <file>Icons/Tile.png</file>
+        <file>Icons/Sphere.ico</file>
     </qresource>
 </RCC>

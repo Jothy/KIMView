@@ -53,6 +53,7 @@ SOFTWARE.
 #include <vtkFileOutputWindow.h>
 #include <vtkImageShiftScale.h>
 #include <vtkInteractorStyleTrackballCamera.h>
+#include <vtkMassProperties.h>
 #include <vtkOutlineFilter.h>
 #include <vtkPolyData.h>
 #include <vtkPolyDataMapper.h>
@@ -86,6 +87,7 @@ SOFTWARE.
 #include <QTimer>
 #include <QTreeWidgetItem>
 #include <QUdpSocket>
+#include <cmath>
 #include <iostream>
 #include <itksys/SystemTools.hxx>
 
@@ -98,6 +100,7 @@ SOFTWARE.
 #include "planreader.h"
 #include "rangesliderdialog.h"
 #include "rtstructreaderdialog.h"
+#include "selecttargetdialog.h"
 #include "udplistener.h"
 #include "ui_mainwindow.h"
 #include "wlwwdialog.h"
@@ -1669,8 +1672,26 @@ void MainWindow::on_actionTile_All_triggered() {
   this->ui->mdiAreaView->tileSubWindows();
 }
 
-void MainWindow::on_actionSphericity_Calc_triggered()
-{
+void MainWindow::on_actionSphericity_Calc_triggered() {
+  SelectTargetDialog *SelectedTarget = new SelectTargetDialog(this);
+  SelectedTarget->ROINames = this->ROINames;
+  SelectedTarget->ROIColors = this->ROIColors;
+  SelectedTarget->setROINames();
+  SelectedTarget->exec();
 
+  // qDebug() << "Selected target ID: " << SelectedTarget->selectedROINum;
+
+  vtkSmartPointer<vtkMassProperties> massCalc =
+      vtkSmartPointer<vtkMassProperties>::New();
+  massCalc->SetInputData(this->MeshList[SelectedTarget->selectedROINum]);
+  // qDebug() << "Surface area: " << massCalc->GetSurfaceArea();
+  // qDebug() << "Volume: " << massCalc->GetVolume();
+  double sphericity =
+      cbrt(36.0 * vtkMath::Pi() * (pow(massCalc->GetVolume(), 2))) /
+      massCalc->GetSurfaceArea();
+  // qDebug() << "Sphericity: " << sphericity;
+
+  QMessageBox messageBox;
+  messageBox.information(this, "Sphericity", QString::number(sphericity));
+  messageBox.setFixedSize(500, 200);
 }
-
