@@ -210,6 +210,7 @@
    <addaction name="actionIP_COnfiguration"/>
    <addaction name="actionStart"/>
    <addaction name="actionStop"/>
+   <addaction name="actionSphericity_Calc"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="dockWidget">
