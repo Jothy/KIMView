@@ -11,3 +11,9 @@ qDebug()<<LPS[0] <<LPS[1]<< LPS[2];
 //gti merge tool
 git mergetool --tool-help
 
+//Deploying the app with windeployqt (Chapter 7, RIP tutorials Qt book)
+set PATH=%PATH%;<qt_install_prefix>/bin
+windeployqt --dir /path/to/deployment/dir /path/to/qt/application.exe
+//once executed copy the .exe to this folder
+
+
