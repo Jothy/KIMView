@@ -150,7 +150,7 @@
      <addaction name="actionMaterial_Dark"/>
      <addaction name="actionImageX"/>
     </widget>
-    <addaction name="actionIP_COnfiguration"/>
+    <addaction name="actionIP_Configuration"/>
     <addaction name="menuThemes"/>
    </widget>
    <widget class="QMenu" name="menuTracking">
@@ -207,7 +207,7 @@
    <addaction name="actionShowBeams"/>
    <addaction name="actionAdjust_Range"/>
    <addaction name="actionReset_WL_WW"/>
-   <addaction name="actionIP_COnfiguration"/>
+   <addaction name="actionIP_Configuration"/>
    <addaction name="actionStart"/>
    <addaction name="actionStop"/>
    <addaction name="actionSphericity_Calc"/>
@@ -778,7 +778,7 @@
     <string>About  &amp;QT</string>
    </property>
   </action>
-  <action name="actionIP_COnfiguration">
+  <action name="actionIP_Configuration">
    <property name="icon">
     <iconset resource="RC.qrc">
      <normaloff>:/Icons/Phone.png</normaloff>:/Icons/Phone.png</iconset>

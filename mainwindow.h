@@ -165,7 +165,7 @@ class MainWindow : public QMainWindow {
 
   void on_actionAbout_QT_triggered();
 
-  void on_actionIP_COnfiguration_triggered();
+  void on_actionIP_Configuration_triggered();
 
   void on_actionStart_triggered();
 
@@ -199,7 +199,7 @@ class MainWindow : public QMainWindow {
 
   void on_actionSphericity_Calc_triggered();
 
-public slots:
+ public slots:
   void updateDose(const QString &str);
 
  private:
