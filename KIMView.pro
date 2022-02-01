@@ -18,9 +18,12 @@ SOURCES +=\
     dvhcalc.cpp \
     dvhdialog.cpp \
     imageviewer2d.cpp \
+    mathutility.cpp \
     planreader.cpp \
     presetwlwwdialog.cpp \
+    radiobiologycalc.cpp \
     selecttargetdialog.cpp \
+    tcpdialog.cpp \
     utilities.cpp   \
     main.cpp \
     mainwindow.cpp \
@@ -35,7 +38,10 @@ SOURCES +=\
 
 
 
-HEADERS +=\    
+HEADERS +=\
+    mathutility.h \
+    radiobiologycalc.h \
+    tcpdialog.h \
     aboutdialog.h \
     alignimageinteractorstyle.h \
     bevwidget.h \
@@ -73,6 +79,7 @@ FORMS += \
     rangesliderdialog.ui \
     rtstructreaderdialog.ui \
     selecttargetdialog.ui \
+    tcpdialog.ui \
     wlwwdialog.ui
 
 TRANSLATIONS += 
