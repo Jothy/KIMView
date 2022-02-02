@@ -1698,6 +1698,12 @@ void MainWindow::on_actionSphericity_Calc_triggered() {
 }
 
 void MainWindow::on_actionTCP_triggered() {
-  TCPDialog *tcpDlg = new TCPDialog(this);
-  tcpDlg->exec();
+  TCPDialog *tcpCalc = new TCPDialog(this);
+  tcpCalc->setStructureNames(this->ROINames);
+  tcpCalc->meshes = this->MeshList;
+  tcpCalc->doseGrid = this->RTDose;
+  tcpCalc->calcType = 0;
+  // qDebug()<<this->fractions<<"Fractions from RTPlan";
+  tcpCalc->fractions = 35;
+  tcpCalc->exec();
 }
