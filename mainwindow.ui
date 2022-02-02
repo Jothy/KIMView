@@ -167,6 +167,12 @@
     <addaction name="actionTile_All"/>
     <addaction name="actionView1"/>
    </widget>
+   <widget class="QMenu" name="menuRadiobiology">
+    <property name="title">
+     <string>Radiobiology</string>
+    </property>
+    <addaction name="actionTCP"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuInsert"/>
    <addaction name="menuView"/>
@@ -174,6 +180,7 @@
    <addaction name="menuTools"/>
    <addaction name="menuDose"/>
    <addaction name="menuStructures"/>
+   <addaction name="menuRadiobiology"/>
    <addaction name="menuSettings"/>
    <addaction name="menuWindows"/>
    <addaction name="menuTracking"/>
@@ -919,6 +926,11 @@
    </property>
    <property name="toolTip">
     <string>Sphericity  Calc</string>
+   </property>
+  </action>
+  <action name="actionTCP">
+   <property name="text">
+    <string>TCP</string>
    </property>
   </action>
  </widget>

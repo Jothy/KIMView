@@ -61,5 +61,6 @@
         <file>Icons/View1.png</file>
         <file>Icons/Tile.png</file>
         <file>Icons/Sphere.png</file>
+        <file>Icons/Radiobiology.png</file>
     </qresource>
 </RCC>

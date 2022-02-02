@@ -199,6 +199,8 @@ class MainWindow : public QMainWindow {
 
   void on_actionSphericity_Calc_triggered();
 
+  void on_actionTCP_triggered();
+
  public slots:
   void updateDose(const QString &str);
 

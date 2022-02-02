@@ -101,6 +101,7 @@ SOFTWARE.
 #include "rangesliderdialog.h"
 #include "rtstructreaderdialog.h"
 #include "selecttargetdialog.h"
+#include "tcpdialog.h"
 #include "udplistener.h"
 #include "ui_mainwindow.h"
 #include "wlwwdialog.h"
@@ -1694,4 +1695,9 @@ void MainWindow::on_actionSphericity_Calc_triggered() {
   QMessageBox messageBox;
   messageBox.information(this, "Sphericity", QString::number(sphericity));
   messageBox.setFixedSize(500, 200);
+}
+
+void MainWindow::on_actionTCP_triggered() {
+  TCPDialog *tcpDlg = new TCPDialog(this);
+  tcpDlg->exec();
 }
