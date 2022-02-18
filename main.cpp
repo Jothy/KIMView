@@ -22,8 +22,11 @@
  SOFTWARE.
  ********************************************************************************/
 #include <QApplication>
+#include <QButtonGroup>
+#include <QDebug>
 #include <QStyleFactory>
 
+#include "aboutdialog.h"
 #include "mainwindow.h"
 
 // Testing
@@ -31,17 +34,28 @@
 int main(int argc, char *argv[]) {
   QApplication a(argc, argv);
   MainWindow w;
-  w.showMaximized();
-  a.setStyle(QStyleFactory::create("Fusion"));
-  a.setOrganizationName("ImageX");
-  a.setOrganizationDomain("https://image-x.sydney.edu.au/");
-  a.setApplicationName("KIMView");
+
+  AboutDialog *license = new AboutDialog();
+  license->exec();
+
+  if (license->acceptLicense == true) {
+    // qDebug() << "Accepted";
+    w.showMaximized();
+    a.setStyle(QStyleFactory::create("Fusion"));
+    a.setOrganizationName("ImageX");
+    a.setOrganizationDomain("https://image-x.sydney.edu.au/");
+    a.setApplicationName("KIMView");
+    return a.exec();
+
+  }
+
+  else {
+    // qDebug() << "Declined";
+  }
 
   //  // Default style
   //  QFile file(":/Styles/ElegantDark.qss");
   //  file.open(QFile::ReadOnly);
   //  QString styleSheet = QLatin1String(file.readAll());
   //  a.setStyleSheet(styleSheet);
-
-  return a.exec();
 }
